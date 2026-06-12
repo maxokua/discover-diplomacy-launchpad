@@ -3,7 +3,6 @@ import { ArrowRight, ArrowUpRight, Compass, Target } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 import institution from "@/assets/institution.jpg";
-import boardroom from "@/assets/boardroom.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
