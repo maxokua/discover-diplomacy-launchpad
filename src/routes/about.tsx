@@ -52,25 +52,20 @@ function AboutPage() {
           <div className="lg:col-span-7">
             <div className="eyebrow">Origin</div>
             <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-              Founded by practitioners. Built for outcomes.
+              Founded by students who lived it.
             </h2>
             <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
               <p>
-                Discover Diplomacy was established in 2018 to fill a gap that founders
-                kept encountering in their own careers: the absence of substantive,
-                personalized counsel for talented students and early-career professionals
-                pursuing the most competitive paths in international affairs.
+                Discover Diplomacy was established in 2024 by four students looking for jobs in
+                international relations.
               </p>
               <p>
-                Generic career services rarely understand the difference between a
-                Pickering and a Rangel, or the timing implications of an Oxford DPhil
-                offer arriving after the Foreign Service register closes. We do.
+                Even though we were students in DC, it seemed like an impossible task with little
+                to no resources out there on how to do it. That's why we're here.
               </p>
               <p>
-                The practice draws on direct, lived experience across the U.S.
-                Department of State, the United Nations system, the World Bank, and
-                leading international NGOs — and translates that experience into a
-                disciplined advisory process.
+                Our practice draws on direct, lived experiences as people who understand the
+                process — because we went through it ourselves.
               </p>
             </div>
           </div>
@@ -127,30 +122,30 @@ function AboutPage() {
             <div className="lg:col-span-4">
               <div className="eyebrow">Leadership</div>
               <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-                Senior advisors.
+                Four founders.
               </h2>
             </div>
             <div className="grid gap-10 lg:col-span-8 lg:grid-cols-2">
               {[
                 {
-                  n: "Principal Advisor",
-                  r: "Managing Director",
-                  bio: "Former U.S. Foreign Service Officer with tours in East Africa and the Western Hemisphere. M.A., Johns Hopkins SAIS.",
+                  n: "Founder",
+                  r: "Strategy & Outreach",
+                  bio: "International relations graduate with experience across Capitol Hill and multilateral institutions.",
                 },
                 {
-                  n: "Senior Advisor",
-                  r: "Multilateral Practice",
-                  bio: "Former Programme Officer with the United Nations Development Programme. MPA, Princeton SPIA.",
+                  n: "Founder",
+                  r: "Research & Advisory",
+                  bio: "Former intern at the U.S. Department of State with a focus on East Asian foreign policy.",
                 },
                 {
-                  n: "Senior Advisor",
-                  r: "Graduate Admissions",
-                  bio: "Former admissions reader at a top-five international affairs program. DPhil, University of Oxford.",
+                  n: "Founder",
+                  r: "Partnerships & Operations",
+                  bio: "Background in nonprofit management and youth-led policy organizations in Washington, DC.",
                 },
                 {
-                  n: "Senior Advisor",
-                  r: "Fellowships Practice",
-                  bio: "Rhodes Scholar and former member of a regional Rhodes selection committee. JD, Yale Law School.",
+                  n: "Founder",
+                  r: "Communications & Brand",
+                  bio: "Experience in strategic communications for international development and global affairs startups.",
                 },
               ].map((m) => (
                 <div key={m.r} className="border-t border-border pt-6">
