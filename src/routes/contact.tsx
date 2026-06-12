@@ -86,22 +86,13 @@ function ContactPage() {
             </ul>
 
             <div className="mt-10 border-t border-border pt-8">
-              <div className="eyebrow">Offices</div>
+              <div className="eyebrow">Location</div>
               <ul className="mt-6 space-y-5 text-sm">
                 <li className="flex gap-4">
                   <MapPin className="h-5 w-5 flex-shrink-0 text-emerald" />
                   <div>
                     <div className="font-medium text-navy-deep">Washington, DC</div>
-                    <div className="text-muted-foreground">1100 K Street NW, Suite 700</div>
-                    <div className="text-muted-foreground">Washington, DC 20005</div>
-                  </div>
-                </li>
-                <li className="flex gap-4">
-                  <MapPin className="h-5 w-5 flex-shrink-0 text-emerald" />
-                  <div>
-                    <div className="font-medium text-navy-deep">Geneva</div>
-                    <div className="text-muted-foreground">Rue du Rhône 14</div>
-                    <div className="text-muted-foreground">1204 Geneva, Switzerland</div>
+                    <div className="text-muted-foreground">United States</div>
                   </div>
                 </li>
               </ul>
