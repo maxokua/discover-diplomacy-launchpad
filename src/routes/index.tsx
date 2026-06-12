@@ -1,23 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Compass, Target } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
+import { Reveal } from "@/components/reveal";
 import institution from "@/assets/institution.jpg";
 import boardroom from "@/assets/boardroom.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Discover Diplomacy — Career Advisory for International Affairs" },
+      { title: "Discover Diplomacy — Career Advisory for International Affairs & Global Business" },
       {
         name: "description",
         content:
-          "Discover Diplomacy is a career advisory practice for students and early-career professionals pursuing roles in diplomacy, international policy, and multilateral institutions.",
+          "Discover Diplomacy advises students and early-career professionals pursuing careers in diplomacy, international policy, multilateral institutions, and international business.",
       },
-      { property: "og:title", content: "Discover Diplomacy — Career Advisory for International Affairs" },
+      { property: "og:title", content: "Discover Diplomacy — Career Advisory for International Affairs & Global Business" },
       {
         property: "og:description",
         content:
-          "Strategic, one-on-one career advising for the next generation of diplomats, policy professionals, and global leaders.",
+          "Helping the next generation discover what they want to do in international affairs and global business — and how to land those roles.",
       },
     ],
     links: [
@@ -36,11 +37,11 @@ function HomePage() {
   return (
     <SiteLayout>
       <Hero />
-      <Credentials />
+      <Placements />
       <Practice />
       <Engagement />
       <Outcomes />
-      <Insights />
+      <Partners />
       <CTA />
     </SiteLayout>
   );
@@ -51,16 +52,19 @@ function Hero() {
     <section className="relative border-b border-border bg-paper">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-28">
         <div className="lg:col-span-7">
-          <div className="eyebrow">Established 2018 · Washington · Geneva</div>
-          <h1 className="mt-6 font-display text-4xl leading-[1.1] text-navy-deep sm:text-5xl lg:text-[64px]">
-            Strategic career advisory for the next generation of international professionals.
-          </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          <Reveal as="div" className="eyebrow">
+            Career Advisory · International Affairs & Global Business
+          </Reveal>
+          <Reveal as="h1" delay={80} className="mt-6 font-display text-4xl leading-[1.1] text-navy-deep sm:text-5xl lg:text-[64px]">
+            Discover what you want to do in the field — and how to land it.
+          </Reveal>
+          <Reveal as="p" delay={160} className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             Discover Diplomacy advises students and early-career professionals pursuing
-            roles in foreign service, multilateral institutions, international development,
-            and global policy. Disciplined, confidential, and outcome-oriented.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            roles in diplomacy, international policy, multilateral institutions, and
+            international business. Our work begins with clarity about what you actually
+            want, and ends with the offer in hand.
+          </Reveal>
+          <Reveal delay={240} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
@@ -72,13 +76,13 @@ function Hero() {
               to="/services"
               className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
             >
-              View advisory services
+              How we work
               <ArrowUpRight className="h-4 w-4" />
             </Link>
-          </div>
+          </Reveal>
         </div>
 
-        <aside className="lg:col-span-5">
+        <Reveal as="aside" delay={200} y={36} className="lg:col-span-5">
           <figure className="overflow-hidden border border-border">
             <img
               src={institution}
@@ -88,38 +92,36 @@ function Hero() {
               className="h-[420px] w-full object-cover lg:h-[520px]"
             />
             <figcaption className="border-t border-border bg-stone px-5 py-4 text-xs text-muted-foreground">
-              Advising clients placed at the U.S. Department of State, United Nations, OECD,
-              World Bank, and leading international NGOs.
+              Clients have advanced to roles at the U.S. Senate, U.S. Department of State,
+              DGA Group, and The Asia Group.
             </figcaption>
           </figure>
-        </aside>
+        </Reveal>
       </div>
     </section>
   );
 }
 
-function Credentials() {
+function Placements() {
   const items = [
+    "U.S. Senate",
     "U.S. Department of State",
-    "United Nations",
-    "World Bank Group",
-    "OECD",
-    "European Commission",
-    "USAID",
+    "DGA Group",
+    "The Asia Group",
   ];
   return (
     <section className="border-b border-border bg-stone">
       <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
-        <div className="grid items-center gap-6 lg:grid-cols-[auto_1fr]">
+        <Reveal className="grid items-center gap-6 lg:grid-cols-[auto_1fr]">
           <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-            Clients have advanced to roles at
+            Recent Placements
           </div>
-          <ul className="flex flex-wrap gap-x-10 gap-y-3 text-sm font-medium text-navy-deep/80">
+          <ul className="flex flex-wrap gap-x-10 gap-y-3 text-sm font-medium text-navy-deep/85">
             {items.map((i) => (
               <li key={i}>{i}</li>
             ))}
           </ul>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -128,27 +130,30 @@ function Credentials() {
 const services = [
   {
     no: "01",
-    title: "Graduate Admissions Advisory",
-    desc: "Strategic positioning for top-tier international affairs programs — SAIS, SIPA, Fletcher, Sciences Po, Oxford, LSE — including school selection, narrative development, and application review.",
-    href: "/services",
+    icon: Compass,
+    title: "Direction",
+    headline: "Figure out what you actually want to do.",
+    desc: "The field is vast — foreign service, multilaterals, think tanks, international development, government affairs, global business. We help you cut through the noise and identify the roles, sectors, and trajectories that genuinely fit your interests, skills, and life.",
+    bullets: [
+      "Structured exploration of the field across diplomacy, policy, and international business",
+      "Self-assessment of strengths, values, and constraints",
+      "Sector and role mapping with realistic entry pathways",
+      "A written advisory memorandum outlining your direction",
+    ],
   },
   {
     no: "02",
-    title: "Fellowships & Scholarships",
-    desc: "Comprehensive support for Rhodes, Marshall, Fulbright, Schwarzman, Truman, and Pickering candidates, from preliminary positioning through final interview preparation.",
-    href: "/services",
-  },
-  {
-    no: "03",
-    title: "Foreign Service & Multilateral Careers",
-    desc: "Preparation for the Foreign Service Officer Test and Oral Assessment, plus targeted strategy for UN, World Bank, and European institution hiring processes.",
-    href: "/services",
-  },
-  {
-    no: "04",
-    title: "Early-Career Transitions",
-    desc: "Confidential advisory for professionals moving into international policy, development, or diplomacy — including positioning, network development, and offer negotiation.",
-    href: "/services",
+    icon: Target,
+    title: "Execution",
+    headline: "Land the role.",
+    desc: "Once direction is clear, we run a disciplined campaign to get you hired. Resume and narrative, network architecture, application strategy, interview preparation, and offer negotiation — the full arc from positioning to acceptance.",
+    bullets: [
+      "Resume, CV, and LinkedIn repositioning for the target sector",
+      "Network mapping and outreach strategy",
+      "Application drafting, review, and timing",
+      "Mock interviews, including FSOT, Oral Assessment, and panel formats",
+      "Offer evaluation and negotiation",
+    ],
   },
 ];
 
@@ -157,37 +162,58 @@ function Practice() {
     <section className="border-b border-border bg-paper">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12">
-          <header className="lg:col-span-4">
-            <div className="eyebrow">Practice Areas</div>
+          <Reveal as="header" className="lg:col-span-4">
+            <div className="eyebrow">What We Do</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              Four advisory practices, one discipline.
+              Two services. One outcome.
             </h2>
             <p className="mt-5 text-muted-foreground">
-              Engagements are structured, evidence-based, and tailored to each client's
-              trajectory. We do not operate as a coaching membership or course platform.
+              We work with each client on two questions: what to do in the field,
+              and how to land it. Everything else is in service of those two answers.
             </p>
-          </header>
+          </Reveal>
 
           <div className="lg:col-span-8">
             <ul className="divide-y divide-border border-y border-border">
-              {services.map((s) => (
+              {services.map((s, idx) => (
                 <li key={s.no}>
-                  <Link
-                    to={s.href}
-                    className="group grid gap-6 py-8 transition-colors hover:bg-stone/50 md:grid-cols-[64px_1fr_24px] md:items-start md:px-2"
-                  >
-                    <div className="font-display text-2xl text-emerald">{s.no}</div>
-                    <div>
-                      <h3 className="font-display text-xl text-navy-deep">{s.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                        {s.desc}
-                      </p>
+                  <Reveal delay={idx * 100}>
+                    <div className="grid gap-8 py-10 md:grid-cols-[64px_1fr] md:items-start md:px-2">
+                      <div>
+                        <div className="font-display text-2xl text-emerald">{s.no}</div>
+                        <s.icon className="mt-4 h-6 w-6 text-navy-deep/60" />
+                      </div>
+                      <div>
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                          {s.title}
+                        </div>
+                        <h3 className="mt-2 font-display text-2xl text-navy-deep">
+                          {s.headline}
+                        </h3>
+                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                          {s.desc}
+                        </p>
+                        <ul className="mt-5 space-y-2 text-sm text-navy-deep/85">
+                          {s.bullets.map((b) => (
+                            <li key={b} className="flex gap-3 border-l border-emerald/40 pl-3">
+                              <span>{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                    <ArrowUpRight className="hidden h-5 w-5 text-muted-foreground transition-colors group-hover:text-navy-deep md:block" />
-                  </Link>
+                  </Reveal>
                 </li>
               ))}
             </ul>
+            <Reveal delay={120} className="mt-8">
+              <Link
+                to="/services"
+                className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
+              >
+                See the full engagement process <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Reveal>
           </div>
         </div>
       </div>
@@ -196,26 +222,10 @@ function Practice() {
 }
 
 const phases = [
-  {
-    n: "I",
-    t: "Intake",
-    d: "A confidential 45-minute conversation to understand objectives, constraints, and competitive position.",
-  },
-  {
-    n: "II",
-    t: "Diagnostic",
-    d: "Structured review of academic record, professional experience, language and regional credentials.",
-  },
-  {
-    n: "III",
-    t: "Strategy",
-    d: "A written advisory memorandum outlining target programs or roles, timeline, and required positioning.",
-  },
-  {
-    n: "IV",
-    t: "Execution",
-    d: "Weekly 1:1 sessions, document review, and mock interview preparation through application or offer.",
-  },
+  { n: "I", t: "Intake", d: "A confidential 45-minute conversation to understand objectives, constraints, and competitive position." },
+  { n: "II", t: "Diagnostic", d: "Structured review of academic record, professional experience, language and regional credentials." },
+  { n: "III", t: "Strategy", d: "A written advisory memorandum outlining your direction in the field, target roles, and timeline." },
+  { n: "IV", t: "Execution", d: "Weekly 1:1 sessions, document review, network strategy, and interview preparation through offer." },
 ];
 
 function Engagement() {
@@ -223,7 +233,7 @@ function Engagement() {
     <section className="border-b border-border bg-navy-deep text-paper">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12">
-          <header className="lg:col-span-5">
+          <Reveal as="header" className="lg:col-span-5">
             <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
               Engagement Model
             </div>
@@ -234,14 +244,14 @@ function Engagement() {
               Every engagement follows the same disciplined arc, from intake through outcome.
               No templated coursework, no group cohorts.
             </p>
-          </header>
+          </Reveal>
           <div className="grid gap-px bg-paper/10 lg:col-span-7 lg:grid-cols-2">
-            {phases.map((p) => (
-              <div key={p.n} className="bg-navy-deep p-8">
+            {phases.map((p, i) => (
+              <Reveal key={p.n} delay={i * 80} className="bg-navy-deep p-8">
                 <div className="font-display text-3xl text-emerald">{p.n}</div>
                 <h3 className="mt-4 font-display text-xl text-paper">{p.t}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-paper/70">{p.d}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -254,7 +264,7 @@ function Outcomes() {
   return (
     <section className="border-b border-border bg-paper">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:px-10 lg:py-28">
-        <div className="lg:col-span-5">
+        <Reveal as="div" className="lg:col-span-5" y={32}>
           <img
             src={boardroom}
             alt="Conference room with city skyline"
@@ -263,23 +273,29 @@ function Outcomes() {
             height={1200}
             className="border border-border object-cover"
           />
-        </div>
+        </Reveal>
         <div className="lg:col-span-7">
-          <div className="eyebrow">Selected Outcomes</div>
-          <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-            Measured against the outcomes that matter.
-          </h2>
-          <div className="mt-10 grid grid-cols-2 gap-x-10 gap-y-10 border-t border-border pt-10">
+          <Reveal>
+            <div className="eyebrow">Where Clients Have Landed</div>
+            <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
+              Real placements across the field.
+            </h2>
+            <p className="mt-5 max-w-xl text-muted-foreground">
+              Our clients have moved into roles spanning the Hill, the executive branch,
+              and the strategic advisory firms that shape international policy and business.
+            </p>
+          </Reveal>
+          <div className="mt-10 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2">
             {[
-              { k: "94%", v: "Acceptance rate at first- or second-choice graduate program (2021–2024 cohorts)" },
-              { k: "31", v: "Fellowships secured, including Rhodes, Marshall, Fulbright, and Schwarzman" },
-              { k: "$2.1M", v: "Aggregate scholarship and fellowship funding awarded to clients" },
-              { k: "40+", v: "Countries represented across the client base since founding" },
-            ].map((o) => (
-              <div key={o.v}>
-                <div className="font-display text-4xl text-navy-deep">{o.k}</div>
-                <div className="mt-2 text-sm text-muted-foreground">{o.v}</div>
-              </div>
+              { o: "U.S. Senate", r: "Legislative & foreign policy staff roles" },
+              { o: "U.S. Department of State", r: "Foreign Service and civil service tracks" },
+              { o: "DGA Group", r: "Global advisory and strategic communications" },
+              { o: "The Asia Group", r: "Strategic advisory across the Indo-Pacific" },
+            ].map((o, i) => (
+              <Reveal key={o.o} delay={i * 80} className="bg-paper p-6">
+                <div className="font-display text-lg text-navy-deep">{o.o}</div>
+                <div className="mt-2 text-sm text-muted-foreground">{o.r}</div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -288,60 +304,40 @@ function Outcomes() {
   );
 }
 
-const insights = [
-  {
-    cat: "Foreign Service",
-    t: "Preparing for the FSOT: a structured six-month plan",
-    d: "What we tell every client about pacing, study materials, and the personal narrative section.",
-  },
-  {
-    cat: "Graduate Admissions",
-    t: "Why your statement of purpose isn't working",
-    d: "The three most common failures we see in international affairs applications — and how to correct them.",
-  },
-  {
-    cat: "Multilateral Careers",
-    t: "Inside the UN Young Professionals Programme",
-    d: "A candid look at the timeline, competitive dynamics, and post-placement realities.",
-  },
-];
-
-function Insights() {
+function Partners() {
   return (
     <section className="border-b border-border bg-stone">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <div className="eyebrow">Insights</div>
+      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+        <Reveal className="grid gap-10 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <div className="eyebrow">Backed By</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              Recent writing from the practice.
+              In partnership with leading institutions.
             </h2>
+            <p className="mt-5 max-w-2xl text-muted-foreground">
+              Discover Diplomacy is supported by partners who share our commitment to
+              developing the next generation of international affairs professionals.
+            </p>
           </div>
-          <Link
-            to="/insights"
-            className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
-          >
-            All insights
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="mt-12 grid gap-px border border-border bg-border md:grid-cols-3">
-          {insights.map((i) => (
-            <article key={i.t} className="flex flex-col bg-paper p-8">
+        </Reveal>
+        <div className="mt-12 grid gap-px border border-border bg-border md:grid-cols-2">
+          {[
+            {
+              n: "Young Professionals in Foreign Policy",
+              d: "A leading global network of emerging foreign policy leaders.",
+            },
+            {
+              n: "American University",
+              d: "Home to the School of International Service and a longtime hub for international affairs talent.",
+            },
+          ].map((p, i) => (
+            <Reveal key={p.n} delay={i * 100} className="bg-paper p-8">
               <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald">
-                {i.cat}
+                Partner
               </div>
-              <h3 className="mt-4 font-display text-xl leading-snug text-navy-deep">
-                {i.t}
-              </h3>
-              <p className="mt-3 text-sm text-muted-foreground">{i.d}</p>
-              <Link
-                to="/insights"
-                className="mt-6 inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-navy-deep"
-              >
-                Read brief <ArrowUpRight className="h-3.5 w-3.5" />
-              </Link>
-            </article>
+              <div className="mt-3 font-display text-xl text-navy-deep">{p.n}</div>
+              <p className="mt-2 text-sm text-muted-foreground">{p.d}</p>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -353,7 +349,7 @@ function CTA() {
   return (
     <section className="bg-paper">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-        <div className="grid gap-10 border-y border-border py-16 lg:grid-cols-12 lg:items-end">
+        <Reveal className="grid gap-10 border-y border-border py-16 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
             <div className="eyebrow">Begin an Engagement</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-5xl">
@@ -373,7 +369,7 @@ function CTA() {
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
