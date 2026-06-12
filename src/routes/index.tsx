@@ -3,7 +3,6 @@ import { ArrowRight, ArrowUpRight, Compass, Target } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 import institution from "@/assets/institution.jpg";
-import boardroom from "@/assets/boardroom.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,10 +36,8 @@ function HomePage() {
   return (
     <SiteLayout>
       <Hero />
-      <Placements />
       <Practice />
       <Engagement />
-      <Outcomes />
       <Partners />
       <CTA />
     </SiteLayout>
@@ -91,10 +88,6 @@ function Hero() {
               height={1280}
               className="h-[420px] w-full object-cover lg:h-[520px]"
             />
-            <figcaption className="border-t border-border bg-stone px-5 py-4 text-xs text-muted-foreground">
-              Clients have advanced to roles at the U.S. Senate, U.S. Department of State,
-              DGA Group, and The Asia Group.
-            </figcaption>
           </figure>
         </Reveal>
       </div>
@@ -131,7 +124,7 @@ const services = [
   {
     no: "01",
     icon: Compass,
-    title: "Direction",
+    title: "Career Orientation",
     headline: "Figure out what you actually want to do.",
     desc: "The field is vast — foreign service, multilaterals, think tanks, international development, government affairs, global business. We help you cut through the noise and identify the roles, sectors, and trajectories that genuinely fit your interests, skills, and life.",
     bullets: [
@@ -144,7 +137,7 @@ const services = [
   {
     no: "02",
     icon: Target,
-    title: "Execution",
+    title: "Placement Execution",
     headline: "Land the role.",
     desc: "Once direction is clear, we run a disciplined campaign to get you hired. Resume and narrative, network architecture, application strategy, interview preparation, and offer negotiation — the full arc from positioning to acceptance.",
     bullets: [
@@ -165,7 +158,7 @@ function Practice() {
           <Reveal as="header" className="lg:col-span-4">
             <div className="eyebrow">What We Do</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              Two services. One outcome.
+              Career orientation. Then placement.
             </h2>
             <p className="mt-5 text-muted-foreground">
               We work with each client on two questions: what to do in the field,
@@ -251,50 +244,6 @@ function Engagement() {
                 <div className="font-display text-3xl text-emerald">{p.n}</div>
                 <h3 className="mt-4 font-display text-xl text-paper">{p.t}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-paper/70">{p.d}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Outcomes() {
-  return (
-    <section className="border-b border-border bg-paper">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:px-10 lg:py-28">
-        <Reveal as="div" className="lg:col-span-5" y={32}>
-          <img
-            src={boardroom}
-            alt="Conference room with city skyline"
-            loading="lazy"
-            width={1600}
-            height={1200}
-            className="border border-border object-cover"
-          />
-        </Reveal>
-        <div className="lg:col-span-7">
-          <Reveal>
-            <div className="eyebrow">Where Clients Have Landed</div>
-            <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              Real placements across the field.
-            </h2>
-            <p className="mt-5 max-w-xl text-muted-foreground">
-              Our clients have moved into roles spanning the Hill, the executive branch,
-              and the strategic advisory firms that shape international policy and business.
-            </p>
-          </Reveal>
-          <div className="mt-10 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2">
-            {[
-              { o: "U.S. Senate", r: "Legislative & foreign policy staff roles" },
-              { o: "U.S. Department of State", r: "Foreign Service and civil service tracks" },
-              { o: "DGA Group", r: "Global advisory and strategic communications" },
-              { o: "The Asia Group", r: "Strategic advisory across the Indo-Pacific" },
-            ].map((o, i) => (
-              <Reveal key={o.o} delay={i * 80} className="bg-paper p-6">
-                <div className="font-display text-lg text-navy-deep">{o.o}</div>
-                <div className="mt-2 text-sm text-muted-foreground">{o.r}</div>
               </Reveal>
             ))}
           </div>

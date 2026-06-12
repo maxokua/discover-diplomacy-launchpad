@@ -26,7 +26,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               hello@discoverdiplomacy.com
             </a>
             <span aria-hidden>·</span>
-            <span>Washington, DC · Geneva</span>
+            <span>Based in Washington, DC</span>
           </div>
         </div>
       </div>
@@ -154,16 +154,12 @@ function SiteFooter() {
           />
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-paper/60">
-              Offices
+              Location
             </div>
             <ul className="mt-4 space-y-3 text-sm text-paper/80">
               <li>
                 <div className="font-medium text-paper">Washington, DC</div>
-                <div className="text-paper/60">1100 K Street NW</div>
-              </li>
-              <li>
-                <div className="font-medium text-paper">Geneva</div>
-                <div className="text-paper/60">Rue du Rhône 14</div>
+                <div className="text-paper/60">United States</div>
               </li>
             </ul>
           </div>
