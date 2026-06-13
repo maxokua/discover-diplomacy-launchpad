@@ -158,7 +158,7 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
             });
             couponId = coupon.id;
           }
-          await stripe.promotionCodes.create({ coupon: couponId, code: "IHEARTMAX" });
+          await stripe.promotionCodes.create({ coupon: couponId, code: "IHEARTMAX" } as any);
         }
       } catch (promoErr) {
         console.error("[membership] promo ensure failed", promoErr);
