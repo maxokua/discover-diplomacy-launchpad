@@ -32,6 +32,17 @@ function ResumeReviewIntake() {
       toast.error("File must be under 10MB");
       return;
     }
+    const ALLOWED_MIME = new Set([
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]);
+    const ALLOWED_EXT = new Set(["pdf", "doc", "docx"]);
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (!ALLOWED_EXT.has(ext) || !ALLOWED_MIME.has(file.type)) {
+      toast.error("Please upload a PDF, DOC, or DOCX file");
+      return;
+    }
     setBusy(true);
     try {
       const parsed = schema.parse({ targetRole, notes });
@@ -39,10 +50,9 @@ function ResumeReviewIntake() {
       if (!userData.user) throw new Error("Not signed in");
       const userId = userData.user.id;
 
-      const ext = file.name.split(".").pop() || "pdf";
       const path = `${userId}/${crypto.randomUUID()}.${ext}`;
       const { error: upErr } = await supabase.storage.from("resumes").upload(path, file, {
-        contentType: file.type || "application/pdf",
+        contentType: "application/octet-stream",
       });
       if (upErr) throw upErr;
 
