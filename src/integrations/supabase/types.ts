@@ -56,6 +56,45 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          institution: string | null
+          last_name: string
+          message: string
+          phone: string | null
+          practice: string | null
+          timeline: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          institution?: string | null
+          last_name: string
+          message: string
+          phone?: string | null
+          practice?: string | null
+          timeline?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          institution?: string | null
+          last_name?: string
+          message?: string
+          phone?: string | null
+          practice?: string | null
+          timeline?: string | null
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
