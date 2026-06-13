@@ -156,43 +156,7 @@ function DirectoryPage() {
                 <ul className="grid gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
                   {items.map((e) => (
                     <li key={e.url} className="bg-paper">
-                      <a
-                        href={e.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-full flex-col p-6 transition-colors hover:bg-stone"
-                      >
-                        <div className="font-display text-base text-navy-deep">{e.name}</div>
-                        <div className="mt-3 space-y-1.5 text-xs text-muted-foreground">
-                          {e.location && (
-                            <div>
-                              <span className="font-medium uppercase tracking-wider text-emerald">
-                                Location ·{" "}
-                              </span>
-                              {e.location}
-                            </div>
-                          )}
-                          {e.interest && (
-                            <div>
-                            <span className="font-medium uppercase tracking-wider text-emerald">
-                                Regional Focus ·{" "}
-                              </span>
-                              {e.interest.replace(/^Interest Area - /, "")}
-                            </div>
-                          )}
-                          {e.subsection && (
-                            <div>
-                              <span className="font-medium uppercase tracking-wider text-emerald">
-                                Interest Area ·{" "}
-                              </span>
-                              {e.subsection}
-                            </div>
-                          )}
-                        </div>
-                        <div className="mt-auto pt-4 text-xs font-medium uppercase tracking-wider text-navy-deep">
-                          More info →
-                        </div>
-                      </a>
+                      <EntryCard entry={e} />
                     </li>
                   ))}
                 </ul>
