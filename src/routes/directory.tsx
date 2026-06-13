@@ -64,10 +64,10 @@ function DirectoryPage() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return ALL_ENTRIES.filter((e) => {
-      if (category !== "All" && e.category !== category) return false;
-      if (location !== "All" && e.location !== location) return false;
-      if (interest !== "All" && e.interest !== interest) return false;
-      if (subsection !== "All" && e.subsection !== subsection) return false;
+      if (category !== "All program types" && e.category !== category) return false;
+      if (location !== "All locations" && e.location !== location) return false;
+      if (interest !== "All focus areas" && e.interest !== interest) return false;
+      if (subsection !== "All subject areas" && e.subsection !== subsection) return false;
       if (q && !`${e.name} ${e.location} ${e.interest} ${e.subsection}`.toLowerCase().includes(q))
         return false;
       return true;
