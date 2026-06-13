@@ -8,6 +8,10 @@ export const Route = createFileRoute("/accessibility")({
       { name: "description", content: "Our commitment to making Discover Diplomacy usable by everyone." },
       { property: "og:title", content: "Accessibility | Discover Diplomacy" },
       { property: "og:description", content: "Our commitment to making Discover Diplomacy usable by everyone." },
+      { property: "og:url", content: "https://discoverdiplomacy.org/accessibility" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/accessibility" },
     ],
   }),
   component: AccessibilityPage,
