@@ -20,6 +20,12 @@ export const Route = createFileRoute("/auth")({
     meta: [
       { title: "Sign in | Discover Diplomacy" },
       { name: "description", content: "Sign in or create an account to manage your engagements with Discover Diplomacy." },
+      { property: "og:title", content: "Sign in | Discover Diplomacy" },
+      { property: "og:description", content: "Sign in or create an account to manage your engagements with Discover Diplomacy." },
+      { property: "og:url", content: "https://discoverdiplomacy.org/auth" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/auth" },
     ],
   }),
   component: AuthPage,
