@@ -54,8 +54,8 @@ function DirectoryPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("All program types");
   const [location, setLocation] = useState<string>("All locations");
-  const [interest, setInterest] = useState<string>("All focus areas");
-  const [subsection, setSubsection] = useState<string>("All subject areas");
+  const [interest, setInterest] = useState<string>("All regional focuses");
+  const [subsection, setSubsection] = useState<string>("All interest areas");
 
   const locations = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.location)), []);
   const interests = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.interest)), []);
@@ -66,8 +66,8 @@ function DirectoryPage() {
     return ALL_ENTRIES.filter((e) => {
       if (category !== "All program types" && e.category !== category) return false;
       if (location !== "All locations" && e.location !== location) return false;
-      if (interest !== "All focus areas" && e.interest !== interest) return false;
-      if (subsection !== "All subject areas" && e.subsection !== subsection) return false;
+      if (interest !== "All regional focuses" && e.interest !== interest) return false;
+      if (subsection !== "All interest areas" && e.subsection !== subsection) return false;
       if (q && !`${e.name} ${e.location} ${e.interest} ${e.subsection}`.toLowerCase().includes(q))
         return false;
       return true;
@@ -87,8 +87,8 @@ function DirectoryPage() {
     setQuery("");
     setCategory("All program types");
     setLocation("All locations");
-    setInterest("All focus areas");
-    setSubsection("All subject areas");
+    setInterest("All regional focuses");
+    setSubsection("All interest areas");
   }
 
   return (
@@ -121,8 +121,8 @@ function DirectoryPage() {
           <div className="mt-3 grid grid-cols-2 gap-3">
             <Select value={category} onChange={setCategory} options={["All program types", ...CATEGORY_ORDER]} className="w-full" />
             <Select value={location} onChange={setLocation} options={["All locations", ...locations]} className="w-full" />
-            <Select value={interest} onChange={setInterest} options={["All focus areas", ...interests]} className="w-full" />
-            <Select value={subsection} onChange={setSubsection} options={["All subject areas", ...subsections]} className="w-full" />
+            <Select value={interest} onChange={setInterest} options={["All regional focuses", ...interests]} className="w-full" />
+            <Select value={subsection} onChange={setSubsection} options={["All interest areas", ...subsections]} className="w-full" />
           </div>
           <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
             <div>
@@ -172,8 +172,8 @@ function DirectoryPage() {
                           )}
                           {e.interest && (
                             <div>
-                              <span className="font-medium uppercase tracking-wider text-emerald">
-                                Focus ·{" "}
+                            <span className="font-medium uppercase tracking-wider text-emerald">
+                                Regional Focus ·{" "}
                               </span>
                               {e.interest.replace(/^Interest Area - /, "")}
                             </div>
@@ -181,7 +181,7 @@ function DirectoryPage() {
                           {e.subsection && (
                             <div>
                               <span className="font-medium uppercase tracking-wider text-emerald">
-                                Area ·{" "}
+                                Interest Area ·{" "}
                               </span>
                               {e.subsection}
                             </div>
