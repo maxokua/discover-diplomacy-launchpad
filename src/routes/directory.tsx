@@ -85,10 +85,10 @@ function DirectoryPage() {
 
   function reset() {
     setQuery("");
-    setCategory("All");
-    setLocation("All");
-    setInterest("All");
-    setSubsection("All");
+    setCategory("All program types");
+    setLocation("All locations");
+    setInterest("All focus areas");
+    setSubsection("All subject areas");
   }
 
   return (
