@@ -54,8 +54,8 @@ function DirectoryPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("All program types");
   const [location, setLocation] = useState<string>("All locations");
-  const [interest, setInterest] = useState<string>("All focus areas");
-  const [subsection, setSubsection] = useState<string>("All subject areas");
+  const [interest, setInterest] = useState<string>("All regional focuses");
+  const [subsection, setSubsection] = useState<string>("All interest areas");
 
   const locations = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.location)), []);
   const interests = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.interest)), []);
