@@ -91,6 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Career coaching and advisory for students and early-career professionals pursuing diplomacy, international policy, multilateral institutions, and global business." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d4edea30-cbac-4d4f-ab5b-a59ee2639a1f/id-preview-07130109--1a8ed9a3-1993-4d5d-8a78-ebf7d09730c6.lovable.app-1781325431925.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d4edea30-cbac-4d4f-ab5b-a59ee2639a1f/id-preview-07130109--1a8ed9a3-1993-4d5d-8a78-ebf7d09730c6.lovable.app-1781325431925.png" },
+      { name: "google-site-verification", content: "-6lhEyMznDFV7Dalsc-NSqs6-wlzIDSMbjoRPU9DYPs" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
