@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoachesRouteImport } from './routes/coaches'
@@ -21,11 +22,18 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
 import { Route as AuthenticatedResumeReviewReturnRouteImport } from './routes/_authenticated/resume-review.return'
 import { Route as AuthenticatedResumeReviewCheckoutRouteImport } from './routes/_authenticated/resume-review.checkout'
+import { Route as AuthenticatedMembershipReturnRouteImport } from './routes/_authenticated/membership.return'
+import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_authenticated/membership.checkout'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MembershipRoute = MembershipRouteImport.update({
+  id: '/membership',
+  path: '/membership',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsRoute = InsightsRouteImport.update({
@@ -85,6 +93,18 @@ const AuthenticatedResumeReviewCheckoutRoute =
     path: '/resume-review/checkout',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMembershipReturnRoute =
+  AuthenticatedMembershipReturnRouteImport.update({
+    id: '/membership/return',
+    path: '/membership/return',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMembershipCheckoutRoute =
+  AuthenticatedMembershipCheckoutRouteImport.update({
+    id: '/membership/checkout',
+    path: '/membership/checkout',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -99,8 +119,11 @@ export interface FileRoutesByFullPath {
   '/coaches': typeof CoachesRoute
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
+  '/membership': typeof MembershipRoute
   '/services': typeof ServicesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
+  '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
   '/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
@@ -113,8 +136,11 @@ export interface FileRoutesByTo {
   '/coaches': typeof CoachesRoute
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
+  '/membership': typeof MembershipRoute
   '/services': typeof ServicesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
+  '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
   '/resume-review': typeof AuthenticatedResumeReviewIndexRoute
@@ -129,8 +155,11 @@ export interface FileRoutesById {
   '/coaches': typeof CoachesRoute
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
+  '/membership': typeof MembershipRoute
   '/services': typeof ServicesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
+  '/_authenticated/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/_authenticated/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/_authenticated/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
   '/_authenticated/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
@@ -145,8 +174,11 @@ export interface FileRouteTypes {
     | '/coaches'
     | '/contact'
     | '/insights'
+    | '/membership'
     | '/services'
     | '/dashboard'
+    | '/membership/checkout'
+    | '/membership/return'
     | '/resume-review/checkout'
     | '/resume-review/return'
     | '/resume-review/'
@@ -159,8 +191,11 @@ export interface FileRouteTypes {
     | '/coaches'
     | '/contact'
     | '/insights'
+    | '/membership'
     | '/services'
     | '/dashboard'
+    | '/membership/checkout'
+    | '/membership/return'
     | '/resume-review/checkout'
     | '/resume-review/return'
     | '/resume-review'
@@ -174,8 +209,11 @@ export interface FileRouteTypes {
     | '/coaches'
     | '/contact'
     | '/insights'
+    | '/membership'
     | '/services'
     | '/_authenticated/dashboard'
+    | '/_authenticated/membership/checkout'
+    | '/_authenticated/membership/return'
     | '/_authenticated/resume-review/checkout'
     | '/_authenticated/resume-review/return'
     | '/_authenticated/resume-review/'
@@ -190,6 +228,7 @@ export interface RootRouteChildren {
   CoachesRoute: typeof CoachesRoute
   ContactRoute: typeof ContactRoute
   InsightsRoute: typeof InsightsRoute
+  MembershipRoute: typeof MembershipRoute
   ServicesRoute: typeof ServicesRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -201,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/membership': {
+      id: '/membership'
+      path: '/membership'
+      fullPath: '/membership'
+      preLoaderRoute: typeof MembershipRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights': {
@@ -280,6 +326,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResumeReviewCheckoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/membership/return': {
+      id: '/_authenticated/membership/return'
+      path: '/membership/return'
+      fullPath: '/membership/return'
+      preLoaderRoute: typeof AuthenticatedMembershipReturnRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/membership/checkout': {
+      id: '/_authenticated/membership/checkout'
+      path: '/membership/checkout'
+      fullPath: '/membership/checkout'
+      preLoaderRoute: typeof AuthenticatedMembershipCheckoutRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -292,6 +352,8 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedMembershipCheckoutRoute: typeof AuthenticatedMembershipCheckoutRoute
+  AuthenticatedMembershipReturnRoute: typeof AuthenticatedMembershipReturnRoute
   AuthenticatedResumeReviewCheckoutRoute: typeof AuthenticatedResumeReviewCheckoutRoute
   AuthenticatedResumeReviewReturnRoute: typeof AuthenticatedResumeReviewReturnRoute
   AuthenticatedResumeReviewIndexRoute: typeof AuthenticatedResumeReviewIndexRoute
@@ -299,6 +361,8 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedMembershipCheckoutRoute: AuthenticatedMembershipCheckoutRoute,
+  AuthenticatedMembershipReturnRoute: AuthenticatedMembershipReturnRoute,
   AuthenticatedResumeReviewCheckoutRoute:
     AuthenticatedResumeReviewCheckoutRoute,
   AuthenticatedResumeReviewReturnRoute: AuthenticatedResumeReviewReturnRoute,
@@ -316,6 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesRoute: CoachesRoute,
   ContactRoute: ContactRoute,
   InsightsRoute: InsightsRoute,
+  MembershipRoute: MembershipRoute,
   ServicesRoute: ServicesRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }

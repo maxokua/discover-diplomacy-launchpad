@@ -56,9 +56,8 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }): Promise<CheckoutResult> => {
     try {
-      const { createStripeClient, getStripeErrorMessage } = await import("@/lib/stripe.server");
+      const { createStripeClient } = await import("@/lib/stripe.server");
 
-      // Verify the review belongs to this user
       const { data: review, error: reviewError } = await context.supabase
         .from("resume_reviews")
         .select("id, user_id, status")
@@ -90,11 +89,133 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
         automatic_tax: { enabled: true },
       });
 
-      // Persist the session id on the review row
       await context.supabase
         .from("resume_reviews")
         .update({ stripe_session_id: session.id, environment: data.environment })
         .eq("id", data.reviewId);
+
+      return { clientSecret: session.client_secret ?? "" };
+    } catch (error) {
+      const { getStripeErrorMessage } = await import("@/lib/stripe.server");
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+export const createMembershipCheckout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (data: { returnUrl: string; environment: StripeEnv }) => {
+      if (!data.returnUrl || typeof data.returnUrl !== "string")
+        throw new Error("Invalid returnUrl");
+      if (data.environment !== "sandbox" && data.environment !== "live")
+        throw new Error("Invalid environment");
+      return data;
+    },
+  )
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      const { createStripeClient } = await import("@/lib/stripe.server");
+
+      // Prevent duplicate active memberships
+      const { data: existing } = await context.supabase
+        .from("subscriptions")
+        .select("status, current_period_end")
+        .eq("user_id", context.userId)
+        .eq("environment", data.environment)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (
+        existing &&
+        ["active", "trialing", "past_due"].includes(existing.status as string)
+      ) {
+        return { error: "You already have an active membership." };
+      }
+
+      const stripe = createStripeClient(data.environment);
+
+      const prices = await stripe.prices.list({ lookup_keys: ["career_membership_monthly"] });
+      if (!prices.data.length) throw new Error("Price not configured");
+      const stripePrice = prices.data[0];
+
+      const email = (context.claims as { email?: string } | undefined)?.email;
+      const customerId = await resolveOrCreateCustomer(stripe, {
+        email,
+        userId: context.userId,
+      });
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{ price: stripePrice.id, quantity: 1 }],
+        mode: "subscription",
+        ui_mode: "embedded_page",
+        return_url: data.returnUrl,
+        customer: customerId,
+        metadata: { userId: context.userId },
+        subscription_data: { metadata: { userId: context.userId } },
+      });
+
+      return { clientSecret: session.client_secret ?? "" };
+    } catch (error) {
+      const { getStripeErrorMessage } = await import("@/lib/stripe.server");
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+export const createCoachingCallCheckout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (data: { returnUrl: string; environment: StripeEnv }) => {
+      if (!data.returnUrl || typeof data.returnUrl !== "string")
+        throw new Error("Invalid returnUrl");
+      if (data.environment !== "sandbox" && data.environment !== "live")
+        throw new Error("Invalid environment");
+      return data;
+    },
+  )
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      const { createStripeClient } = await import("@/lib/stripe.server");
+
+      // Members only
+      const { data: sub } = await context.supabase
+        .from("subscriptions")
+        .select("status, current_period_end")
+        .eq("user_id", context.userId)
+        .eq("environment", data.environment)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      const isMember =
+        !!sub &&
+        (["active", "trialing"].includes(sub.status as string) ||
+          (sub.status === "canceled" &&
+            sub.current_period_end &&
+            new Date(sub.current_period_end as string) > new Date()));
+      if (!isMember) {
+        return { error: "The CEO coaching call is an add-on for active members." };
+      }
+
+      const stripe = createStripeClient(data.environment);
+      const prices = await stripe.prices.list({ lookup_keys: ["ceo_coaching_call_30"] });
+      if (!prices.data.length) throw new Error("Price not configured");
+      const stripePrice = prices.data[0];
+
+      const email = (context.claims as { email?: string } | undefined)?.email;
+      const customerId = await resolveOrCreateCustomer(stripe, {
+        email,
+        userId: context.userId,
+      });
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{ price: stripePrice.id, quantity: 1 }],
+        mode: "payment",
+        ui_mode: "embedded_page",
+        return_url: data.returnUrl,
+        customer: customerId,
+        payment_intent_data: { description: "30-Minute CEO Coaching Call" },
+        metadata: { userId: context.userId, kind: "ceo_coaching_call" },
+        automatic_tax: { enabled: true },
+      });
 
       return { clientSecret: session.client_secret ?? "" };
     } catch (error) {

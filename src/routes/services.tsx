@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 
@@ -10,13 +10,13 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Two services: 1:1 career orientation coaching for international affairs, and a $25 expert resume review tailored to pass ATS.",
+          "Two services: a $25 expert resume review and our most popular $50/month Career Membership — month-to-month, with resume tailoring, LinkedIn review, research, outreach, interview prep, and a global opportunities Substack.",
       },
       { property: "og:title", content: "Services — Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "1:1 career orientation coaching and a $25 expert resume review tailored to pass ATS.",
+          "$25 resume review or $50/month Career Membership — month-to-month, no annual lock-in.",
       },
     ],
   }),
@@ -41,56 +41,12 @@ function ServicesPage() {
         </div>
       </section>
 
-      {/* Career Orientation */}
-      <section id="orientation" className="border-b border-border bg-paper">
+      {/* Service 01 — Resume Review */}
+      <section id="resume-review" className="border-b border-border bg-paper">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
           <Reveal className="lg:col-span-5">
             <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
-              Service 01
-            </div>
-            <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-              Career Orientation
-            </h2>
-            <p className="mt-5 text-muted-foreground">
-              The field is huge. The Foreign Service, multilaterals, think tanks, intelligence,
-              international business, development — they all look adjacent from the outside and
-              feel completely different on the inside. We help you cut through it.
-            </p>
-            <Link
-              to="/contact"
-              className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
-            >
-              Book an intake call <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-          <Reveal className="lg:col-span-7" delay={120}>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              What it includes
-            </div>
-            <ul className="mt-5 space-y-3">
-              {[
-                "1:1 sessions with a coach who has lived the path you're considering",
-                "Career-orientation diagnostic: skills, interests, leverage, and constraints",
-                "A shortlist of roles, employers, and entry points worth actually pursuing",
-                "A personalized roadmap with milestones, applications, and people to meet",
-                "Direct, candid feedback on the tradeoffs of each track",
-              ].map((i) => (
-                <li key={i} className="flex gap-3 text-sm text-navy-deep/85">
-                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
-                  <span>{i}</span>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Resume Review */}
-      <section id="resume-review" className="border-b border-border bg-stone">
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
-          <Reveal className="lg:col-span-5">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
-              Service 02 · $25
+              Service 01 · $25
             </div>
             <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
               Expert Resume Review
@@ -131,23 +87,74 @@ function ServicesPage() {
         </div>
       </section>
 
+      {/* Service 02 — Career Membership (most popular) */}
+      <section id="membership" className="border-b border-border bg-stone">
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
+          <Reveal className="lg:col-span-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald/30 bg-emerald/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">
+              Service 02 · Most popular · $50/mo
+            </div>
+            <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
+              Career Membership
+            </h2>
+            <p className="mt-5 text-muted-foreground">
+              Our most popular service. Month-to-month — no annual plans, because we're not about
+              locking you in, we're about helping you. Cancel the day it stops being useful.
+            </p>
+            <Link
+              to="/membership"
+              className="mt-8 inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+            >
+              Join the membership — $50/mo
+            </Link>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Add a 30-min call with the CEO for $25. Otherwise, members get the CEO's email and
+              can ask as many questions as they'd like.
+            </p>
+          </Reveal>
+          <Reveal className="lg:col-span-7" delay={120}>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+              What's included
+            </div>
+            <ul className="mt-5 space-y-3">
+              {[
+                "Upload your documents to your profile so we can see everything",
+                "Tell us 5 target jobs — we tailor your resume specifically for each",
+                "Full LinkedIn profile review",
+                "Industry and company research",
+                "Outreach assistance — who to message and what to say",
+                "Interview prep tailored to your target roles",
+                "Help drafting and tailoring each application",
+                "Substack with 50+ open opportunities from every region of the world",
+                "Direct email access to the CEO",
+              ].map((i) => (
+                <li key={i} className="flex gap-3 text-sm text-navy-deep/85">
+                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
+                  <span>{i}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
+
       <section className="bg-navy-deep text-paper">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
           <div className="grid items-center gap-8 lg:grid-cols-12">
             <div className="lg:col-span-8">
               <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
-                Not sure where to start?
+                Two ways to get started
               </div>
               <h2 className="mt-4 font-display text-2xl text-paper lg:text-3xl">
-                Most clients start with the $25 resume review and move to coaching from there.
+                Try the $25 review, or jump straight into the $50/mo membership.
               </h2>
             </div>
             <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
-              <Link to="/resume-review" className="bg-paper px-5 py-3 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-paper/90">
-                Start the $25 review
+              <Link to="/membership" className="bg-paper px-5 py-3 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-paper/90">
+                Start membership — $50/mo
               </Link>
-              <Link to="/contact" className="border border-paper/40 px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-paper/10">
-                Book a coaching intake
+              <Link to="/resume-review" className="border border-paper/40 px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-paper/10">
+                $25 resume review
               </Link>
             </div>
           </div>
@@ -156,3 +163,4 @@ function ServicesPage() {
     </SiteLayout>
   );
 }
+
