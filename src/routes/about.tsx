@@ -46,18 +46,23 @@ function AboutPage() {
       <section className="border-b border-border bg-paper">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
           <Reveal className="lg:col-span-5">
-            <img
-              src={institution}
-              alt="Institutional architecture"
-              loading="lazy"
-              width={1920}
-              height={1280}
-              className="border border-border object-cover"
-            />
+            <div className="overflow-hidden border border-border">
+              <Parallax speed={-0.18}>
+                <img
+                  src={institution}
+                  alt="Institutional architecture"
+                  loading="lazy"
+                  width={1920}
+                  height={1280}
+                  className="scale-110 object-cover"
+                />
+              </Parallax>
+            </div>
             <div className="mt-4 text-xs text-muted-foreground">
               Federal Triangle, Washington, DC
             </div>
           </Reveal>
+
           <Reveal className="lg:col-span-7" delay={120}>
             <div className="eyebrow">Origin</div>
             <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
