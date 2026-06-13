@@ -118,7 +118,7 @@ function DirectoryPage() {
             placeholder="Search by name…"
             className="w-full border border-border bg-paper px-4 py-2.5 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
           />
-          <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="mt-3 grid grid-cols-2 gap-3">
             <Select value={category} onChange={setCategory} options={["All program types", ...CATEGORY_ORDER]} className="w-full" />
             <Select value={location} onChange={setLocation} options={["All locations", ...locations]} className="w-full" />
             <Select value={interest} onChange={setInterest} options={["All focus areas", ...interests]} className="w-full" />
