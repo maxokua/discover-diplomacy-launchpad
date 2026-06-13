@@ -82,11 +82,20 @@ function CoachesPage() {
       let resumePath: string | null = null;
       if (file) {
         if (file.size > 10 * 1024 * 1024) throw new Error("Resume must be under 10MB");
-        const ext = file.name.split(".").pop() || "pdf";
+        const ALLOWED_MIME = new Set([
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ]);
+        const ALLOWED_EXT = new Set(["pdf", "doc", "docx"]);
+        const ext = (file.name.split(".").pop() || "").toLowerCase();
+        if (!ALLOWED_EXT.has(ext) || !ALLOWED_MIME.has(file.type)) {
+          throw new Error("Resume must be a PDF, DOC, or DOCX file");
+        }
         resumePath = `applications/${crypto.randomUUID()}.${ext}`;
         const { error: upErr } = await supabase.storage
           .from("coach-resumes")
-          .upload(resumePath, file, { contentType: file.type || "application/pdf" });
+          .upload(resumePath, file, { contentType: "application/octet-stream" });
         if (upErr) throw upErr;
       }
 
