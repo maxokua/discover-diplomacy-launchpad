@@ -260,13 +260,13 @@ function Engagement() {
 
 function BackedBy() {
   return (
-    <section className="border-b border-border bg-stone">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-        <Reveal className="flex flex-col items-center gap-10 text-center">
+    <section className="border-b border-border bg-paper">
+      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10 lg:py-16">
+        <Reveal className="flex flex-col items-center gap-8 text-center">
           <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
             Backed by
           </div>
-          <ul className="flex flex-wrap items-center justify-center gap-x-20 gap-y-10">
+          <ul className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
             <li>
               <img
                 src={ypfpLogo.url}
@@ -274,10 +274,10 @@ function BackedBy() {
                 width={160}
                 height={160}
                 loading="lazy"
-                className="h-24 w-24 object-contain transition-all duration-500 hover:scale-105 lg:h-28 lg:w-28"
+                className="h-20 w-20 object-contain opacity-80 grayscale transition-all duration-500 hover:scale-105 hover:opacity-100 hover:grayscale-0 lg:h-24 lg:w-24"
               />
             </li>
-            <li className="hidden h-16 w-px bg-border md:block" aria-hidden />
+            <li className="hidden h-10 w-px bg-border md:block" aria-hidden />
             <li>
               <img
                 src={americanUniversityLogo.url}
@@ -285,7 +285,7 @@ function BackedBy() {
                 width={160}
                 height={160}
                 loading="lazy"
-                className="h-20 w-20 object-contain transition-all duration-500 hover:scale-105 lg:h-24 lg:w-24"
+                className="h-16 w-16 object-contain opacity-80 grayscale transition-all duration-500 hover:scale-105 hover:opacity-100 hover:grayscale-0 lg:h-20 lg:w-20"
               />
             </li>
           </ul>
