@@ -2,11 +2,13 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { type ReactNode, useState } from "react";
 import { Menu, X } from "lucide-react";
 import logoAsset from "@/assets/compass-logo.png.asset.json";
+import { useAuth } from "@/hooks/use-auth";
 
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
   { to: "/about", label: "About" },
+  { to: "/coaches", label: "Coaches" },
   { to: "/insights", label: "Insights" },
   { to: "/contact", label: "Contact" },
 ] as const;
@@ -14,10 +16,10 @@ const NAV = [
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user } = useAuth();
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      {/* Top utility bar */}
       <div className="hidden border-b border-border bg-navy-deep text-paper md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-xs lg:px-10">
           <span className="text-paper/70">Career coaching for globally minded professionals</span>
@@ -27,11 +29,20 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </a>
             <span aria-hidden>·</span>
             <span>Based in Washington, DC</span>
+            <span aria-hidden>·</span>
+            {user ? (
+              <Link to="/dashboard" className="font-medium text-paper hover:text-paper">
+                Dashboard
+              </Link>
+            ) : (
+              <Link to="/auth" className="font-medium text-paper hover:text-paper">
+                Sign in
+              </Link>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Primary nav */}
       <header className="sticky top-0 z-40 border-b border-border bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
           <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
@@ -46,7 +57,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-7 md:flex">
             {NAV.map((n) => {
               const active = pathname === n.to || (n.to !== "/" && pathname.startsWith(n.to));
               return (
@@ -55,9 +66,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   to={n.to}
                   className={
                     "text-sm transition-colors " +
-                    (active
-                      ? "text-navy-deep font-medium"
-                      : "text-muted-foreground hover:text-navy-deep")
+                    (active ? "text-navy-deep font-medium" : "text-muted-foreground hover:text-navy-deep")
                   }
                 >
                   {n.label}
@@ -65,10 +74,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               );
             })}
             <Link
-              to="/contact"
+              to={user ? "/dashboard" : "/auth"}
               className="ml-2 inline-flex items-center rounded-sm bg-navy-deep px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
             >
-              Book Consultation
+              {user ? "Dashboard" : "Sign in"}
             </Link>
           </nav>
 
@@ -96,11 +105,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 </Link>
               ))}
               <Link
-                to="/contact"
+                to={user ? "/dashboard" : "/auth"}
                 onClick={() => setOpen(false)}
                 className="mt-4 inline-flex items-center justify-center rounded-sm bg-navy-deep px-4 py-3 text-xs font-medium uppercase tracking-wider text-paper"
               >
-                Book Consultation
+                {user ? "Dashboard" : "Sign in"}
               </Link>
             </div>
           </nav>
@@ -129,9 +138,8 @@ function SiteFooter() {
             </div>
           </div>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-paper/70">
-            A career advisory practice for students and early-career professionals
-            pursuing roles in diplomacy, international policy, multilateral institutions,
-            and global affairs.
+            A career advisory practice for students and early-career professionals pursuing roles
+            in diplomacy, international policy, multilateral institutions, and global affairs.
           </p>
         </div>
 
@@ -148,8 +156,8 @@ function SiteFooter() {
             title="Engage"
             links={[
               { to: "/contact", label: "Consultation" },
-              { to: "/contact", label: "Speaking" },
-              { to: "/contact", label: "Partnerships" },
+              { to: "/resume-review", label: "Resume review" },
+              { to: "/coaches", label: "Become a coach" },
             ]}
           />
           <div>
