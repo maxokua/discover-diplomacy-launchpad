@@ -4,18 +4,22 @@ import { SiteLayout } from "@/components/site-layout";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy & Terms of Use | Discover Diplomacy" },
+      { title: "Privacy Policy | Discover Diplomacy" },
       {
         name: "description",
         content:
-          "How Discover Diplomacy collects, uses, and protects your information, plus the consent you give when you create an account, including resume use, AI editing, and employer sharing.",
+          "How Discover Diplomacy collects, uses, and protects your information, and the consent you give when you create an account.",
       },
       { property: "og:title", content: "Privacy Policy | Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "How Discover Diplomacy collects, uses, and protects your information, plus the consent you give when you create an account.",
+          "How Discover Diplomacy collects, uses, and protects your information.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/privacy" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/privacy" },
     ],
   }),
   component: PrivacyPage,
