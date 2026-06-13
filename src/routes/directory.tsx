@@ -172,8 +172,8 @@ function DirectoryPage() {
                           )}
                           {e.interest && (
                             <div>
-                              <span className="font-medium uppercase tracking-wider text-emerald">
-                                Focus ·{" "}
+                            <span className="font-medium uppercase tracking-wider text-emerald">
+                                Regional Focus ·{" "}
                               </span>
                               {e.interest.replace(/^Interest Area - /, "")}
                             </div>
@@ -181,7 +181,7 @@ function DirectoryPage() {
                           {e.subsection && (
                             <div>
                               <span className="font-medium uppercase tracking-wider text-emerald">
-                                Area ·{" "}
+                                Interest Area ·{" "}
                               </span>
                               {e.subsection}
                             </div>
