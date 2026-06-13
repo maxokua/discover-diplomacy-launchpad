@@ -548,7 +548,9 @@ export const adminFinalizeReview = createServerFn({ method: "POST" })
 
 // ─── Coach + Employer portals ───────────────────────────────────────────────
 
-async function requireAnyRole(context: any, roles: string[]) {
+type AppRole = "admin" | "coach" | "employer" | "moderator" | "user";
+
+async function requireAnyRole(context: any, roles: AppRole[]) {
   for (const role of roles) {
     const { data } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
@@ -558,6 +560,7 @@ async function requireAnyRole(context: any, roles: string[]) {
   }
   throw new Error("Forbidden");
 }
+
 
 export const coachListClients = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
