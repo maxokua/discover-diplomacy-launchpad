@@ -58,6 +58,7 @@ function DashboardPage() {
   async function load() {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return;
+    setUserId(userData.user.id);
     const env = getStripeEnvironment();
     const [{ data: prof }, { data: revs }, { data: subRow }] = await Promise.all([
       supabase.from("profiles").select("full_name, email").eq("id", userData.user.id).single(),
