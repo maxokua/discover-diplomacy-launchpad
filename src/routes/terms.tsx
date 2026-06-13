@@ -8,6 +8,10 @@ export const Route = createFileRoute("/terms")({
       { name: "description", content: "The terms that govern your use of Discover Diplomacy services." },
       { property: "og:title", content: "Terms of Service | Discover Diplomacy" },
       { property: "og:description", content: "The terms that govern your use of Discover Diplomacy services." },
+      { property: "og:url", content: "https://discoverdiplomacy.org/terms" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/terms" },
     ],
   }),
   component: TermsPage,
