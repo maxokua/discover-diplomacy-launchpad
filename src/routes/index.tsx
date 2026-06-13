@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, Compass, Target } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 import { Parallax } from "@/components/scroll-effects";
+import { MagneticLink } from "@/components/magnetic";
 import institution from "@/assets/institution.jpg";
 
 
@@ -84,13 +85,13 @@ function Hero() {
             want, and ends with the offer in hand.
           </Reveal>
           <Reveal delay={240} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <Link
+            <MagneticLink
               to="/membership"
               className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
               Start a Membership
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </MagneticLink>
             <Link
               to="/services"
               className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
