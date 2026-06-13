@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as MembershipRouteImport } from './routes/membership'
+import { Route as EmployersRouteImport } from './routes/employers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoachesRouteImport } from './routes/coaches'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -33,6 +34,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const MembershipRoute = MembershipRouteImport.update({
   id: '/membership',
   path: '/membership',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployersRoute = EmployersRouteImport.update({
+  id: '/employers',
+  path: '/employers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/coaches': typeof CoachesRoute
   '/contact': typeof ContactRoute
+  '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
   '/services': typeof ServicesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/coaches': typeof CoachesRoute
   '/contact': typeof ContactRoute
+  '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
   '/services': typeof ServicesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/coaches': typeof CoachesRoute
   '/contact': typeof ContactRoute
+  '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
   '/services': typeof ServicesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/coaches'
     | '/contact'
+    | '/employers'
     | '/membership'
     | '/services'
     | '/dashboard'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/coaches'
     | '/contact'
+    | '/employers'
     | '/membership'
     | '/services'
     | '/dashboard'
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/coaches'
     | '/contact'
+    | '/employers'
     | '/membership'
     | '/services'
     | '/_authenticated/dashboard'
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CoachesRoute: typeof CoachesRoute
   ContactRoute: typeof ContactRoute
+  EmployersRoute: typeof EmployersRoute
   MembershipRoute: typeof MembershipRoute
   ServicesRoute: typeof ServicesRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -234,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/membership'
       fullPath: '/membership'
       preLoaderRoute: typeof MembershipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employers': {
+      id: '/employers'
+      path: '/employers'
+      fullPath: '/employers'
+      preLoaderRoute: typeof EmployersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -359,6 +379,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CoachesRoute: CoachesRoute,
   ContactRoute: ContactRoute,
+  EmployersRoute: EmployersRoute,
   MembershipRoute: MembershipRoute,
   ServicesRoute: ServicesRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
@@ -366,3 +387,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
