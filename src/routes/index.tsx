@@ -36,9 +36,10 @@ function HomePage() {
   return (
     <SiteLayout>
       <Hero />
+      <BackedBy />
       <Practice />
       <Engagement />
-      <Partners />
+      <ForEmployers />
       <CTA />
     </SiteLayout>
   );
@@ -144,7 +145,7 @@ const services = [
       "Resume, CV, and LinkedIn repositioning for the target sector",
       "Network mapping and outreach strategy",
       "Application drafting, review, and timing",
-      "Mock interviews, including FSOT, Oral Assessment, and panel formats",
+      "Mock interviews with panel-style preparation tailored to each role",
       "Offer evaluation and negotiation",
     ],
   },
@@ -214,11 +215,11 @@ function Practice() {
   );
 }
 
-const phases = [
-  { n: "I", t: "Intake", d: "A confidential 45-minute conversation to understand objectives, constraints, and competitive position." },
-  { n: "II", t: "Diagnostic", d: "Structured review of academic record, professional experience, language and regional credentials." },
-  { n: "III", t: "Strategy", d: "A written advisory memorandum outlining your direction in the field, target roles, and timeline." },
-  { n: "IV", t: "Execution", d: "Weekly 1:1 sessions, document review, network strategy, and interview preparation through offer." },
+const engagementSteps = [
+  { n: "01", t: "Make your account", d: "Sign up in under a minute." },
+  { n: "02", t: "Upload your documents", d: "Resume, CV, LinkedIn — whatever you've got. We work from what you give us." },
+  { n: "03", t: "Link the job postings", d: "Drop in the roles you actually want to apply to. That pings us." },
+  { n: "04", t: "We send it back", d: "Updated documents and clear advice — no hassle, no awkward email chains, no information overload." },
 ];
 
 function Engagement() {
@@ -231,15 +232,16 @@ function Engagement() {
               Engagement Model
             </div>
             <h2 className="mt-5 font-display text-3xl text-paper lg:text-4xl">
-              A four-phase advisory process.
+              Just clear insights into exactly what you should do.
             </h2>
             <p className="mt-5 max-w-md text-paper/70">
-              Every engagement follows the same disciplined arc, from intake through outcome.
-              No templated coursework, no group cohorts.
+              Make your account, upload your documents, and link the job postings you want to
+              apply to. That pings us — and we send you your updated documents and advice. No
+              hassle, no awkward email exchange, no information overload.
             </p>
           </Reveal>
           <div className="grid gap-px bg-paper/10 lg:col-span-7 lg:grid-cols-2">
-            {phases.map((p, i) => (
+            {engagementSteps.map((p, i) => (
               <Reveal key={p.n} delay={i * 80} className="bg-navy-deep p-8">
                 <div className="font-display text-3xl text-emerald">{p.n}</div>
                 <h3 className="mt-4 font-display text-xl text-paper">{p.t}</h3>
@@ -253,46 +255,70 @@ function Engagement() {
   );
 }
 
-function Partners() {
+function BackedBy() {
   return (
     <section className="border-b border-border bg-stone">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-        <Reveal className="grid gap-10 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <div className="eyebrow">Backed By</div>
-            <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              In partnership with leading institutions.
-            </h2>
-            <p className="mt-5 max-w-2xl text-muted-foreground">
-              Discover Diplomacy is supported by partners who share our commitment to
-              developing the next generation of international affairs professionals.
-            </p>
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
+        <Reveal className="flex flex-col items-center gap-10 text-center">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
+            Backed by
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-10">
+            <div className="flex flex-col items-center">
+              <div className="font-display text-2xl font-semibold tracking-tight text-navy-deep lg:text-3xl">
+                YPFP
+              </div>
+              <div className="mt-2 text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                Young Professionals in Foreign Policy
+              </div>
+            </div>
+            <div className="hidden h-12 w-px bg-border md:block" aria-hidden />
+            <div className="flex flex-col items-center">
+              <div className="font-display text-2xl font-semibold tracking-tight text-navy-deep lg:text-3xl">
+                American University
+              </div>
+              <div className="mt-2 text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                School of International Service · Washington, DC
+              </div>
+            </div>
           </div>
         </Reveal>
-        <div className="mt-12 grid gap-px border border-border bg-border md:grid-cols-2">
-          {[
-            {
-              n: "Young Professionals in Foreign Policy",
-              d: "A leading global network of emerging foreign policy leaders.",
-            },
-            {
-              n: "American University",
-              d: "Home to the School of International Service and a longtime hub for international affairs talent.",
-            },
-          ].map((p, i) => (
-            <Reveal key={p.n} delay={i * 100} className="bg-paper p-8">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald">
-                Partner
-              </div>
-              <div className="mt-3 font-display text-xl text-navy-deep">{p.n}</div>
-              <p className="mt-2 text-sm text-muted-foreground">{p.d}</p>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );
 }
+
+function ForEmployers() {
+  return (
+    <section className="border-b border-border bg-paper">
+      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+        <Reveal className="grid gap-10 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <div className="eyebrow">For Employers</div>
+            <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
+              Hiring? Access vetted candidates in international affairs.
+            </h2>
+            <p className="mt-5 max-w-2xl text-muted-foreground">
+              Our clients are students and early-career professionals serious enough about the
+              field to invest in their own preparation. Browse their resumes and reach the ones
+              that fit your role.
+            </p>
+          </div>
+          <div className="lg:col-span-5 lg:text-right">
+            <Link
+              to="/employers"
+              className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
+            >
+              Access candidate resumes
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 
 function CTA() {
   return (

@@ -148,8 +148,7 @@ function ContactPage() {
                 <div className="grid gap-6 sm:grid-cols-2">
                   <Field
                     id="institution"
-                    label="Current institution or employer"
-                    required
+                    label="Current institution or employer (if applicable)"
                   />
                   <Select
                     id="practice"

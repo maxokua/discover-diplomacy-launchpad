@@ -10,7 +10,7 @@ const NAV = [
   { to: "/membership", label: "Membership" },
   { to: "/about", label: "About" },
   { to: "/coaches", label: "Coaches" },
-  { to: "/insights", label: "Insights" },
+  { to: "/employers", label: "Employers" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -149,8 +149,8 @@ function SiteFooter() {
             title="Practice"
             links={[
               { to: "/services", label: "Services" },
+              { to: "/membership", label: "Membership" },
               { to: "/about", label: "About" },
-              { to: "/insights", label: "Insights" },
             ]}
           />
           <FooterCol
