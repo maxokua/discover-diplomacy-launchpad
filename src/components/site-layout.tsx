@@ -131,7 +131,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main id="main-content" className="flex-1">{children}</main>
+      <main id="main-content" key={pathname} className="flex-1 page-enter">{children}</main>
 
       <SiteFooter />
     </div>
