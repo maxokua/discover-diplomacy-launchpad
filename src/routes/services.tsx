@@ -10,7 +10,7 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Two services: a $25 expert resume review and our most popular $50/month Career Membership — month-to-month, with resume tailoring, LinkedIn review, research, outreach, interview prep, and a global opportunities Substack.",
+          "Two services: a $25 expert resume review and our most popular $50/month Career Membership — month-to-month, with resume tailoring, LinkedIn review, research, outreach, interview prep, and a global opportunities Substack with 50 opportunities weekly.",
       },
       { property: "og:title", content: "Services — Discover Diplomacy" },
       {
@@ -122,10 +122,10 @@ function ServicesPage() {
                 "Tell us 5 target jobs — we tailor your resume specifically for each",
                 "Full LinkedIn profile review",
                 "Industry and company research",
-                "Outreach assistance — who to message and what to say",
+                "Outreach assistance — direct help to build your network",
                 "Interview prep tailored to your target roles",
                 "Help drafting and tailoring each application",
-                "Substack with 50+ open opportunities from every region of the world",
+                "Substack with 50 opportunities weekly from every region of the world",
                 "Direct email access to the CEO",
               ].map((i) => (
                 <li key={i} className="flex gap-3 text-sm text-navy-deep/85">

@@ -11,13 +11,13 @@ export const Route = createFileRoute("/membership")({
       {
         name: "description",
         content:
-          "Our most popular service. $50/month, no annual lock-in. Resume tailoring for 5 target jobs, LinkedIn review, industry research, outreach, interview prep, application help, and a Substack with 50+ global opportunities.",
+          "Our most popular service. $50/month, no annual lock-in. Resume tailoring for 5 target jobs, LinkedIn review, industry research, outreach, interview prep, application help, and a Substack with 50 opportunities weekly.",
       },
       { property: "og:title", content: "Career Membership — $50/mo" },
       {
         property: "og:description",
         content:
-          "Tailored resume, LinkedIn review, research, outreach, interview prep, applications, and the global opportunities Substack. Direct CEO email access.",
+          "Tailored resume, LinkedIn review, research, outreach, interview prep, applications, and a Substack with 50 opportunities weekly. Direct CEO email access.",
       },
     ],
   }),
@@ -29,10 +29,10 @@ const INCLUDED = [
   "Tell us the 5 jobs you want us to specifically tailor your resume for",
   "Full LinkedIn profile review and rewrite",
   "Industry and company research for your targets",
-  "Outreach assistance — who to message, what to say",
+  "Outreach assistance — direct help to build your network",
   "Interview prep tailored to the roles you're chasing",
   "Help drafting and tailoring each application",
-  "Access to our Substack with 50+ open opportunities from every region of the world",
+  "Access to our Substack with 50 opportunities weekly from every region of the world",
   "Direct email access to the CEO — ask as many questions as you want",
 ];
 

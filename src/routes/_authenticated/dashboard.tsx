@@ -156,8 +156,8 @@ function DashboardPage() {
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Tailored resume for 5 target jobs, LinkedIn review, research, outreach,
-                    interview prep, applications, and the global opportunities Substack. Month to
-                    month, cancel anytime.
+                    interview prep, applications, and the global opportunities Substack with 50
+                    opportunities weekly. Month to month, cancel anytime.
                   </p>
                 </>
               )}
