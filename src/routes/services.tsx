@@ -168,6 +168,27 @@ function ServicesPage() {
         </div>
       </section>
 
+      <section className="border-t border-border bg-paper">
+        <div className="mx-auto max-w-3xl px-6 py-16 text-center lg:px-10">
+          <Reveal>
+            <div className="eyebrow">Need-based pricing</div>
+            <h2 className="mt-4 font-display text-2xl text-navy-deep lg:text-3xl">
+              Are the prices too high?
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              We want to help. If $25 or $50 a month is out of reach right now, send us a note and we will work something out with you. No forms, no proof of income, no awkwardness. Just email us and tell us where you are.
+            </p>
+            <a
+              href="mailto:hello@discoverdiplomacy.com?subject=Pricing"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
+            >
+              hello@discoverdiplomacy.com
+            </a>
+          </Reveal>
+        </div>
+      </section>
+
+
       <section className="bg-navy-deep text-paper">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
           <div className="grid items-center gap-8 lg:grid-cols-12">
