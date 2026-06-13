@@ -20,6 +20,10 @@ export const Route = createFileRoute("/contact")({
         content:
           "Request a confidential consultation with Discover Diplomacy.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/contact" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/contact" },
     ],
   }),
   component: ContactPage,

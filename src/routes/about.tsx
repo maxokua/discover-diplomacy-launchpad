@@ -18,6 +18,10 @@ export const Route = createFileRoute("/about")({
         content:
           "Founded in 2024 by four students who lived the broken path into international affairs.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/about" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/about" },
     ],
   }),
   component: AboutPage,
