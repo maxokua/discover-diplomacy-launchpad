@@ -45,6 +45,7 @@ function DashboardPage() {
   const navigate = useNavigate();
   const { coaching } = Route.useSearch();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [sub, setSub] = useState<Sub | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,6 +58,7 @@ function DashboardPage() {
   async function load() {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return;
+    setUserId(userData.user.id);
     const env = getStripeEnvironment();
     const [{ data: prof }, { data: revs }, { data: subRow }] = await Promise.all([
       supabase.from("profiles").select("full_name, email").eq("id", userData.user.id).single(),
@@ -248,6 +250,19 @@ function DashboardPage() {
                 Welcome{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}.
               </h1>
               <p className="mt-3 text-sm text-muted-foreground">{profile?.email}</p>
+              {userId && (
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(userId);
+                    toast.success("User ID copied to clipboard");
+                  }}
+                  className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground hover:text-navy-deep"
+                  title="Click to copy"
+                >
+                  <span>ID: {userId}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+              )}
             </div>
             <div className="flex flex-wrap gap-2">
               <button
