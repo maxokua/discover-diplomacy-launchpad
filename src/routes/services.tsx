@@ -10,7 +10,7 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Two services: a $25 expert resume review and our most popular $50/month Career Membership, month-to-month, with resume tailoring, LinkedIn review, research, outreach, interview prep, and a global opportunities Substack with 50 opportunities weekly.",
+          "Two services from Discover Diplomacy: a $25 expert resume review and our $50/month Career Membership — month-to-month, no annual lock-in.",
       },
       { property: "og:title", content: "Services | Discover Diplomacy" },
       {
