@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, Compass, Target } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { Parallax } from "@/components/scroll-effects";
 import institution from "@/assets/institution.jpg";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -101,15 +103,18 @@ function Hero() {
 
         <Reveal as="aside" delay={200} y={36} className="lg:col-span-5">
           <figure className="overflow-hidden border border-border">
-            <img
-              src={institution}
-              alt="Classical institutional architecture at dusk"
-              width={1920}
-              height={1280}
-              className="h-[420px] w-full object-cover lg:h-[520px]"
-            />
+            <Parallax speed={-0.15}>
+              <img
+                src={institution}
+                alt="Classical institutional architecture at dusk"
+                width={1920}
+                height={1280}
+                className="h-[460px] w-full scale-110 object-cover lg:h-[560px]"
+              />
+            </Parallax>
           </figure>
         </Reveal>
+
       </div>
     </section>
   );
@@ -151,7 +156,7 @@ function Practice() {
     <section className="border-b border-border bg-paper">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12">
-          <Reveal as="header" className="lg:col-span-4">
+          <Reveal as="header" className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
             <div className="eyebrow">What We Do</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
               Career orientation. Then placement.
