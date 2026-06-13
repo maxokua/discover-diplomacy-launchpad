@@ -20,6 +20,8 @@ function ResumeReviewIntake() {
   const [targetRole, setTargetRole] = useState("");
   const [notes, setNotes] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [visibleToEmployers, setVisibleToEmployers] = useState(false);
+  const [visibleToCoaches, setVisibleToCoaches] = useState(false);
   const [busy, setBusy] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
