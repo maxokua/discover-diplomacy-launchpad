@@ -1,0 +1,22 @@
+# Discover Diplomacy
+
+> Career advisory for students and early-career professionals pursuing careers in diplomacy, international policy, multilateral institutions, and global business.
+
+Discover Diplomacy helps globally minded students and early-career professionals figure out what they want to do in international affairs, and gives them the tools to land those roles. Services include a $25 expert resume review and a $50/month Career Membership covering resume tailoring, LinkedIn review, research, outreach, interview prep, and a weekly Substack of 50 global opportunities.
+
+## Pages
+
+- [Home](/): Career advisory for international affairs and global business.
+- [Services](/services): $25 resume review and $50/month Career Membership.
+- [Career Membership](/membership): Month-to-month membership with resume tailoring, outreach, interview prep, and weekly opportunities.
+- [About](/about): Who we are and how we work.
+- [Coaches](/coaches): Apply to coach with Discover Diplomacy.
+- [For Employers](/employers): Browse vetted candidate resumes.
+- [Directory](/directory): Curated internships, fellowships, and programs in international affairs.
+- [Contact](/contact): Get in touch.
+
+## Optional
+
+- [Privacy Policy](/privacy)
+- [Terms of Service](/terms)
+- [Accessibility](/accessibility)
