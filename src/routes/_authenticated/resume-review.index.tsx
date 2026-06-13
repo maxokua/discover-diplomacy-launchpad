@@ -66,6 +66,8 @@ function ResumeReviewIntake() {
           notes: parsed.notes || null,
           resume_path: path,
           status: "pending_payment",
+          visible_to_employers: visibleToEmployers,
+          visible_to_coaches: visibleToCoaches,
         })
         .select("id")
         .single();
