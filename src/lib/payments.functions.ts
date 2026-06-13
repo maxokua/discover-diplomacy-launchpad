@@ -662,7 +662,7 @@ export const myPortalRoles = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const checks = await Promise.all(
-      ["admin", "coach", "employer"].map(async (role) => {
+      (["admin", "coach", "employer"] as const).map(async (role) => {
         const { data } = await context.supabase.rpc("has_role", {
           _user_id: context.userId,
           _role: role,
