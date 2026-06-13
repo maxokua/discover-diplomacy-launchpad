@@ -103,15 +103,18 @@ function Hero() {
 
         <Reveal as="aside" delay={200} y={36} className="lg:col-span-5">
           <figure className="overflow-hidden border border-border">
-            <img
-              src={institution}
-              alt="Classical institutional architecture at dusk"
-              width={1920}
-              height={1280}
-              className="h-[420px] w-full object-cover lg:h-[520px]"
-            />
+            <Parallax speed={-0.15}>
+              <img
+                src={institution}
+                alt="Classical institutional architecture at dusk"
+                width={1920}
+                height={1280}
+                className="h-[460px] w-full scale-110 object-cover lg:h-[560px]"
+              />
+            </Parallax>
           </figure>
         </Reveal>
+
       </div>
     </section>
   );
