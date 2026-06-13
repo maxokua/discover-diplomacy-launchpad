@@ -11,7 +11,7 @@ export const Route = createFileRoute("/membership")({
       {
         name: "description",
         content:
-          "Our most popular service. $50/month, no annual lock-in. Resume tailoring for 5 target jobs, LinkedIn review, industry research, outreach, interview prep, application help, and a Substack with 50 opportunities weekly.",
+          "$50/month Career Membership: tailored resumes, LinkedIn review, research, outreach, interview prep, and a weekly Substack of 50 opportunities.",
       },
       { property: "og:title", content: "Career Membership | $50/mo" },
       {
