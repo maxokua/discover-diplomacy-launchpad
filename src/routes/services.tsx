@@ -41,58 +41,12 @@ function ServicesPage() {
         </div>
       </section>
 
-      {/* Service 01 — Resume Review */}
-      <section id="resume-review" className="border-b border-border bg-paper">
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
-          <Reveal className="lg:col-span-5">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
-              Service 01 · $25
-            </div>
-            <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-              Expert Resume Review
-            </h2>
-            <p className="mt-5 text-muted-foreground">
-              A line-by-line review by an expert who knows what hiring managers and applicant
-              tracking systems are actually looking for. Tailored to the role you're targeting,
-              with the essential keywords your resume needs to get a second look.
-            </p>
-            <Link
-              to="/resume-review"
-              className="mt-8 inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
-            >
-              Get started — $25
-            </Link>
-          </Reveal>
-          <Reveal className="lg:col-span-7" delay={120}>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              How it works
-            </div>
-            <ol className="mt-5 space-y-5">
-              {[
-                ["01", "Submit", "Sign in, upload your resume, and tell us the role you're targeting."],
-                ["02", "Pay $25", "Secure checkout. You'll only be charged for the review itself."],
-                ["03", "Expert review", "A coach with direct hiring-side experience rewrites your resume line by line for ATS keywords, structure, and impact."],
-                ["04", "Returned in 3–5 days", "You get the marked-up version, a clean revised draft, and notes on what to keep doing."],
-              ].map(([n, t, d]) => (
-                <li key={n} className="grid grid-cols-[auto,1fr] gap-5 border-b border-border pb-5 last:border-0">
-                  <div className="font-display text-lg italic text-emerald">{n}.</div>
-                  <div>
-                    <div className="font-display text-base text-navy-deep">{t}</div>
-                    <p className="mt-1 text-sm text-muted-foreground">{d}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Service 02 — Career Membership (most popular) */}
-      <section id="membership" className="border-b border-border bg-stone">
+      {/* Service 01 — Career Membership (most popular) */}
+      <section id="membership" className="border-b border-border bg-paper">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
           <Reveal className="lg:col-span-5">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald/30 bg-emerald/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">
-              Service 02 · Most popular · $50/mo
+              Service 01 · Most popular · $50/mo
             </div>
             <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
               Career Membership
@@ -134,6 +88,52 @@ function ServicesPage() {
                 </li>
               ))}
             </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Service 02 — Resume Review */}
+      <section id="resume-review" className="border-b border-border bg-stone">
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
+          <Reveal className="lg:col-span-5">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
+              Service 02 · $25
+            </div>
+            <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
+              Expert Resume Review
+            </h2>
+            <p className="mt-5 text-muted-foreground">
+              A line-by-line review by an expert who knows what hiring managers and applicant
+              tracking systems are actually looking for. Tailored to the role you're targeting,
+              with the essential keywords your resume needs to get a second look.
+            </p>
+            <Link
+              to="/resume-review"
+              className="mt-8 inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+            >
+              Get started — $25
+            </Link>
+          </Reveal>
+          <Reveal className="lg:col-span-7" delay={120}>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+              How it works
+            </div>
+            <ol className="mt-5 space-y-5">
+              {[
+                ["01", "Submit", "Sign in, upload your resume, and tell us the role you're targeting."],
+                ["02", "Pay $25", "Secure checkout. You'll only be charged for the review itself."],
+                ["03", "Expert review", "A coach with direct hiring-side experience rewrites your resume line by line for ATS keywords, structure, and impact."],
+                ["04", "Returned in 3–5 days", "You get the marked-up version, a clean revised draft, and notes on what to keep doing."],
+              ].map(([n, t, d]) => (
+                <li key={n} className="grid grid-cols-[auto,1fr] gap-5 border-b border-border pb-5 last:border-0">
+                  <div className="font-display text-lg italic text-emerald">{n}.</div>
+                  <div>
+                    <div className="font-display text-base text-navy-deep">{t}</div>
+                    <p className="mt-1 text-sm text-muted-foreground">{d}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </Reveal>
         </div>
       </section>
