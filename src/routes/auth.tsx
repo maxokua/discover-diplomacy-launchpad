@@ -32,7 +32,10 @@ const nameSchema = z.string().trim().min(1, "Enter your name").max(100);
 function AuthPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
-  const nextPath = next && next.startsWith("/") ? next : "/dashboard";
+  const nextPath =
+    next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/\\")
+      ? next
+      : "/dashboard";
   const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
