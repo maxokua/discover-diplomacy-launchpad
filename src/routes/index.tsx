@@ -156,7 +156,7 @@ function Practice() {
     <section className="border-b border-border bg-paper">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12">
-          <Reveal as="header" className="lg:col-span-4">
+          <Reveal as="header" className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
             <div className="eyebrow">What We Do</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
               Career orientation. Then placement.
