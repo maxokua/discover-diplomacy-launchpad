@@ -96,30 +96,6 @@ function Hero() {
   );
 }
 
-function Placements() {
-  const items = [
-    "U.S. Senate",
-    "U.S. Department of State",
-    "DGA Group",
-    "The Asia Group",
-  ];
-  return (
-    <section className="border-b border-border bg-stone">
-      <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
-        <Reveal className="grid items-center gap-6 lg:grid-cols-[auto_1fr]">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-            Recent Placements
-          </div>
-          <ul className="flex flex-wrap gap-x-10 gap-y-3 text-sm font-medium text-navy-deep/85">
-            {items.map((i) => (
-              <li key={i}>{i}</li>
-            ))}
-          </ul>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
 
 const services = [
   {
