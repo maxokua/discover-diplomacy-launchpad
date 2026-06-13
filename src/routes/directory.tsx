@@ -87,8 +87,8 @@ function DirectoryPage() {
     setQuery("");
     setCategory("All program types");
     setLocation("All locations");
-    setInterest("All focus areas");
-    setSubsection("All subject areas");
+    setInterest("All regional focuses");
+    setSubsection("All interest areas");
   }
 
   return (
