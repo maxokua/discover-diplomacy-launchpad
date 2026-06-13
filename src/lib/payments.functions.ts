@@ -509,10 +509,10 @@ export const adminFinalizeReview = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await requireAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: Record<string, unknown> = { status: data.status };
+    const patch: { status: string; reviewed_resume_path?: string } = { status: data.status };
     if (data.reviewedPath) patch.reviewed_resume_path = data.reviewedPath;
-    const { error } = await supabaseAdmin
-      .from("resume_reviews")
+    const { error } = await (supabaseAdmin
+      .from("resume_reviews") as any)
       .update(patch)
       .eq("id", data.reviewId);
     if (error) return { error: error.message };
