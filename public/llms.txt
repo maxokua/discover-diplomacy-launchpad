@@ -13,6 +13,7 @@ Discover Diplomacy helps globally minded students and early-career professionals
 - [Coaches](/coaches): Apply to coach with Discover Diplomacy.
 - [For Employers](/employers): Browse vetted candidate resumes.
 - [Directory](/directory): Curated internships, fellowships, and programs in international affairs.
+- [International Relations Jobs Guide](/guide/international-relations-jobs-requirements): Careers, education requirements, salaries, and how to break in.
 - [Contact](/contact): Get in touch.
 
 ## Optional
