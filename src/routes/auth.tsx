@@ -1,0 +1,203 @@
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
+import { SiteLayout } from "@/components/site-layout";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/auth")({
+  head: () => ({
+    meta: [
+      { title: "Sign in — Discover Diplomacy" },
+      { name: "description", content: "Sign in or create an account to manage your engagements with Discover Diplomacy." },
+    ],
+  }),
+  component: AuthPage,
+});
+
+const emailSchema = z.string().trim().email("Enter a valid email").max(255);
+const passwordSchema = z.string().min(8, "Password must be at least 8 characters").max(72);
+const nameSchema = z.string().trim().min(1, "Enter your name").max(100);
+
+function AuthPage() {
+  const navigate = useNavigate();
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) navigate({ to: "/dashboard" });
+    });
+  }, [navigate]);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      const parsedEmail = emailSchema.parse(email);
+      const parsedPassword = passwordSchema.parse(password);
+      if (mode === "signup") {
+        const parsedName = nameSchema.parse(fullName);
+        const { error } = await supabase.auth.signUp({
+          email: parsedEmail,
+          password: parsedPassword,
+          options: {
+            emailRedirectTo: window.location.origin,
+            data: { full_name: parsedName },
+          },
+        });
+        if (error) throw error;
+        toast.success("Account created");
+        navigate({ to: "/dashboard" });
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: parsedEmail,
+          password: parsedPassword,
+        });
+        if (error) throw error;
+        toast.success("Welcome back");
+        navigate({ to: "/dashboard" });
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      toast.error(message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleGoogle() {
+    setBusy(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin + "/dashboard",
+      });
+      if (result.error) {
+        toast.error("Google sign-in failed");
+        setBusy(false);
+        return;
+      }
+      if (result.redirected) return;
+      navigate({ to: "/dashboard" });
+    } catch {
+      toast.error("Google sign-in failed");
+      setBusy(false);
+    }
+  }
+
+  return (
+    <SiteLayout>
+      <section className="bg-paper">
+        <div className="mx-auto grid min-h-[calc(100vh-200px)] max-w-7xl items-center px-6 py-16 lg:px-10">
+          <div className="mx-auto w-full max-w-md">
+            <div className="eyebrow">Client Portal</div>
+            <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
+              {mode === "signin" ? "Sign in to your account" : "Create your account"}
+            </h1>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {mode === "signin"
+                ? "Access your engagements and resume reviews."
+                : "Get started with Discover Diplomacy."}
+            </p>
+
+            <form onSubmit={handleSubmit} className="mt-10 space-y-5">
+              {mode === "signup" && (
+                <div>
+                  <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                    Full name
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+                  />
+                </div>
+              )}
+              <div>
+                <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                  Email
+                </label>
+                <input
+                  required
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                  Password
+                </label>
+                <input
+                  required
+                  type="password"
+                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={busy}
+                className="w-full bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy disabled:opacity-60"
+              >
+                {busy ? "Working…" : mode === "signin" ? "Sign in" : "Create account"}
+              </button>
+            </form>
+
+            <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
+              <div className="h-px flex-1 bg-border" /> or <div className="h-px flex-1 bg-border" />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogle}
+              disabled={busy}
+              className="w-full border border-border bg-paper px-5 py-3 text-sm text-navy-deep transition-colors hover:bg-stone disabled:opacity-60"
+            >
+              Continue with Google
+            </button>
+
+            <p className="mt-8 text-center text-sm text-muted-foreground">
+              {mode === "signin" ? (
+                <>
+                  No account yet?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setMode("signup")}
+                    className="font-medium text-navy-deep underline-offset-4 hover:underline"
+                  >
+                    Create one
+                  </button>
+                </>
+              ) : (
+                <>
+                  Already have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setMode("signin")}
+                    className="font-medium text-navy-deep underline-offset-4 hover:underline"
+                  >
+                    Sign in
+                  </button>
+                </>
+              )}
+            </p>
+            <p className="mt-6 text-center text-xs text-muted-foreground">
+              <Link to="/" className="hover:text-navy-deep">← Back to home</Link>
+            </p>
+          </div>
+        </div>
+      </section>
+    </SiteLayout>
+  );
+}
