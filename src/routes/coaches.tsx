@@ -22,6 +22,10 @@ export const Route = createFileRoute("/coaches")({
         content:
           "Apply to coach. Market-leading pay per client, flexible scheduling, mission-driven work.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/coaches" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/coaches" },
     ],
   }),
   component: CoachesPage,

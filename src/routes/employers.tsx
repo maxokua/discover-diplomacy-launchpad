@@ -18,6 +18,10 @@ export const Route = createFileRoute("/employers")({
         content:
           "Access vetted candidate resumes from clients pursuing roles in diplomacy, policy, multilaterals, and international business.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/employers" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/employers" },
     ],
   }),
   component: EmployersPage,

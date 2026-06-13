@@ -19,13 +19,32 @@ export const Route = createFileRoute("/")({
         content:
           "Helping the next generation discover what they want to do in international affairs and global business — and how to land those roles.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/" },
+      { name: "twitter:title", content: "Discover Diplomacy — Career Advisory" },
+      { name: "twitter:description", content: "Career coaching for students and early-career professionals in diplomacy, policy, and global business." },
     ],
     links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: "Discover Diplomacy",
+          url: "https://discoverdiplomacy.org",
+          description: "Career advisory for students and early-career professionals pursuing diplomacy, international policy, multilateral institutions, and global business.",
+          areaServed: "Worldwide",
+          address: { "@type": "PostalAddress", addressLocality: "Washington", addressRegion: "DC", addressCountry: "US" },
+          serviceType: ["Career coaching", "Resume review", "Interview preparation", "Career membership"],
+        }),
       },
     ],
   }),
@@ -251,10 +270,10 @@ function BackedBy() {
             <div className="hidden h-12 w-px bg-border md:block" aria-hidden />
             <div className="flex flex-col items-center">
               <div className="font-display text-2xl font-semibold tracking-tight text-navy-deep lg:text-3xl">
-                American University
+                Veloric Center for Entrepreneurship
               </div>
               <div className="mt-2 text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                School of International Service · Washington, DC
+                American University · Washington, DC
               </div>
             </div>
           </div>

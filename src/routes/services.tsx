@@ -18,6 +18,23 @@ export const Route = createFileRoute("/services")({
         content:
           "$25 resume review or $50/month Career Membership — month-to-month, no annual lock-in.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/services" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/services" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: [
+            { "@type": "Service", position: 1, name: "Career Membership", description: "Month-to-month membership with resume tailoring, LinkedIn review, research, outreach, interview prep, and a weekly Substack of 50 global opportunities.", offers: { "@type": "Offer", price: "50", priceCurrency: "USD", priceSpecification: { "@type": "UnitPriceSpecification", price: "50", priceCurrency: "USD", unitText: "MONTH" } } },
+            { "@type": "Service", position: 2, name: "Expert Resume Review", description: "One-time expert review of your resume for international affairs and global business roles.", offers: { "@type": "Offer", price: "25", priceCurrency: "USD" } },
+          ],
+        }),
+      },
     ],
   }),
   component: ServicesPage,

@@ -19,6 +19,29 @@ export const Route = createFileRoute("/membership")({
         content:
           "Tailored resume, LinkedIn review, research, outreach, interview prep, applications, and a Substack with 50 opportunities weekly. Direct CEO email access.",
       },
+      { property: "og:url", content: "https://discoverdiplomacy.org/membership" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/membership" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: "Career Membership",
+          description: "Month-to-month career membership: resume tailoring for 5 target roles, LinkedIn review, research, outreach, interview prep, application help, weekly opportunities Substack, and direct CEO email access.",
+          brand: { "@type": "Brand", name: "Discover Diplomacy" },
+          offers: {
+            "@type": "Offer",
+            price: "50",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+            url: "https://discoverdiplomacy.org/membership",
+          },
+        }),
+      },
     ],
   }),
   component: MembershipPage,
