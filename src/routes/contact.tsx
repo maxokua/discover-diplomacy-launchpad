@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, Mail, MapPin } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -25,6 +27,38 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      const formEl = e.currentTarget;
+      const fd = new FormData(formEl);
+      const payload = {
+        first_name: String(fd.get("firstName") || "").trim(),
+        last_name: String(fd.get("lastName") || "").trim(),
+        email: String(fd.get("email") || "").trim(),
+        phone: String(fd.get("phone") || "").trim() || null,
+        institution: String(fd.get("institution") || "").trim() || null,
+        practice: String(fd.get("practice") || "").trim() || null,
+        timeline: String(fd.get("timeline") || "").trim() || null,
+        message: String(fd.get("message") || "").trim(),
+      };
+      if (!payload.first_name || !payload.last_name || !payload.email || !payload.message) {
+        toast.error("Please fill in all required fields");
+        setBusy(false);
+        return;
+      }
+      const { error } = await supabase.from("contact_submissions").insert(payload);
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Submission failed");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <SiteLayout>
@@ -130,13 +164,7 @@ function ContactPage() {
                 </button>
               </div>
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSubmitted(true);
-                }}
-                className="grid gap-6"
-              >
+              <form onSubmit={handleSubmit} className="grid gap-6">
                 <div className="grid gap-6 sm:grid-cols-2">
                   <Field id="firstName" label="First name" required />
                   <Field id="lastName" label="Last name" required />
@@ -152,13 +180,14 @@ function ContactPage() {
                   />
                   <Select
                     id="practice"
-                    label="Practice area of interest"
+                    label="What are you interested in?"
                     options={[
-                      "Graduate Admissions Advisory",
-                      "Fellowships & Scholarships",
-                      "Foreign Service & Multilateral Careers",
-                      "Early-Career Transitions",
-                      "Not yet determined",
+                      "$50/mo Career Membership",
+                      "$25 Resume Review",
+                      "Employer / candidate access",
+                      "Coaching with us",
+                      "Press",
+                      "Not yet sure",
                     ]}
                   />
                 </div>
@@ -205,9 +234,10 @@ function ContactPage() {
                 <div className="flex flex-wrap items-center gap-6 border-t border-border pt-8">
                   <button
                     type="submit"
-                    className="inline-flex items-center rounded-sm bg-navy-deep px-8 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
+                    disabled={busy}
+                    className="inline-flex items-center rounded-sm bg-navy-deep px-8 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy disabled:opacity-60"
                   >
-                    Submit Inquiry
+                    {busy ? "Submitting…" : "Submit Inquiry"}
                   </button>
                   <span className="text-xs text-muted-foreground">
                     Response within two business days.

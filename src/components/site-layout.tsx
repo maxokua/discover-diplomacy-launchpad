@@ -43,10 +43,17 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
       </div>
 
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-navy-deep focus:px-4 focus:py-2 focus:text-xs focus:font-medium focus:uppercase focus:tracking-wider focus:text-paper"
+      >
+        Skip to main content
+      </a>
+
       <header className="sticky top-0 z-40 border-b border-border bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
           <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-            <img src={logoAsset.url} alt="" className="h-9 w-9" />
+            <img src={logoAsset.url} alt="Discover Diplomacy" className="h-9 w-9" />
             <div className="leading-tight">
               <div className="font-display text-[17px] font-semibold text-navy-deep">
                 Discover Diplomacy
@@ -57,7 +64,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav aria-label="Primary navigation" className="hidden items-center gap-7 md:flex">
             {NAV.map((n) => {
               const active = pathname === n.to || (n.to !== "/" && pathname.startsWith(n.to));
               return (
@@ -84,6 +91,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <button
             type="button"
             aria-label="Toggle menu"
+            aria-expanded={open}
             className="rounded-sm border border-border p-2 md:hidden"
             onClick={() => setOpen((v) => !v)}
           >
@@ -92,7 +100,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
 
         {open && (
-          <nav className="border-t border-border bg-paper md:hidden">
+          <nav aria-label="Mobile navigation" className="border-t border-border bg-paper md:hidden">
             <div className="mx-auto flex max-w-7xl flex-col px-6 py-4">
               {NAV.map((n) => (
                 <Link
@@ -116,7 +124,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">{children}</main>
 
       <SiteFooter />
     </div>
@@ -129,7 +137,7 @@ function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-12 lg:px-10">
         <div className="lg:col-span-5">
           <div className="flex items-center gap-3">
-            <img src={logoAsset.url} alt="" className="h-10 w-10" />
+            <img src={logoAsset.url} alt="Discover Diplomacy" className="h-10 w-10" />
             <div>
               <div className="font-display text-lg">Discover Diplomacy</div>
               <div className="text-[10px] uppercase tracking-[0.22em] text-paper/60">
@@ -155,8 +163,9 @@ function SiteFooter() {
             title="Engage"
             links={[
               { to: "/contact", label: "Consultation" },
-              { to: "/resume-review", label: "Resume review" },
+              { to: "/services", label: "Resume review" },
               { to: "/coaches", label: "Become a coach" },
+              { to: "/employers", label: "For employers" },
             ]}
           />
           <div>
@@ -176,9 +185,9 @@ function SiteFooter() {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-paper/60 lg:px-10">
           <div>© {new Date().getFullYear()} Discover Diplomacy LLC. All rights reserved.</div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-paper">Privacy</a>
-            <a href="#" className="hover:text-paper">Terms</a>
-            <a href="#" className="hover:text-paper">Accessibility</a>
+            <Link to="/privacy" className="hover:text-paper">Privacy</Link>
+            <Link to="/terms" className="hover:text-paper">Terms</Link>
+            <Link to="/accessibility" className="hover:text-paper">Accessibility</Link>
           </div>
         </div>
       </div>

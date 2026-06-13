@@ -7,6 +7,9 @@ import { SiteLayout } from "@/components/site-layout";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (s: Record<string, unknown>): { next?: string } => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") ? s.next : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Sign in — Discover Diplomacy" },
@@ -22,45 +25,60 @@ const nameSchema = z.string().trim().min(1, "Enter your name").max(100);
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const { next } = Route.useSearch();
+  const nextPath = next && next.startsWith("/") ? next : "/dashboard";
+  const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [signupSent, setSignupSent] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard" });
+      if (data.session) window.location.href = nextPath;
     });
-  }, [navigate]);
+  }, [navigate, nextPath]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     try {
       const parsedEmail = emailSchema.parse(email);
-      const parsedPassword = passwordSchema.parse(password);
-      if (mode === "signup") {
+      if (mode === "reset") {
+        const { error } = await supabase.auth.resetPasswordForEmail(parsedEmail, {
+          redirectTo: window.location.origin + "/reset-password",
+        });
+        if (error) throw error;
+        setResetSent(true);
+      } else if (mode === "signup") {
+        const parsedPassword = passwordSchema.parse(password);
         const parsedName = nameSchema.parse(fullName);
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email: parsedEmail,
           password: parsedPassword,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: window.location.origin + nextPath,
             data: { full_name: parsedName },
           },
         });
         if (error) throw error;
-        toast.success("Account created");
-        navigate({ to: "/dashboard" });
+        if (data.session) {
+          toast.success("Account created");
+          window.location.href = nextPath;
+        } else {
+          setSignupSent(true);
+        }
       } else {
+        const parsedPassword = passwordSchema.parse(password);
         const { error } = await supabase.auth.signInWithPassword({
           email: parsedEmail,
           password: parsedPassword,
         });
         if (error) throw error;
         toast.success("Welcome back");
-        navigate({ to: "/dashboard" });
+        window.location.href = nextPath;
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong";
@@ -74,7 +92,7 @@ function AuthPage() {
     setBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin + "/dashboard",
+        redirect_uri: window.location.origin + nextPath,
       });
       if (result.error) {
         toast.error("Google sign-in failed");
@@ -82,7 +100,7 @@ function AuthPage() {
         return;
       }
       if (result.redirected) return;
-      navigate({ to: "/dashboard" });
+      window.location.href = nextPath;
     } catch {
       toast.error("Google sign-in failed");
       setBusy(false);

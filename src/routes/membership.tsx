@@ -36,9 +36,27 @@ const INCLUDED = [
   "Direct email access to the CEO — ask as many questions as you want",
 ];
 
+function StartLink({ user, label }: { user: boolean; label: string }) {
+  return user ? (
+    <Link
+      to="/membership/checkout"
+      className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+    >
+      {label}
+    </Link>
+  ) : (
+    <Link
+      to="/auth"
+      search={{ next: "/membership/checkout" }}
+      className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+    >
+      Sign in to start — $50/mo
+    </Link>
+  );
+}
+
 function MembershipPage() {
   const { user } = useAuth();
-  const startHref = user ? "/membership/checkout" : "/auth";
 
   return (
     <SiteLayout>
@@ -56,12 +74,7 @@ function MembershipPage() {
               you. Stay as long as it's useful, leave the day it isn't.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <Link
-                to={startHref}
-                className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
-              >
-                {user ? "Start membership — $50/mo" : "Sign in to start — $50/mo"}
-              </Link>
+              <StartLink user={!!user} label="Start membership — $50/mo" />
               <span className="text-xs uppercase tracking-wider text-muted-foreground">
                 Cancel anytime · No annual contract
               </span>
@@ -133,12 +146,7 @@ function MembershipPage() {
               </h2>
             </div>
             <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
-              <Link
-                to={startHref}
-                className="bg-paper px-5 py-3 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-paper/90"
-              >
-                Start — $50/mo
-              </Link>
+              <StartLink user={!!user} label="Start — $50/mo" />
             </div>
           </div>
         </div>
