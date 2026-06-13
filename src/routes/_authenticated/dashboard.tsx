@@ -45,6 +45,7 @@ function DashboardPage() {
   const navigate = useNavigate();
   const { coaching } = Route.useSearch();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [sub, setSub] = useState<Sub | null>(null);
   const [loading, setLoading] = useState(true);
