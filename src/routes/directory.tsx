@@ -112,17 +112,17 @@ function DirectoryPage() {
 
       <section className="sticky top-[73px] z-30 border-b border-border bg-paper/95 backdrop-blur">
         <div className="mx-auto max-w-7xl px-6 py-4 lg:px-10">
-          <div className="grid gap-3 lg:grid-cols-12">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by name…"
-              className="lg:col-span-4 border border-border bg-paper px-4 py-2.5 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-            />
-            <Select value={category} onChange={setCategory} options={["All", ...CATEGORY_ORDER]} className="lg:col-span-2" />
-            <Select value={location} onChange={setLocation} options={["All", ...locations]} className="lg:col-span-2" />
-            <Select value={interest} onChange={setInterest} options={["All", ...interests]} className="lg:col-span-2" />
-            <Select value={subsection} onChange={setSubsection} options={["All", ...subsections]} className="lg:col-span-2" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by name…"
+            className="w-full border border-border bg-paper px-4 py-2.5 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+          />
+          <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <Select value={category} onChange={setCategory} options={["All program types", ...CATEGORY_ORDER]} className="w-full" />
+            <Select value={location} onChange={setLocation} options={["All locations", ...locations]} className="w-full" />
+            <Select value={interest} onChange={setInterest} options={["All focus areas", ...interests]} className="w-full" />
+            <Select value={subsection} onChange={setSubsection} options={["All subject areas", ...subsections]} className="w-full" />
           </div>
           <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
             <div>
