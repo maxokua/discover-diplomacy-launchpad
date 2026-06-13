@@ -82,9 +82,6 @@ function AboutPage() {
                 things started to land — on the Hill, at State, at multilaterals, in
                 international business.
               </p>
-              <blockquote className="border-l-2 border-emerald pl-5 font-display text-xl text-navy-deep">
-                "We don't pretend the path is fair. We just refuse to let it stay a mystery."
-              </blockquote>
               <p>
                 Discover Diplomacy exists because we wished it had. Our practice draws on direct,
                 lived experience — what worked, what wasted months, and what nobody tells you until
@@ -95,65 +92,6 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="border-b border-border bg-stone">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-          <Reveal>
-            <div className="eyebrow">What We Believe</div>
-            <h2 className="mt-5 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
-              A small set of commitments that govern every engagement.
-            </h2>
-          </Reveal>
-          <div className="mt-14 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
-            {[
-              { n: "i", t: "Confidentiality", d: "Every engagement is held in confidence. What you share with us doesn't leave the room." },
-              { n: "ii", t: "Candor", d: "We tell clients what they need to hear, not what they want to hear. That's the whole product." },
-              { n: "iii", t: "Discipline", d: "Every engagement follows a structured process. We don't improvise on people's careers." },
-              { n: "iv", t: "Accountability", d: "We track outcomes. The work either lands roles, opens doors, and sharpens decisions — or we change what we're doing." },
-            ].map((p, i) => (
-              <Reveal key={p.n} delay={i * 80}>
-                <div className="h-full bg-paper p-8">
-                  <div className="font-display text-2xl italic text-emerald">{p.n}.</div>
-                  <h3 className="mt-4 font-display text-lg text-navy-deep">{p.t}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{p.d}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-border bg-paper">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-          <div className="grid gap-12 lg:grid-cols-12">
-            <Reveal className="lg:col-span-4">
-              <div className="eyebrow">Leadership</div>
-              <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-                Four founders.
-              </h2>
-              <p className="mt-4 text-sm text-muted-foreground">
-                We work as a team. Every client benefits from the collective experience of all four
-                founders and our growing roster of expert coaches.
-              </p>
-            </Reveal>
-            <div className="grid gap-10 lg:col-span-8 lg:grid-cols-2">
-              {[
-                { r: "Strategy & Outreach", bio: "International relations graduate with experience across Capitol Hill and multilateral institutions." },
-                { r: "Research & Advisory", bio: "Former intern at the U.S. Department of State with a focus on East Asian foreign policy." },
-                { r: "Partnerships & Operations", bio: "Background in nonprofit management and youth-led policy organizations in Washington, DC." },
-                { r: "Communications & Brand", bio: "Experience in strategic communications for international development and global affairs startups." },
-              ].map((m, i) => (
-                <Reveal key={m.r} delay={i * 60}>
-                  <div className="border-t border-border pt-6">
-                    <div className="font-display text-lg text-navy-deep">Founder</div>
-                    <div className="text-xs uppercase tracking-wider text-emerald">{m.r}</div>
-                    <p className="mt-3 text-sm text-muted-foreground">{m.bio}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
     </SiteLayout>
   );
 }
