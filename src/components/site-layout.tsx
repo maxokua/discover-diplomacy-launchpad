@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import logoAsset from "@/assets/compass-logo.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 import { ScrollProgress } from "@/components/scroll-effects";
+import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 
 
 const NAV = [
