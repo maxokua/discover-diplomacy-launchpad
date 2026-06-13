@@ -23,6 +23,7 @@ import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
 import { Route as AuthenticatedResumeReviewReturnRouteImport } from './routes/_authenticated/resume-review.return'
@@ -104,6 +105,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesApplyRoute = CoachesApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => CoachesRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -175,7 +181,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
   '/auth': typeof AuthRoute
-  '/coaches': typeof CoachesRoute
+  '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
   '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/coaches/apply': typeof CoachesApplyRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -201,7 +208,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
   '/auth': typeof AuthRoute
-  '/coaches': typeof CoachesRoute
+  '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
   '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
@@ -211,6 +218,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/coaches/apply': typeof CoachesApplyRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -229,7 +237,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
   '/auth': typeof AuthRoute
-  '/coaches': typeof CoachesRoute
+  '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
   '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
@@ -239,6 +247,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/coaches/apply': typeof CoachesApplyRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -267,6 +276,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/dashboard'
+    | '/coaches/apply'
     | '/admin/reviews'
     | '/coach/clients'
     | '/employer/resumes'
@@ -293,6 +303,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/dashboard'
+    | '/coaches/apply'
     | '/admin/reviews'
     | '/coach/clients'
     | '/employer/resumes'
@@ -320,6 +331,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/_authenticated/dashboard'
+    | '/coaches/apply'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/coach/clients'
     | '/_authenticated/employer/resumes'
@@ -338,7 +350,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AccessibilityRoute: typeof AccessibilityRoute
   AuthRoute: typeof AuthRoute
-  CoachesRoute: typeof CoachesRoute
+  CoachesRoute: typeof CoachesRouteWithChildren
   ContactRoute: typeof ContactRoute
   EmployersRoute: typeof EmployersRoute
   MembershipRoute: typeof MembershipRoute
@@ -451,6 +463,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/apply': {
+      id: '/coaches/apply'
+      path: '/apply'
+      fullPath: '/coaches/apply'
+      preLoaderRoute: typeof CoachesApplyRouteImport
+      parentRoute: typeof CoachesRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -559,13 +578,24 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface CoachesRouteChildren {
+  CoachesApplyRoute: typeof CoachesApplyRoute
+}
+
+const CoachesRouteChildren: CoachesRouteChildren = {
+  CoachesApplyRoute: CoachesApplyRoute,
+}
+
+const CoachesRouteWithChildren =
+  CoachesRoute._addFileChildren(CoachesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AccessibilityRoute: AccessibilityRoute,
   AuthRoute: AuthRoute,
-  CoachesRoute: CoachesRoute,
+  CoachesRoute: CoachesRouteWithChildren,
   ContactRoute: ContactRoute,
   EmployersRoute: EmployersRoute,
   MembershipRoute: MembershipRoute,

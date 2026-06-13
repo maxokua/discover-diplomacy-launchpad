@@ -1,11 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
-import { Check } from "lucide-react";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/coaches")({
   head: () => ({
@@ -31,98 +26,7 @@ export const Route = createFileRoute("/coaches")({
   component: CoachesPage,
 });
 
-const AREAS = [
-  "U.S. Foreign Service",
-  "Multilateral / UN",
-  "Capitol Hill",
-  "Think tanks",
-  "International development",
-  "Graduate admissions",
-  "Fellowships",
-  "Private sector (intl. business)",
-  "Intelligence community",
-];
-
-const schema = z.object({
-  full_name: z.string().trim().min(1).max(200),
-  email: z.string().trim().email().max(320),
-  linkedin_url: z.string().trim().max(500).optional().or(z.literal("")),
-  current_position: z.string().trim().max(300).optional().or(z.literal("")),
-  years_experience: z.number().int().min(0).max(60).optional(),
-  motivation: z.string().trim().min(20, "Please share a bit more").max(5000),
-});
-
 function CoachesPage() {
-  const [form, setForm] = useState({
-    full_name: "",
-    email: "",
-    linkedin_url: "",
-    current_position: "",
-    years_experience: "",
-    motivation: "",
-  });
-  const [areas, setAreas] = useState<string[]>([]);
-  const [file, setFile] = useState<File | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  function toggleArea(a: string) {
-    setAreas((prev) => (prev.includes(a) ? prev.filter((x) => x !== a) : [...prev, a]));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setBusy(true);
-    try {
-      const parsed = schema.parse({
-        full_name: form.full_name,
-        email: form.email,
-        linkedin_url: form.linkedin_url,
-        current_position: form.current_position,
-        years_experience: form.years_experience ? Number(form.years_experience) : undefined,
-        motivation: form.motivation,
-      });
-
-      let resumePath: string | null = null;
-      if (file) {
-        if (file.size > 10 * 1024 * 1024) throw new Error("Resume must be under 10MB");
-        const ALLOWED_MIME = new Set([
-          "application/pdf",
-          "application/msword",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ]);
-        const ALLOWED_EXT = new Set(["pdf", "doc", "docx"]);
-        const ext = (file.name.split(".").pop() || "").toLowerCase();
-        if (!ALLOWED_EXT.has(ext) || !ALLOWED_MIME.has(file.type)) {
-          throw new Error("Resume must be a PDF, DOC, or DOCX file");
-        }
-        resumePath = `applications/${crypto.randomUUID()}.${ext}`;
-        const { error: upErr } = await supabase.storage
-          .from("coach-resumes")
-          .upload(resumePath, file, { contentType: "application/octet-stream" });
-        if (upErr) throw upErr;
-      }
-
-      const { error } = await supabase.from("coach_applications").insert({
-        full_name: parsed.full_name,
-        email: parsed.email,
-        linkedin_url: parsed.linkedin_url || null,
-        current_position: parsed.current_position || null,
-        years_experience: parsed.years_experience ?? null,
-        areas_of_expertise: areas,
-        motivation: parsed.motivation,
-        resume_path: resumePath,
-      });
-      if (error) throw error;
-      setSubmitted(true);
-      toast.success("Application submitted");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Submission failed");
-    } finally {
-      setBusy(false);
-    }
-  }
-
   return (
     <SiteLayout>
       <section className="border-b border-border bg-paper">
@@ -137,6 +41,14 @@ function CoachesPage() {
               career in foreign policy, international business, or multilateral institutions, we
               want to hear from you.
             </p>
+            <div className="mt-10">
+              <Link
+                to="/coaches/apply"
+                className="inline-block bg-navy-deep px-8 py-4 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+              >
+                Apply here
+              </Link>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -164,10 +76,13 @@ function CoachesPage() {
         </div>
       </section>
 
-      <section id="apply" className="relative overflow-hidden bg-navy-deep">
-        <div className="absolute inset-0 opacity-[0.08]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
+      <section className="relative overflow-hidden bg-navy-deep">
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        />
         <div className="relative mx-auto max-w-5xl px-6 py-28 text-center lg:px-10 lg:py-40">
           <Reveal>
             <div className="eyebrow text-emerald">Coach With Us</div>
@@ -178,16 +93,12 @@ function CoachesPage() {
               We are always looking for experienced professionals who want to give back. If you have walked the halls of power and want to help others do the same, we want to hear from you.
             </p>
             <div className="mt-12">
-              <a
-                href="#application-form"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+              <Link
+                to="/coaches/apply"
                 className="inline-block bg-emerald px-16 py-6 font-display text-2xl text-navy-deep transition-transform hover:scale-105 lg:px-20 lg:py-7 lg:text-3xl"
               >
                 Apply here
-              </a>
+              </Link>
             </div>
             <p className="mt-6 text-sm text-paper/40">
               No fees to join. We review every application personally.
@@ -195,111 +106,6 @@ function CoachesPage() {
           </Reveal>
         </div>
       </section>
-
-      <section id="application-form" className="bg-paper">
-        <div className="mx-auto max-w-4xl px-6 py-20 lg:px-10 lg:py-24">
-          {submitted ? (
-            <div className="text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald/10 text-emerald">
-                <Check className="h-7 w-7" />
-              </div>
-              <h2 className="mt-8 font-display text-3xl text-navy-deep">Application received.</h2>
-              <p className="mt-3 text-base text-muted-foreground">
-                We will review your application and follow up by email.
-              </p>
-
-            </div>
-          ) : (
-            <>
-              <Reveal>
-                <div className="eyebrow">Coach Application</div>
-                <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-                  Tell us about yourself
-                </h2>
-              </Reveal>
-              <form onSubmit={handleSubmit} className="mt-10 grid gap-6 md:grid-cols-2">
-                <Field label="Full name" required>
-                  <input required value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} className={inputCls} />
-                </Field>
-                <Field label="Email" required>
-                  <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={inputCls} />
-                </Field>
-                <Field label="LinkedIn URL">
-                  <input type="url" value={form.linkedin_url} onChange={(e) => setForm({ ...form, linkedin_url: e.target.value })} className={inputCls} placeholder="https://linkedin.com/in/…" />
-                </Field>
-                <Field label="Current role / affiliation">
-                  <input value={form.current_position} onChange={(e) => setForm({ ...form, current_position: e.target.value })} className={inputCls} />
-                </Field>
-                <Field label="Years of experience">
-                  <input type="number" min={0} max={60} value={form.years_experience} onChange={(e) => setForm({ ...form, years_experience: e.target.value })} className={inputCls} />
-                </Field>
-                <Field label="Resume (PDF/DOCX, max 10MB)">
-                  <input type="file" accept=".pdf,.doc,.docx,application/pdf" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className={inputCls + " file:mr-4 file:border-0 file:bg-stone file:px-4 file:py-2 file:text-xs file:uppercase file:tracking-wider file:text-navy-deep"} />
-                </Field>
-
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
-                    Areas of expertise
-                  </label>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {AREAS.map((a) => (
-                      <button
-                        type="button"
-                        key={a}
-                        onClick={() => toggleArea(a)}
-                        className={
-                          "border px-3 py-2 text-xs transition-colors " +
-                          (areas.includes(a)
-                            ? "border-navy-deep bg-navy-deep text-paper"
-                            : "border-border bg-paper text-navy-deep hover:bg-stone")
-                        }
-                      >
-                        {a}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="md:col-span-2">
-                  <Field label="Why do you want to coach with us?" required>
-                    <textarea
-                      required
-                      rows={6}
-                      value={form.motivation}
-                      onChange={(e) => setForm({ ...form, motivation: e.target.value })}
-                      className={inputCls}
-                    />
-                  </Field>
-                </div>
-
-                <div className="md:col-span-2 pt-2">
-                  <button
-                    type="submit"
-                    disabled={busy}
-                    className="bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
-                  >
-                    {busy ? "Submitting…" : "Submit application"}
-                  </button>
-                </div>
-              </form>
-            </>
-          )}
-        </div>
-      </section>
     </SiteLayout>
-  );
-}
-
-const inputCls =
-  "mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep";
-
-function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
-        {label} {required && <span className="text-emerald">*</span>}
-      </label>
-      {children}
-    </div>
   );
 }
