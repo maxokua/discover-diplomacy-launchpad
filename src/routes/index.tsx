@@ -83,10 +83,10 @@ function Hero() {
           </Reveal>
           <Reveal delay={240} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link
-              to="/contact"
+              to="/membership"
               className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
-              Request a Consultation
+              Start a Membership
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
@@ -323,19 +323,19 @@ function CTA() {
           <div className="lg:col-span-8">
             <div className="eyebrow">Begin an Engagement</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-5xl">
-              Schedule a confidential consultation.
+              Join the membership and get to work.
             </h2>
             <p className="mt-5 max-w-2xl text-muted-foreground">
-              We take on a limited number of new clients each quarter. To inquire about
-              representation, please submit a brief outline of your background and goals.
+              $50/month, no annual lock-in. Tailored resume, LinkedIn review, research,
+              outreach, interview prep, and a weekly Substack of 50 global opportunities.
             </p>
           </div>
           <div className="lg:col-span-4 lg:text-right">
             <Link
-              to="/contact"
+              to="/membership"
               className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-7 py-4 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
-              Request a Consultation
+              Start a Membership
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
