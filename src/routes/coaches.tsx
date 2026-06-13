@@ -57,6 +57,7 @@ function CoachesPage() {
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
           <Reveal>
             <div className="eyebrow">Why Coach With Us</div>
+            <h2 className="sr-only">Why coach with Discover Diplomacy</h2>
           </Reveal>
           <div className="mt-10 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
             {[
