@@ -235,19 +235,9 @@ function EntryCard({ entry: e }: { entry: Entry }) {
           {e.description!.split("\n\n").map((p, i) => (
             <p key={i}>{p}</p>
           ))}
-          {e.externalLink && (
-            <a
-              href={e.externalLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-block text-xs font-medium uppercase tracking-wider text-emerald underline"
-            >
-              Visit program website →
-            </a>
-          )}
         </div>
       )}
-      <div className="mt-auto flex items-center justify-between pt-4 text-xs font-medium uppercase tracking-wider">
+      <div className="mt-auto flex items-center justify-between gap-4 pt-4 text-xs font-medium uppercase tracking-wider">
         {hasMore ? (
           <button
             onClick={() => setOpen((v) => !v)}
@@ -258,14 +248,16 @@ function EntryCard({ entry: e }: { entry: Entry }) {
         ) : (
           <span />
         )}
-        <a
-          href={e.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-muted-foreground hover:text-navy-deep"
-        >
-          Source ↗
-        </a>
+        {e.externalLink && (
+          <a
+            href={e.externalLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald hover:underline"
+          >
+            Visit program website →
+          </a>
+        )}
       </div>
     </div>
   );
