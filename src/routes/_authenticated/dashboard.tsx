@@ -1,9 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/site-layout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { toast } from "sonner";
+import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { createCoachingCallCheckout } from "@/lib/payments.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Discover Diplomacy" }] }),
@@ -20,34 +23,81 @@ type Review = {
 
 type Profile = { full_name: string | null; email: string | null };
 
+type Sub = {
+  status: string;
+  current_period_end: string | null;
+  cancel_at_period_end: boolean | null;
+};
+
 function DashboardPage() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [sub, setSub] = useState<Sub | null>(null);
   const [loading, setLoading] = useState(true);
+  const [callOpen, setCallOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) return;
-      const [{ data: prof }, { data: revs }] = await Promise.all([
+      const env = getStripeEnvironment();
+      const [{ data: prof }, { data: revs }, { data: subRow }] = await Promise.all([
         supabase.from("profiles").select("full_name, email").eq("id", userData.user.id).single(),
         supabase
           .from("resume_reviews")
           .select("id, status, target_role, created_at, amount_cents")
           .eq("user_id", userData.user.id)
           .order("created_at", { ascending: false }),
+        supabase
+          .from("subscriptions")
+          .select("status, current_period_end, cancel_at_period_end")
+          .eq("user_id", userData.user.id)
+          .eq("environment", env)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ]);
       if (!mounted) return;
       setProfile(prof ?? { full_name: null, email: userData.user.email ?? null });
       setReviews((revs ?? []) as Review[]);
+      setSub((subRow ?? null) as Sub | null);
       setLoading(false);
     })();
     return () => {
       mounted = false;
     };
   }, []);
+
+  const isActiveMember = useMemo(() => {
+    if (!sub) return false;
+    if (["active", "trialing", "past_due"].includes(sub.status)) return true;
+    if (
+      sub.status === "canceled" &&
+      sub.current_period_end &&
+      new Date(sub.current_period_end) > new Date()
+    )
+      return true;
+    return false;
+  }, [sub]);
+
+  const callOptions = useMemo(
+    () => ({
+      fetchClientSecret: async () => {
+        const result = await createCoachingCallCheckout({
+          data: {
+            environment: getStripeEnvironment(),
+            returnUrl: window.location.origin + "/dashboard",
+          },
+        });
+        if ("error" in result) throw new Error(result.error);
+        if (!result.clientSecret) throw new Error("No client secret returned");
+        return result.clientSecret;
+      },
+    }),
+    [],
+  );
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -66,9 +116,7 @@ function DashboardPage() {
               <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-5xl">
                 Welcome{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}.
               </h1>
-              <p className="mt-3 text-sm text-muted-foreground">
-                {profile?.email}
-              </p>
+              <p className="mt-3 text-sm text-muted-foreground">{profile?.email}</p>
             </div>
             <button
               onClick={signOut}
@@ -77,6 +125,75 @@ function DashboardPage() {
               Sign out
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* Membership */}
+      <section className="border-b border-border bg-paper">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10 lg:py-12">
+          <div className="grid gap-6 border border-border bg-stone p-8 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-8">
+              <div className="eyebrow">Career Membership</div>
+              {loading ? (
+                <div className="mt-3 text-sm text-muted-foreground">Loading…</div>
+              ) : isActiveMember ? (
+                <>
+                  <h2 className="mt-3 font-display text-2xl text-navy-deep">
+                    You're an active member.
+                  </h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {sub?.cancel_at_period_end && sub?.current_period_end
+                      ? `Access ends ${new Date(sub.current_period_end).toLocaleDateString()} — you've canceled but still have member access until then.`
+                      : sub?.current_period_end
+                      ? `Renews ${new Date(sub.current_period_end).toLocaleDateString()}.`
+                      : "Thanks for being here."}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="mt-3 font-display text-2xl text-navy-deep">
+                    Join the Career Membership — $50/month.
+                  </h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Tailored resume for 5 target jobs, LinkedIn review, research, outreach,
+                    interview prep, applications, and the global opportunities Substack. Month to
+                    month, cancel anytime.
+                  </p>
+                </>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
+              {isActiveMember ? (
+                <button
+                  onClick={() => setCallOpen((v) => !v)}
+                  className="bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                >
+                  {callOpen ? "Close" : "Book 30-min CEO call — $25"}
+                </button>
+              ) : (
+                <Link
+                  to="/membership/checkout"
+                  className="bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                >
+                  Start membership — $50/mo
+                </Link>
+              )}
+            </div>
+          </div>
+
+          {isActiveMember && callOpen && (
+            <div className="mt-6 border border-border bg-paper p-6">
+              <div className="eyebrow">30-min CEO Coaching Call · $25</div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                One-time add-on. After payment we'll email you a scheduling link.
+              </p>
+              <div className="mt-6">
+                <EmbeddedCheckoutProvider stripe={getStripe()} options={callOptions}>
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

@@ -10,13 +10,13 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Two services: 1:1 career orientation coaching for international affairs, and a $25 expert resume review tailored to pass ATS.",
+          "Two services: a $25 expert resume review and our most popular $50/month Career Membership — month-to-month, with resume tailoring, LinkedIn review, research, outreach, interview prep, and a global opportunities Substack.",
       },
       { property: "og:title", content: "Services — Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "1:1 career orientation coaching and a $25 expert resume review tailored to pass ATS.",
+          "$25 resume review or $50/month Career Membership — month-to-month, no annual lock-in.",
       },
     ],
   }),
