@@ -73,9 +73,10 @@ function ContactPage() {
             Request a confidential consultation.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            We respond to qualified inquiries within two business days. All
-            correspondence is held in confidence.
+            All correspondence is held in confidence. We read every qualified inquiry and
+            reply as soon as we're able.
           </p>
+
         </div>
       </section>
 
@@ -136,9 +137,8 @@ function ContactPage() {
                   Inquiry received.
                 </h2>
                 <p className="mt-4 max-w-lg text-muted-foreground">
-                  Thank you. A senior advisor will review your submission and respond
-                  within two business days. If your inquiry is time-sensitive, please
-                  write directly to{" "}
+                  Thank you. A senior advisor will review your submission and follow up by
+                  email. If your inquiry is time-sensitive, please also write directly to{" "}
                   <a
                     href="mailto:engagements@discoverdiplomacy.com"
                     className="text-navy-deep underline underline-offset-4"
@@ -147,6 +147,7 @@ function ContactPage() {
                   </a>
                   .
                 </p>
+
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
@@ -231,8 +232,9 @@ function ContactPage() {
                     {busy ? "Submitting…" : "Submit Inquiry"}
                   </button>
                   <span className="text-xs text-muted-foreground">
-                    Response within two business days.
+                    We read every qualified inquiry.
                   </span>
+
                 </div>
               </form>
             )}
