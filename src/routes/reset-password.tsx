@@ -10,6 +10,12 @@ export const Route = createFileRoute("/reset-password")({
     meta: [
       { title: "Reset password | Discover Diplomacy" },
       { name: "description", content: "Set a new password for your Discover Diplomacy account." },
+      { property: "og:title", content: "Reset password | Discover Diplomacy" },
+      { property: "og:description", content: "Set a new password for your Discover Diplomacy account." },
+      { property: "og:url", content: "https://discoverdiplomacy.org/reset-password" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/reset-password" },
     ],
   }),
   component: ResetPasswordPage,
