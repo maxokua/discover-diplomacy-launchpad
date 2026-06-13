@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { Parallax } from "@/components/scroll-effects";
 import institution from "@/assets/institution.jpg";
+
 
 export const Route = createFileRoute("/about")({
   head: () => ({
