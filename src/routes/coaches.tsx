@@ -164,7 +164,39 @@ function CoachesPage() {
         </div>
       </section>
 
-      <section id="apply" className="bg-paper">
+      <section id="apply" className="relative overflow-hidden bg-navy-deep">
+        <div className="absolute inset-0 opacity-[0.08]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
+        <div className="relative mx-auto max-w-5xl px-6 py-28 text-center lg:px-10 lg:py-40">
+          <Reveal>
+            <div className="eyebrow text-emerald">Coach With Us</div>
+            <h2 className="mx-auto mt-6 max-w-3xl font-display text-4xl leading-tight text-paper lg:text-6xl lg:leading-tight">
+              Ready to shape the next generation of foreign policy leaders?
+            </h2>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-paper/70">
+              We are always looking for experienced professionals who want to give back. If you have walked the halls of power and want to help others do the same, we want to hear from you.
+            </p>
+            <div className="mt-12">
+              <a
+                href="#application-form"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="inline-block bg-emerald px-16 py-6 font-display text-2xl text-navy-deep transition-transform hover:scale-105 lg:px-20 lg:py-7 lg:text-3xl"
+              >
+                Apply here
+              </a>
+            </div>
+            <p className="mt-6 text-sm text-paper/40">
+              No fees to join. We review every application personally.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <section id="application-form" className="bg-paper">
         <div className="mx-auto max-w-4xl px-6 py-20 lg:px-10 lg:py-24">
           {submitted ? (
             <div className="text-center">
@@ -173,16 +205,16 @@ function CoachesPage() {
               </div>
               <h2 className="mt-8 font-display text-3xl text-navy-deep">Application received.</h2>
               <p className="mt-3 text-base text-muted-foreground">
-                We'll review your application and follow up by email.
+                We will review your application and follow up by email.
               </p>
 
             </div>
           ) : (
             <>
               <Reveal>
-                <div className="eyebrow">Apply</div>
+                <div className="eyebrow">Coach Application</div>
                 <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-                  Coach application
+                  Tell us about yourself
                 </h2>
               </Reveal>
               <form onSubmit={handleSubmit} className="mt-10 grid gap-6 md:grid-cols-2">
