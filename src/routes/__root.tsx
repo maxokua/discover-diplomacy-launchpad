@@ -77,7 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Discover Diplomacy — Career Advisory for International Affairs" },
+      { title: "Discover Diplomacy | Career Advisory for International Affairs" },
       { name: "description", content: "Career coaching and advisory for students and early-career professionals pursuing diplomacy, international policy, multilateral institutions, and global business." },
       { name: "author", content: "Discover Diplomacy" },
       { name: "robots", content: "index, follow, max-image-preview:large" },

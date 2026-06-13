@@ -11,7 +11,7 @@ const search = z.object({ reviewId: z.string().uuid() });
 
 export const Route = createFileRoute("/_authenticated/resume-review/checkout")({
   validateSearch: (s) => search.parse(s),
-  head: () => ({ meta: [{ title: "Checkout — Discover Diplomacy" }] }),
+  head: () => ({ meta: [{ title: "Checkout | Discover Diplomacy" }] }),
   component: CheckoutPage,
 });
 
@@ -43,7 +43,7 @@ function CheckoutPage() {
         <div className="mx-auto max-w-4xl px-6 py-12 lg:px-10 lg:py-16">
           <div className="eyebrow">Checkout</div>
           <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-            Expert Resume Review — $25
+            Expert Resume Review · $25
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
             Your order will be queued the moment payment completes.

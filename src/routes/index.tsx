@@ -7,20 +7,20 @@ import institution from "@/assets/institution.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Discover Diplomacy — Career Advisory for International Affairs & Global Business" },
+      { title: "Discover Diplomacy | Career Advisory for International Affairs & Global Business" },
       {
         name: "description",
         content:
           "Discover Diplomacy advises students and early-career professionals pursuing careers in diplomacy, international policy, multilateral institutions, and international business.",
       },
-      { property: "og:title", content: "Discover Diplomacy — Career Advisory for International Affairs & Global Business" },
+      { property: "og:title", content: "Discover Diplomacy | Career Advisory for International Affairs & Global Business" },
       {
         property: "og:description",
         content:
-          "Helping the next generation discover what they want to do in international affairs and global business — and how to land those roles.",
+          "Helping the next generation discover what they want to do in international affairs and global business, and how to land those roles.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/" },
-      { name: "twitter:title", content: "Discover Diplomacy — Career Advisory" },
+      { name: "twitter:title", content: "Discover Diplomacy | Career Advisory" },
       { name: "twitter:description", content: "Career coaching for students and early-career professionals in diplomacy, policy, and global business." },
     ],
     links: [
@@ -73,7 +73,7 @@ function Hero() {
             Career Advisory · International Affairs & Global Business
           </Reveal>
           <Reveal as="h1" delay={80} className="mt-6 font-display text-4xl leading-[1.1] text-navy-deep sm:text-5xl lg:text-[64px]">
-            Discover what you want to do in the field — and how to land it.
+            Discover what you want to do in the field, and how to land it.
           </Reveal>
           <Reveal as="p" delay={160} className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             Discover Diplomacy advises students and early-career professionals pursuing
@@ -122,7 +122,7 @@ const services = [
     icon: Compass,
     title: "Career Orientation",
     headline: "Figure out what you actually want to do.",
-    desc: "The field is vast — foreign service, multilaterals, think tanks, international development, government affairs, global business. We help you cut through the noise and identify the roles, sectors, and trajectories that genuinely fit your interests, skills, and life.",
+    desc: "The field is vast, foreign service, multilaterals, think tanks, international development, government affairs, global business. We help you cut through the noise and identify the roles, sectors, and trajectories that genuinely fit your interests, skills, and life.",
     bullets: [
       "Structured exploration of the field across diplomacy, policy, and international business",
       "Self-assessment of strengths, values, and constraints",
@@ -135,7 +135,7 @@ const services = [
     icon: Target,
     title: "Placement Execution",
     headline: "Land the role.",
-    desc: "Once direction is clear, we run a disciplined campaign to get you hired. Resume and narrative, network architecture, application strategy, interview preparation, and offer negotiation — the full arc from positioning to acceptance.",
+    desc: "Once direction is clear, we run a disciplined campaign to get you hired. Resume and narrative, network architecture, application strategy, interview preparation, and offer negotiation, the full arc from positioning to acceptance.",
     bullets: [
       "Resume, CV, and LinkedIn repositioning for the target sector",
       "Network mapping and outreach strategy",
@@ -212,9 +212,9 @@ function Practice() {
 
 const engagementSteps = [
   { n: "01", t: "Make your account", d: "Sign up in under a minute." },
-  { n: "02", t: "Upload your documents", d: "Resume, CV, LinkedIn — whatever you've got. We work from what you give us." },
+  { n: "02", t: "Upload your documents", d: "Resume, CV, LinkedIn, whatever you've got. We work from what you give us." },
   { n: "03", t: "Link the job postings", d: "Drop in the roles you actually want to apply to. That pings us." },
-  { n: "04", t: "We send it back", d: "Updated documents and clear advice — no hassle, no awkward email chains, no information overload." },
+  { n: "04", t: "We send it back", d: "Updated documents and clear advice, no hassle, no awkward email chains, no information overload." },
 ];
 
 function Engagement() {
@@ -231,7 +231,7 @@ function Engagement() {
             </h2>
             <p className="mt-5 max-w-md text-paper/70">
               Make your account, upload your documents, and link the job postings you want to
-              apply to. That pings us — and we send you your updated documents and advice. No
+              apply to. That pings us, and we send you your updated documents and advice. No
               hassle, no awkward email exchange, no information overload.
             </p>
           </Reveal>

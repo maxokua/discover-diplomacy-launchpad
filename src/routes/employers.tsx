@@ -6,13 +6,13 @@ import { Reveal } from "@/components/reveal";
 export const Route = createFileRoute("/employers")({
   head: () => ({
     meta: [
-      { title: "For Employers — Access Candidate Resumes — Discover Diplomacy" },
+      { title: "For Employers | Access Candidate Resumes | Discover Diplomacy" },
       {
         name: "description",
         content:
-          "Hiring in international affairs, policy, or global business? Browse vetted resumes from Discover Diplomacy clients — students and early-career professionals serious about the field.",
+          "Hiring in international affairs, policy, or global business? Browse vetted resumes from Discover Diplomacy clients, students and early-career professionals serious about the field.",
       },
-      { property: "og:title", content: "For Employers — Discover Diplomacy" },
+      { property: "og:title", content: "For Employers | Discover Diplomacy" },
       {
         property: "og:description",
         content:
@@ -65,7 +65,7 @@ function EmployersPage() {
           <Reveal className="lg:col-span-5">
             <div className="eyebrow">What you get</div>
             <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-              A curated talent pool — not a job board.
+              A curated talent pool, not a job board.
             </h2>
             <p className="mt-5 text-muted-foreground">
               Every candidate has been through our coaching process. You see polished resumes
@@ -78,8 +78,8 @@ function EmployersPage() {
                 "Searchable directory of active candidates and their resumes",
                 "Filter by target sector, region, language, and graduation year",
                 "Resumes already tailored and ATS-optimized by our coaches",
-                "Direct contact through Discover Diplomacy — no bidding, no spam",
-                "Members opt in to be visible to employers — every candidate consents",
+                "Direct contact through Discover Diplomacy, no bidding, no spam",
+                "Members opt in to be visible to employers, every candidate consents",
               ].map((i) => (
                 <li key={i} className="flex gap-3 text-sm text-navy-deep/90">
                   <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />

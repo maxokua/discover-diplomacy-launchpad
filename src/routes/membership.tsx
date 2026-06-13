@@ -7,13 +7,13 @@ import { useAuth } from "@/hooks/use-auth";
 export const Route = createFileRoute("/membership")({
   head: () => ({
     meta: [
-      { title: "Career Membership — $50/mo — Discover Diplomacy" },
+      { title: "Career Membership | $50/mo | Discover Diplomacy" },
       {
         name: "description",
         content:
           "Our most popular service. $50/month, no annual lock-in. Resume tailoring for 5 target jobs, LinkedIn review, industry research, outreach, interview prep, application help, and a Substack with 50 opportunities weekly.",
       },
-      { property: "og:title", content: "Career Membership — $50/mo" },
+      { property: "og:title", content: "Career Membership | $50/mo" },
       {
         property: "og:description",
         content:
@@ -52,11 +52,11 @@ const INCLUDED = [
   "Tell us the 5 jobs you want us to specifically tailor your resume for",
   "Full LinkedIn profile review and rewrite",
   "Industry and company research for your targets",
-  "Outreach assistance — direct help to build your network",
+  "Outreach assistance, direct help to build your network",
   "Interview prep tailored to the roles you're chasing",
   "Help drafting and tailoring each application",
   "Access to our Substack with 50 opportunities weekly from every region of the world",
-  "Direct email access to the CEO — ask as many questions as you want",
+  "Direct email access to the CEO, ask as many questions as you want",
 ];
 
 function StartLink({ user, label }: { user: boolean; label: string }) {
@@ -73,7 +73,7 @@ function StartLink({ user, label }: { user: boolean; label: string }) {
       search={{ next: "/membership/checkout" }}
       className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
     >
-      Sign in to start — $50/mo
+      Sign in to start · $50/mo
     </Link>
   );
 }
@@ -93,11 +93,11 @@ function MembershipPage() {
               The Career Membership. $50 a month. Month to month.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-              We don't do annual plans — we're not in this to lock you in, we're in this to help
+              We don't do annual plans, we're not in this to lock you in, we're in this to help
               you. Stay as long as it's useful, leave the day it isn't.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <StartLink user={!!user} label="Start membership — $50/mo" />
+              <StartLink user={!!user} label="Start membership · $50/mo" />
               <span className="text-xs uppercase tracking-wider text-muted-foreground">
                 Cancel anytime · No annual contract
               </span>
@@ -139,7 +139,7 @@ function MembershipPage() {
               Want time with the CEO? Add it for $25.
             </h2>
             <p className="mt-5 text-muted-foreground">
-              The $50 membership does <em>not</em> include a call — but you do get the CEO's email
+              The $50 membership does <em>not</em> include a call, but you do get the CEO's email
               and can ask as many questions as you'd like. If you want a live 30-minute session,
               book one for an extra $25.
             </p>
@@ -165,11 +165,11 @@ function MembershipPage() {
                 Ready when you are
               </div>
               <h2 className="mt-4 font-display text-2xl text-paper lg:text-3xl">
-                Join for $50/month. Cancel anytime — no questions, no hoops.
+                Join for $50/month. Cancel anytime, no questions, no hoops.
               </h2>
             </div>
             <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
-              <StartLink user={!!user} label="Start — $50/mo" />
+              <StartLink user={!!user} label="Start · $50/mo" />
             </div>
           </div>
         </div>

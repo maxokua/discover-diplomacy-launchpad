@@ -4,9 +4,9 @@ import { SiteLayout } from "@/components/site-layout";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Terms of Service — Discover Diplomacy" },
+      { title: "Terms of Service | Discover Diplomacy" },
       { name: "description", content: "The terms that govern your use of Discover Diplomacy services." },
-      { property: "og:title", content: "Terms of Service — Discover Diplomacy" },
+      { property: "og:title", content: "Terms of Service | Discover Diplomacy" },
       { property: "og:description", content: "The terms that govern your use of Discover Diplomacy services." },
     ],
   }),

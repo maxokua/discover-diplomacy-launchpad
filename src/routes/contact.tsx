@@ -8,13 +8,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Discover Diplomacy" },
+      { title: "Contact | Discover Diplomacy" },
       {
         name: "description",
         content:
           "Request a confidential consultation with Discover Diplomacy. Limited new engagements each quarter.",
       },
-      { property: "og:title", content: "Contact — Discover Diplomacy" },
+      { property: "og:title", content: "Contact | Discover Diplomacy" },
       {
         property: "og:description",
         content:

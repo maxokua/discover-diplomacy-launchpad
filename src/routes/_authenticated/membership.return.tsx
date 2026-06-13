@@ -5,7 +5,7 @@ export const Route = createFileRoute("/_authenticated/membership/return")({
   validateSearch: (s: Record<string, unknown>): { session_id?: string } => ({
     session_id: typeof s.session_id === "string" ? s.session_id : undefined,
   }),
-  head: () => ({ meta: [{ title: "Welcome to the Membership — Discover Diplomacy" }] }),
+  head: () => ({ meta: [{ title: "Welcome to the Membership | Discover Diplomacy" }] }),
   component: MembershipReturn,
 });
 

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Reset password — Discover Diplomacy" },
+      { title: "Reset password | Discover Diplomacy" },
       { name: "description", content: "Set a new password for your Discover Diplomacy account." },
     ],
   }),
@@ -106,7 +106,7 @@ function ResetPasswordPage() {
             <div className="eyebrow">Client Portal</div>
             <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Set a new password</h1>
             <p className="mt-3 text-sm text-muted-foreground">
-              Choose a strong password — at least 8 characters.
+              Choose a strong password, at least 8 characters.
             </p>
 
             <form onSubmit={handleSubmit} className="mt-10 space-y-5">
