@@ -31,7 +31,7 @@ function ServicesPage() {
           <Reveal>
             <div className="eyebrow">Services</div>
             <h1 className="mt-5 max-w-4xl font-display text-4xl text-navy-deep lg:text-6xl">
-              Two services. Built for people who are serious about this field.
+              Services built for people who are serious about this field.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
               We help globally minded students and early professionals figure out what they

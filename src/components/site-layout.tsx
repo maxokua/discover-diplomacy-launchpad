@@ -7,7 +7,6 @@ import { useAuth } from "@/hooks/use-auth";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
-  { to: "/membership", label: "Membership" },
   { to: "/about", label: "About" },
   { to: "/coaches", label: "Coaches" },
   { to: "/employers", label: "Employers" },
@@ -149,7 +148,6 @@ function SiteFooter() {
             title="Practice"
             links={[
               { to: "/services", label: "Services" },
-              { to: "/membership", label: "Membership" },
               { to: "/about", label: "About" },
             ]}
           />
