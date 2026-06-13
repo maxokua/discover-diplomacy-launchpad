@@ -275,6 +275,8 @@ export type Database = {
           target_role: string
           updated_at: string
           user_id: string
+          visible_to_coaches: boolean
+          visible_to_employers: boolean
         }
         Insert: {
           amount_cents?: number
@@ -290,6 +292,8 @@ export type Database = {
           target_role: string
           updated_at?: string
           user_id: string
+          visible_to_coaches?: boolean
+          visible_to_employers?: boolean
         }
         Update: {
           amount_cents?: number
@@ -305,6 +309,8 @@ export type Database = {
           target_role?: string
           updated_at?: string
           user_id?: string
+          visible_to_coaches?: boolean
+          visible_to_employers?: boolean
         }
         Relationships: []
       }

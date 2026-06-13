@@ -571,6 +571,7 @@ export const coachListClients = createServerFn({ method: "POST" })
       .from("resume_reviews")
       .select("id, user_id, target_role, notes, status, created_at")
       .in("status", ["paid", "in_review", "pending_payment"])
+      .eq("visible_to_coaches", true)
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) return { error: error.message };
@@ -608,6 +609,8 @@ export const employerListResumes = createServerFn({ method: "POST" })
       .select(
         "id, user_id, target_role, status, resume_path, reviewed_resume_path, created_at",
       )
+      .eq("visible_to_employers", true)
+      .in("status", ["paid", "in_review", "completed"])
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) return { error: error.message };
@@ -637,6 +640,32 @@ export const employerListResumes = createServerFn({ method: "POST" })
     return { resumes };
   });
 
+export const updateReviewVisibility = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: {
+    reviewId: string;
+    visibleToEmployers?: boolean;
+    visibleToCoaches?: boolean;
+  }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.reviewId)) throw new Error("Invalid reviewId");
+    return data;
+  })
+  .handler(async ({ data, context }) => {
+    const update: { visible_to_employers?: boolean; visible_to_coaches?: boolean } = {};
+    if (typeof data.visibleToEmployers === "boolean")
+      update.visible_to_employers = data.visibleToEmployers;
+    if (typeof data.visibleToCoaches === "boolean")
+      update.visible_to_coaches = data.visibleToCoaches;
+    if (!Object.keys(update).length) return { ok: true };
+    const { error } = await context.supabase
+      .from("resume_reviews")
+      .update(update)
+      .eq("id", data.reviewId)
+      .eq("user_id", context.userId);
+    if (error) return { error: error.message };
+    return { ok: true };
+  });
+
 export const employerGetResumeUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { reviewId: string }) => {
@@ -648,10 +677,14 @@ export const employerGetResumeUrl = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: review } = await supabaseAdmin
       .from("resume_reviews")
-      .select("resume_path, reviewed_resume_path")
+      .select("resume_path, reviewed_resume_path, visible_to_employers")
       .eq("id", data.reviewId)
       .single();
     if (!review) return { error: "Not found" };
+    const isAdmin = await context.supabase
+      .rpc("has_role", { _user_id: context.userId, _role: "admin" })
+      .then((r) => !!r.data);
+    if (!review.visible_to_employers && !isAdmin) return { error: "Not available" };
     const path = (review.reviewed_resume_path ?? review.resume_path) as string | null;
     if (!path) return { error: "No file" };
     const { data: signed } = await supabaseAdmin.storage
