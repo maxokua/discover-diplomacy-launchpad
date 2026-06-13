@@ -19,8 +19,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     console.log("checkout.session.completed without reviewId metadata");
     return;
   }
-  await getSupabase()
-    .from("resume_reviews")
+  await (getSupabase().from("resume_reviews") as any)
     .update({
       status: "paid",
       stripe_session_id: session.id,
