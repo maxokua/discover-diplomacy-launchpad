@@ -139,35 +139,62 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
       if (!prices.data.length) throw new Error("Price not configured");
       const stripePrice = prices.data[0];
 
-      // Ensure IHEARTMAX exists once, capped to 25 total redemptions.
-      try {
-        const existingCodes = await stripe.promotionCodes.list({ code: "IHEARTMAX", limit: 1 });
-        if (!existingCodes.data.length) {
-          let couponId: string | undefined;
-          const coupons = await stripe.coupons.list({ limit: 100 });
-          const match = coupons.data.find(
-            (c: any) => c.id === "iheartmax_100" || c.name === "IHEARTMAX 100% off",
-          );
-          if (match) {
-            couponId = match.id;
-          } else {
-            const coupon = await stripe.coupons.create({
-              id: "iheartmax_100",
-              percent_off: 100,
-              duration: "forever",
-              name: "IHEARTMAX 100% off",
-            });
-            couponId = coupon.id;
-          }
-          await stripe.promotionCodes.create({
-            coupon: couponId,
-            code: "IHEARTMAX",
-            max_redemptions: 25,
-          } as any);
+      // Ensure promo codes exist once. IHEARTMAX = 100% off, 25 redemptions.
+      // IBELIEVE11 = 50% off, 50 redemptions.
+      const ensurePromo = async (opts: {
+        code: string;
+        couponId: string;
+        percentOff: number;
+        name: string;
+        maxRedemptions: number;
+        duration: "forever" | "once";
+      }) => {
+        const existing = await stripe.promotionCodes.list({ code: opts.code, limit: 1 });
+        if (existing.data.length) return;
+        let couponId: string | undefined;
+        const coupons = await stripe.coupons.list({ limit: 100 });
+        const match = coupons.data.find(
+          (c: any) => c.id === opts.couponId || c.name === opts.name,
+        );
+        if (match) {
+          couponId = match.id;
+        } else {
+          const coupon = await stripe.coupons.create({
+            id: opts.couponId,
+            percent_off: opts.percentOff,
+            duration: opts.duration,
+            name: opts.name,
+          });
+          couponId = coupon.id;
         }
+        await stripe.promotionCodes.create({
+          coupon: couponId,
+          code: opts.code,
+          max_redemptions: opts.maxRedemptions,
+        } as any);
+      };
+
+      try {
+        await ensurePromo({
+          code: "IHEARTMAX",
+          couponId: "iheartmax_100",
+          percentOff: 100,
+          name: "IHEARTMAX 100% off",
+          maxRedemptions: 25,
+          duration: "forever",
+        });
+        await ensurePromo({
+          code: "IBELIEVE11",
+          couponId: "ibelieve11_50",
+          percentOff: 50,
+          name: "IBELIEVE11 50% off",
+          maxRedemptions: 50,
+          duration: "forever",
+        });
       } catch (promoErr) {
         console.error("[membership] promo ensure failed", promoErr);
       }
+
 
       const email = (context.claims as { email?: string } | undefined)?.email;
       const customerId = await resolveOrCreateCustomer(stripe, {
