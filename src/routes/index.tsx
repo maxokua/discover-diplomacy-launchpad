@@ -144,7 +144,7 @@ const services = [
       "Resume, CV, and LinkedIn repositioning for the target sector",
       "Network mapping and outreach strategy",
       "Application drafting, review, and timing",
-      "Mock interviews, including FSOT, Oral Assessment, and panel formats",
+      "Mock interviews with panel-style preparation tailored to each role",
       "Offer evaluation and negotiation",
     ],
   },
