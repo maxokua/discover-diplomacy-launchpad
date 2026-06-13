@@ -5,6 +5,8 @@ import { Reveal } from "@/components/reveal";
 import { Parallax } from "@/components/scroll-effects";
 import { MagneticLink } from "@/components/magnetic";
 import institution from "@/assets/institution.jpg";
+import ypfpLogo from "@/assets/ypfp-logo.jpg.asset.json";
+import americanUniversityLogo from "@/assets/american-university-logo.png.asset.json";
 
 
 export const Route = createFileRoute("/")({
@@ -264,30 +266,35 @@ function BackedBy() {
           <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
             Backed by
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-10">
-            <div className="flex flex-col items-center">
-              <div className="font-display text-2xl font-semibold tracking-tight text-navy-deep lg:text-3xl">
-                YPFP
-              </div>
-              <div className="mt-2 text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                Young Professionals in Foreign Policy
-              </div>
-            </div>
-            <div className="hidden h-12 w-px bg-border md:block" aria-hidden />
-            <div className="flex flex-col items-center">
-              <div className="font-display text-2xl font-semibold tracking-tight text-navy-deep lg:text-3xl">
-                Veloric Center for Entrepreneurship
-              </div>
-              <div className="mt-2 text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                American University · Washington, DC
-              </div>
-            </div>
-          </div>
+          <ul className="flex flex-wrap items-center justify-center gap-x-20 gap-y-10">
+            <li>
+              <img
+                src={ypfpLogo.url}
+                alt="Young Professionals in Foreign Policy"
+                width={160}
+                height={160}
+                loading="lazy"
+                className="h-24 w-24 object-contain transition-all duration-500 hover:scale-105 lg:h-28 lg:w-28"
+              />
+            </li>
+            <li className="hidden h-16 w-px bg-border md:block" aria-hidden />
+            <li>
+              <img
+                src={americanUniversityLogo.url}
+                alt="American University — Veloric Center for Entrepreneurship"
+                width={160}
+                height={160}
+                loading="lazy"
+                className="h-20 w-20 object-contain transition-all duration-500 hover:scale-105 lg:h-24 lg:w-24"
+              />
+            </li>
+          </ul>
         </Reveal>
       </div>
     </section>
   );
 }
+
 
 function ForEmployers() {
   return (
