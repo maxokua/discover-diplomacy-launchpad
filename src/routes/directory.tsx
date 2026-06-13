@@ -10,6 +10,8 @@ type Entry = {
   interest: string;
   subsection: string;
   url: string;
+  description?: string;
+  externalLink?: string;
 };
 
 const ALL_ENTRIES = (directoryData as Entry[]).filter((e) => e.category !== "Other");
