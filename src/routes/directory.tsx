@@ -52,10 +52,10 @@ function uniqSorted(arr: string[]) {
 
 function DirectoryPage() {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>("All");
-  const [location, setLocation] = useState<string>("All");
-  const [interest, setInterest] = useState<string>("All");
-  const [subsection, setSubsection] = useState<string>("All");
+  const [category, setCategory] = useState<string>("All program types");
+  const [location, setLocation] = useState<string>("All locations");
+  const [interest, setInterest] = useState<string>("All focus areas");
+  const [subsection, setSubsection] = useState<string>("All subject areas");
 
   const locations = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.location)), []);
   const interests = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.interest)), []);
