@@ -35,6 +35,19 @@ export const Route = createFileRoute("/services")({
           ],
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "What services does Discover Diplomacy offer?", acceptedAnswer: { "@type": "Answer", text: "Two services: a one-time $25 expert resume review, and a $50 per month Career Membership covering resume tailoring, LinkedIn review, research, outreach, interview prep, and a weekly Substack of 50 global opportunities." } },
+            { "@type": "Question", name: "How much does a resume review cost?", acceptedAnswer: { "@type": "Answer", text: "A one-time expert resume review is $25. We return a revised resume tailored to international affairs, policy, and global business hiring conventions." } },
+            { "@type": "Question", name: "Is there an annual plan?", acceptedAnswer: { "@type": "Answer", text: "No. The membership is intentionally month-to-month at $50. Stay as long as it is useful, cancel when it is not." } },
+            { "@type": "Question", name: "What career fields do you cover?", acceptedAnswer: { "@type": "Answer", text: "Diplomacy and foreign service, international policy, multilateral institutions (UN, World Bank, IMF, regional banks), international development, government affairs, and global business." } },
+          ],
+        }),
+      },
     ],
   }),
   component: ServicesPage,
