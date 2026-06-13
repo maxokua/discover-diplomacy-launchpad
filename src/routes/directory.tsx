@@ -66,8 +66,8 @@ function DirectoryPage() {
     return ALL_ENTRIES.filter((e) => {
       if (category !== "All program types" && e.category !== category) return false;
       if (location !== "All locations" && e.location !== location) return false;
-      if (interest !== "All focus areas" && e.interest !== interest) return false;
-      if (subsection !== "All subject areas" && e.subsection !== subsection) return false;
+      if (interest !== "All regional focuses" && e.interest !== interest) return false;
+      if (subsection !== "All interest areas" && e.subsection !== subsection) return false;
       if (q && !`${e.name} ${e.location} ${e.interest} ${e.subsection}`.toLowerCase().includes(q))
         return false;
       return true;
