@@ -42,6 +42,20 @@ export const Route = createFileRoute("/membership")({
           },
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "How much does the Career Membership cost?", acceptedAnswer: { "@type": "Answer", text: "$50 per month, billed monthly. No annual contract. You can cancel anytime from your dashboard." } },
+            { "@type": "Question", name: "What is included in the membership?", acceptedAnswer: { "@type": "Answer", text: "Resume tailoring for up to 5 target jobs, LinkedIn review, industry and employer research, outreach assistance, interview preparation, application support, a weekly Substack with 50 curated global opportunities, and direct email access to the CEO." } },
+            { "@type": "Question", name: "Who is the membership for?", acceptedAnswer: { "@type": "Answer", text: "Students and early-career professionals targeting roles in diplomacy, foreign policy, multilateral institutions, international development, and global business." } },
+            { "@type": "Question", name: "Can I cancel anytime?", acceptedAnswer: { "@type": "Answer", text: "Yes. Cancel from your dashboard in one click. You keep access through the end of the billing period you already paid for." } },
+            { "@type": "Question", name: "Does the membership include a coaching call?", acceptedAnswer: { "@type": "Answer", text: "Calls are not included in the base $50 membership, but members get direct CEO email access and can book a 30-minute CEO call for $25." } },
+          ],
+        }),
+      },
     ],
   }),
   component: MembershipPage,
