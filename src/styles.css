@@ -143,6 +143,10 @@
   60%  { filter: blur(0); }
   100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 .page-enter {
   animation: pageEnter 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
