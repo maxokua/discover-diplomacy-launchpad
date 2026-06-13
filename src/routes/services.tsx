@@ -36,6 +36,7 @@ export const Route = createFileRoute("/services")({
         }),
       },
     ],
+  }),
   component: ServicesPage,
 });
 
