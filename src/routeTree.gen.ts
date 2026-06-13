@@ -29,6 +29,7 @@ import { Route as AuthenticatedResumeReviewReturnRouteImport } from './routes/_a
 import { Route as AuthenticatedResumeReviewCheckoutRouteImport } from './routes/_authenticated/resume-review.checkout'
 import { Route as AuthenticatedMembershipReturnRouteImport } from './routes/_authenticated/membership.return'
 import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_authenticated/membership.checkout'
+import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -136,6 +137,12 @@ const AuthenticatedMembershipCheckoutRoute =
     path: '/membership/checkout',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminReviewsRoute =
+  AuthenticatedAdminReviewsRouteImport.update({
+    id: '/admin/reviews',
+    path: '/admin/reviews',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
@@ -164,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
@@ -187,6 +195,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
@@ -212,6 +221,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/_authenticated/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/_authenticated/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/dashboard'
+    | '/admin/reviews'
     | '/membership/checkout'
     | '/membership/return'
     | '/resume-review/checkout'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/dashboard'
+    | '/admin/reviews'
     | '/membership/checkout'
     | '/membership/return'
     | '/resume-review/checkout'
@@ -284,6 +296,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/_authenticated/dashboard'
+    | '/_authenticated/admin/reviews'
     | '/_authenticated/membership/checkout'
     | '/_authenticated/membership/return'
     | '/_authenticated/resume-review/checkout'
@@ -454,6 +467,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMembershipCheckoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/reviews': {
+      id: '/_authenticated/admin/reviews'
+      path: '/admin/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
       path: '/lovable/email/queue/process'
@@ -473,6 +493,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
   AuthenticatedMembershipCheckoutRoute: typeof AuthenticatedMembershipCheckoutRoute
   AuthenticatedMembershipReturnRoute: typeof AuthenticatedMembershipReturnRoute
   AuthenticatedResumeReviewCheckoutRoute: typeof AuthenticatedResumeReviewCheckoutRoute
@@ -482,6 +503,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
   AuthenticatedMembershipCheckoutRoute: AuthenticatedMembershipCheckoutRoute,
   AuthenticatedMembershipReturnRoute: AuthenticatedMembershipReturnRoute,
   AuthenticatedResumeReviewCheckoutRoute:

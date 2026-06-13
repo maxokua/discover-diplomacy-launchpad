@@ -116,83 +116,139 @@ function AuthPage() {
     }
   }
 
+  const heading =
+    mode === "signin"
+      ? "Sign in to your account"
+      : mode === "signup"
+      ? "Create your account"
+      : "Reset your password";
+  const subhead =
+    mode === "signin"
+      ? "Access your engagements and resume reviews."
+      : mode === "signup"
+      ? "Get started with Discover Diplomacy."
+      : "Enter your email and we'll send you a reset link.";
+
   return (
     <SiteLayout>
       <section className="bg-paper">
         <div className="mx-auto grid min-h-[calc(100vh-200px)] max-w-7xl items-center px-6 py-16 lg:px-10">
           <div className="mx-auto w-full max-w-md">
             <div className="eyebrow">Client Portal</div>
-            <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-              {mode === "signin" ? "Sign in to your account" : "Create your account"}
-            </h1>
-            <p className="mt-3 text-sm text-muted-foreground">
-              {mode === "signin"
-                ? "Access your engagements and resume reviews."
-                : "Get started with Discover Diplomacy."}
-            </p>
+            <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">{heading}</h1>
+            <p className="mt-3 text-sm text-muted-foreground">{subhead}</p>
 
-            <form onSubmit={handleSubmit} className="mt-10 space-y-5">
-              {mode === "signup" && (
-                <div>
-                  <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
-                    Full name
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-                  />
+            {mode === "reset" && resetSent ? (
+              <div className="mt-10 border border-border bg-stone p-6 text-sm text-navy-deep">
+                If an account exists for that email, a reset link is on its way. Check your inbox
+                (and spam folder).
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("signin");
+                      setResetSent(false);
+                    }}
+                    className="font-medium underline-offset-4 hover:underline"
+                  >
+                    ← Back to sign in
+                  </button>
                 </div>
-              )}
-              <div>
-                <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
-                  Email
-                </label>
-                <input
-                  required
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-                />
               </div>
-              <div>
-                <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
-                  Password
-                </label>
-                <input
-                  required
-                  type="password"
-                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-                />
+            ) : mode === "signup" && signupSent ? (
+              <div className="mt-10 border border-border bg-stone p-6 text-sm text-navy-deep">
+                Check your inbox to confirm your email and finish setting up your account.
               </div>
-              <button
-                type="submit"
-                disabled={busy}
-                className="w-full bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy disabled:opacity-60"
-              >
-                {busy ? "Working…" : mode === "signin" ? "Sign in" : "Create account"}
-              </button>
-            </form>
+            ) : (
+              <>
+                <form onSubmit={handleSubmit} className="mt-10 space-y-5">
+                  {mode === "signup" && (
+                    <div>
+                      <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                        Full name
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                      Email
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+                    />
+                  </div>
+                  {mode !== "reset" && (
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                          Password
+                        </label>
+                        {mode === "signin" && (
+                          <button
+                            type="button"
+                            onClick={() => setMode("reset")}
+                            className="text-xs text-muted-foreground hover:text-navy-deep underline-offset-4 hover:underline"
+                          >
+                            Forgot password?
+                          </button>
+                        )}
+                      </div>
+                      <input
+                        required
+                        type="password"
+                        autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+                      />
+                    </div>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={busy}
+                    className="w-full bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy disabled:opacity-60"
+                  >
+                    {busy
+                      ? "Working…"
+                      : mode === "signin"
+                      ? "Sign in"
+                      : mode === "signup"
+                      ? "Create account"
+                      : "Send reset link"}
+                  </button>
+                </form>
 
-            <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
-              <div className="h-px flex-1 bg-border" /> or <div className="h-px flex-1 bg-border" />
-            </div>
+                {mode !== "reset" && (
+                  <>
+                    <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
+                      <div className="h-px flex-1 bg-border" /> or{" "}
+                      <div className="h-px flex-1 bg-border" />
+                    </div>
 
-            <button
-              type="button"
-              onClick={handleGoogle}
-              disabled={busy}
-              className="w-full border border-border bg-paper px-5 py-3 text-sm text-navy-deep transition-colors hover:bg-stone disabled:opacity-60"
-            >
-              Continue with Google
-            </button>
+                    <button
+                      type="button"
+                      onClick={handleGoogle}
+                      disabled={busy}
+                      className="w-full border border-border bg-paper px-5 py-3 text-sm text-navy-deep transition-colors hover:bg-stone disabled:opacity-60"
+                    >
+                      Continue with Google
+                    </button>
+                  </>
+                )}
+              </>
+            )}
 
             <p className="mt-8 text-center text-sm text-muted-foreground">
               {mode === "signin" ? (
@@ -206,12 +262,29 @@ function AuthPage() {
                     Create one
                   </button>
                 </>
-              ) : (
+              ) : mode === "signup" ? (
                 <>
                   Already have an account?{" "}
                   <button
                     type="button"
-                    onClick={() => setMode("signin")}
+                    onClick={() => {
+                      setMode("signin");
+                      setSignupSent(false);
+                    }}
+                    className="font-medium text-navy-deep underline-offset-4 hover:underline"
+                  >
+                    Sign in
+                  </button>
+                </>
+              ) : (
+                <>
+                  Remembered it?{" "}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("signin");
+                      setResetSent(false);
+                    }}
                     className="font-medium text-navy-deep underline-offset-4 hover:underline"
                   >
                     Sign in

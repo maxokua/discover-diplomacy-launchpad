@@ -110,6 +110,33 @@ async function handleWebhook(req: Request, env: StripeEnv) {
     case "customer.subscription.deleted":
       await handleSubscriptionDeleted(event.data.object, env);
       break;
+    case "invoice.payment_failed": {
+      // Mirror past_due/unpaid promptly so the dashboard banner shows up
+      // without waiting for the next customer.subscription.updated.
+      const invoice: any = event.data.object;
+      const subId = invoice.subscription;
+      if (subId) {
+        await (getSupabase().from("subscriptions") as any)
+          .update({
+            status: invoice.status === "uncollectible" ? "unpaid" : "past_due",
+            updated_at: new Date().toISOString(),
+          })
+          .eq("stripe_subscription_id", subId)
+          .eq("environment", env);
+      }
+      break;
+    }
+    case "invoice.payment_succeeded": {
+      const invoice: any = event.data.object;
+      const subId = invoice.subscription;
+      if (subId) {
+        await (getSupabase().from("subscriptions") as any)
+          .update({ status: "active", updated_at: new Date().toISOString() })
+          .eq("stripe_subscription_id", subId)
+          .eq("environment", env);
+      }
+      break;
+    }
     default:
       console.log("Unhandled event:", event.type);
   }
