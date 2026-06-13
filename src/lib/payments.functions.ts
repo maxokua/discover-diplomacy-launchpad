@@ -89,7 +89,8 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
         automatic_tax: { enabled: true },
       });
 
-      await context.supabase
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin
         .from("resume_reviews")
         .update({ stripe_session_id: session.id, environment: data.environment })
         .eq("id", data.reviewId);
