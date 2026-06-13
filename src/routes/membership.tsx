@@ -17,7 +17,7 @@ export const Route = createFileRoute("/membership")({
       {
         property: "og:description",
         content:
-          "Tailored resume, LinkedIn review, research, outreach, interview prep, applications, and the global opportunities Substack. Direct CEO email access.",
+          "Tailored resume, LinkedIn review, research, outreach, interview prep, applications, and a Substack with 50 opportunities weekly. Direct CEO email access.",
       },
     ],
   }),
