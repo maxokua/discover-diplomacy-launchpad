@@ -434,12 +434,12 @@ function chipCls(active: boolean) {
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
-    <div>
-      <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+    <label className="block">
+      <span className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
         {label} {required && <span className="text-emerald">*</span>}
-      </label>
+      </span>
       {children}
-    </div>
+    </label>
   );
 }
 

@@ -9,13 +9,13 @@ import institution from "@/assets/institution.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Discover Diplomacy | Career Advisory for International Affairs & Global Business" },
+      { title: "Discover Diplomacy — Careers in Global Affairs" },
       {
         name: "description",
         content:
-          "Discover Diplomacy advises students and early-career professionals pursuing careers in diplomacy, international policy, multilateral institutions, and international business.",
+          "Career advisory for students and early-career professionals pursuing diplomacy, international policy, multilateral institutions, and global business.",
       },
-      { property: "og:title", content: "Discover Diplomacy | Career Advisory for International Affairs & Global Business" },
+      { property: "og:title", content: "Discover Diplomacy — Careers in Global Affairs" },
       {
         property: "og:description",
         content:

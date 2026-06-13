@@ -6,11 +6,11 @@ import { Reveal } from "@/components/reveal";
 export const Route = createFileRoute("/employers")({
   head: () => ({
     meta: [
-      { title: "For Employers | Access Candidate Resumes | Discover Diplomacy" },
+      { title: "For Employers — Candidate Resumes | Discover Diplomacy" },
       {
         name: "description",
         content:
-          "Hiring in international affairs, policy, or global business? Browse vetted resumes from Discover Diplomacy clients, students and early-career professionals serious about the field.",
+          "Hiring in international affairs, policy, or global business? Browse vetted resumes from Discover Diplomacy clients.",
       },
       { property: "og:title", content: "For Employers | Discover Diplomacy" },
       {

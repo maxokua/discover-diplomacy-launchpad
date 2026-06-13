@@ -20,6 +20,12 @@ export const Route = createFileRoute("/auth")({
     meta: [
       { title: "Sign in | Discover Diplomacy" },
       { name: "description", content: "Sign in or create an account to manage your engagements with Discover Diplomacy." },
+      { property: "og:title", content: "Sign in | Discover Diplomacy" },
+      { property: "og:description", content: "Sign in or create an account to manage your engagements with Discover Diplomacy." },
+      { property: "og:url", content: "https://discoverdiplomacy.org/auth" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://discoverdiplomacy.org/auth" },
     ],
   }),
   component: AuthPage,
@@ -163,10 +169,10 @@ function AuthPage() {
               <>
                 <form onSubmit={handleSubmit} className="mt-10 space-y-5">
                   {mode === "signup" && (
-                    <div>
-                      <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                    <label className="block">
+                      <span className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
                         Full name
-                      </label>
+                      </span>
                       <input
                         required
                         type="text"
@@ -174,12 +180,12 @@ function AuthPage() {
                         onChange={(e) => setFullName(e.target.value)}
                         className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
                       />
-                    </div>
-                  )}
-                  <div>
-                    <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
-                      Email
                     </label>
+                  )}
+                  <label className="block">
+                    <span className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                      Email
+                    </span>
                     <input
                       required
                       type="email"
@@ -188,13 +194,13 @@ function AuthPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
                     />
-                  </div>
+                  </label>
                   {mode !== "reset" && (
-                    <div>
+                    <label className="block">
                       <div className="flex items-center justify-between">
-                        <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
+                        <span className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
                           Password
-                        </label>
+                        </span>
                         {mode === "signin" && (
                           <button
                             type="button"
@@ -213,7 +219,7 @@ function AuthPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
                       />
-                    </div>
+                    </label>
                   )}
                   <button
                     type="submit"
