@@ -197,3 +197,76 @@ function Select({
     </select>
   );
 }
+
+function EntryCard({ entry: e }: { entry: Entry }) {
+  const [open, setOpen] = useState(false);
+  const hasMore = !!(e.description && e.description.length > 0);
+  return (
+    <div className="flex h-full flex-col p-6">
+      <div className="font-display text-base text-navy-deep">{e.name}</div>
+      <div className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+        {e.location && (
+          <div>
+            <span className="font-medium uppercase tracking-wider text-emerald">
+              Location ·{" "}
+            </span>
+            {e.location}
+          </div>
+        )}
+        {e.interest && (
+          <div>
+            <span className="font-medium uppercase tracking-wider text-emerald">
+              Regional Focus ·{" "}
+            </span>
+            {e.interest.replace(/^Interest Area - /, "")}
+          </div>
+        )}
+        {e.subsection && (
+          <div>
+            <span className="font-medium uppercase tracking-wider text-emerald">
+              Interest Area ·{" "}
+            </span>
+            {e.subsection}
+          </div>
+        )}
+      </div>
+      {open && hasMore && (
+        <div className="mt-4 space-y-2 border-t border-border pt-4 text-sm leading-relaxed text-navy-deep/80">
+          {e.description!.split("\n\n").map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+          {e.externalLink && (
+            <a
+              href={e.externalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block text-xs font-medium uppercase tracking-wider text-emerald underline"
+            >
+              Visit program website →
+            </a>
+          )}
+        </div>
+      )}
+      <div className="mt-auto flex items-center justify-between pt-4 text-xs font-medium uppercase tracking-wider">
+        {hasMore ? (
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="text-navy-deep hover:text-emerald"
+          >
+            {open ? "Hide info ↑" : "More info ↓"}
+          </button>
+        ) : (
+          <span />
+        )}
+        <a
+          href={e.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted-foreground hover:text-navy-deep"
+        >
+          Source ↗
+        </a>
+      </div>
+    </div>
+  );
+}
