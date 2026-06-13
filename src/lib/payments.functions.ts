@@ -677,10 +677,14 @@ export const employerGetResumeUrl = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: review } = await supabaseAdmin
       .from("resume_reviews")
-      .select("resume_path, reviewed_resume_path")
+      .select("resume_path, reviewed_resume_path, visible_to_employers")
       .eq("id", data.reviewId)
       .single();
     if (!review) return { error: "Not found" };
+    const isAdmin = await context.supabase
+      .rpc("has_role", { _user_id: context.userId, _role: "admin" })
+      .then((r) => !!r.data);
+    if (!review.visible_to_employers && !isAdmin) return { error: "Not available" };
     const path = (review.reviewed_resume_path ?? review.resume_path) as string | null;
     if (!path) return { error: "No file" };
     const { data: signed } = await supabaseAdmin.storage
