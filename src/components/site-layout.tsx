@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import logoAsset from "@/assets/compass-logo.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 import { ScrollProgress } from "@/components/scroll-effects";
+import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 
 
 const NAV = [
@@ -24,6 +25,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <ScrollProgress />
+      <ScrollRevealInit />
 
       <div className="hidden border-b border-border bg-navy-deep text-paper md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-xs lg:px-10">
@@ -129,7 +131,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main id="main-content" className="flex-1">{children}</main>
+      <main id="main-content" key={pathname} className="flex-1 page-enter">{children}</main>
 
       <SiteFooter />
     </div>

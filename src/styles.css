@@ -120,19 +120,145 @@
 /* Scroll-reveal: applied automatically to sections + opt-in via [data-reveal] */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(28px);
+  filter: blur(6px);
   transition:
-    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
+    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 800ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform, filter;
 }
-[data-reveal][data-reveal-variant="left"] { transform: translateX(-32px); }
-[data-reveal][data-reveal-variant="right"] { transform: translateX(32px); }
-[data-reveal][data-reveal-variant="scale"] { transform: scale(0.96); }
+[data-reveal][data-reveal-variant="left"] { transform: translateX(-40px); }
+[data-reveal][data-reveal-variant="right"] { transform: translateX(40px); }
+[data-reveal][data-reveal-variant="scale"] { transform: scale(0.94); }
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+  filter: blur(0);
 }
+
+/* Page load: every route change does a soft fade + rise */
+@keyframes pageEnter {
+  0%   { opacity: 0; transform: translateY(14px); filter: blur(8px); }
+  60%  { filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.page-enter {
+  animation: pageEnter 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hover lift for auto-tagged cards */
+[data-hover-lift] {
+  transition:
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 380ms ease;
+  will-change: transform;
+}
+[data-hover-lift]:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--color-navy-deep) 6%, transparent),
+    0 18px 40px -22px color-mix(in oklab, var(--color-navy-deep) 38%, transparent);
+  border-color: color-mix(in oklab, var(--color-emerald) 45%, var(--color-border));
+}
+
+/* Image hover zoom for content imagery */
+[data-img-zoom-wrap] { overflow: hidden; }
+[data-img-zoom] {
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 600ms ease;
+  will-change: transform;
+}
+[data-hover-lift]:hover [data-img-zoom],
+[data-img-zoom-wrap]:hover [data-img-zoom] {
+  transform: scale(1.06);
+}
+
+/* Animated underline for primary nav + content links */
+header nav a:not([class*="bg-"]) {
+  position: relative;
+}
+header nav a:not([class*="bg-"])::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 1px;
+  background: var(--color-emerald);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+header nav a:not([class*="bg-"]):hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* Footer link rise */
+footer a {
+  transition: color 220ms ease, transform 220ms ease;
+  display: inline-block;
+}
+footer a:hover { transform: translateY(-1px); }
+
+/* Buttons: subtle press + sheen on primary */
+button, a[class*="rounded-"][class*="bg-"] {
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 260ms ease,
+    border-color 220ms ease;
+}
+a[class*="bg-navy"]:hover, button[class*="bg-navy"]:hover,
+a[class*="bg-emerald"]:hover, button[class*="bg-emerald"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px -14px color-mix(in oklab, var(--color-navy-deep) 60%, transparent);
+}
+a[class*="bg-navy"]:active, button[class*="bg-navy"]:active,
+a[class*="bg-emerald"]:active, button[class*="bg-emerald"]:active {
+  transform: translateY(0);
+}
+
+/* Sheen sweep on solid CTA buttons */
+a[class*="bg-navy"], button[class*="bg-navy"],
+a[class*="bg-emerald"], button[class*="bg-emerald"] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+a[class*="bg-navy"]::before, button[class*="bg-navy"]::before,
+a[class*="bg-emerald"]::before, button[class*="bg-emerald"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+a[class*="bg-navy"]:hover::before, button[class*="bg-navy"]:hover::before,
+a[class*="bg-emerald"]:hover::before, button[class*="bg-emerald"]:hover::before {
+  transform: translateX(120%);
+}
+a[class*="bg-navy"] > *, button[class*="bg-navy"] > *,
+a[class*="bg-emerald"] > *, button[class*="bg-emerald"] > * { position: relative; z-index: 1; }
+
+/* Logo: gentle rotation on hover */
+header a[class*="items-center"] img {
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+header a[class*="items-center"]:hover img {
+  transform: rotate(-8deg) scale(1.06);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+  .page-enter { animation: none !important; }
+  [data-hover-lift], [data-img-zoom], header nav a::after, footer a,
+  a[class*="bg-navy"]::before, a[class*="bg-emerald"]::before,
+  button[class*="bg-navy"]::before, button[class*="bg-emerald"]::before,
+  header a[class*="items-center"] img {
+    transition: none !important; animation: none !important; transform: none !important;
+  }
 }
