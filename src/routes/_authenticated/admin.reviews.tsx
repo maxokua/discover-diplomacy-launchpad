@@ -11,7 +11,7 @@ import {
 } from "@/lib/payments.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/reviews")({
-  head: () => ({ meta: [{ title: "Admin · Resume reviews — Discover Diplomacy" }] }),
+  head: () => ({ meta: [{ title: "Admin · Resume reviews | Discover Diplomacy" }] }),
   component: AdminReviewsPage,
 });
 
@@ -155,7 +155,7 @@ function AdminReviewsPage() {
                     <div className="lg:col-span-4">
                       <div className="font-display text-base text-navy-deep">{r.target_role}</div>
                       <div className="text-xs text-muted-foreground">
-                        {new Date(r.created_at).toLocaleString()} · {r.environment ?? "—"}
+                        {new Date(r.created_at).toLocaleString()} · {r.environment ?? ", "}
                       </div>
                       {r.notes && (
                         <div className="mt-2 text-xs text-muted-foreground line-clamp-3">{r.notes}</div>

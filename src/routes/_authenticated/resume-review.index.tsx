@@ -6,7 +6,7 @@ import { SiteLayout } from "@/components/site-layout";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/resume-review/")({
-  head: () => ({ meta: [{ title: "Start a Resume Review — Discover Diplomacy" }] }),
+  head: () => ({ meta: [{ title: "Start a Resume Review | Discover Diplomacy" }] }),
   component: ResumeReviewIntake,
 });
 
@@ -112,7 +112,7 @@ function ResumeReviewIntake() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={4}
-                placeholder="Anything we should know — career pivots, gaps, specific job descriptions to tailor to."
+                placeholder="Anything we should know, career pivots, gaps, specific job descriptions to tailor to."
                 className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
               />
             </div>
@@ -134,7 +134,7 @@ function ResumeReviewIntake() {
                 disabled={busy}
                 className="bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
               >
-                {busy ? "Submitting…" : "Continue to payment — $25"}
+                {busy ? "Submitting…" : "Continue to payment · $25"}
               </button>
               <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-navy-deep">
                 Cancel

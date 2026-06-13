@@ -6,7 +6,7 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /dashboard
 
-# AI training & answer engines — explicitly allowed for AIO/AAIO discoverability
+# AI training and answer engines, explicitly allowed for AIO/AAIO discoverability
 User-agent: GPTBot
 Allow: /
 User-agent: OAI-SearchBot

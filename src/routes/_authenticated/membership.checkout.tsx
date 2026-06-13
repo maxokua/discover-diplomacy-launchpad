@@ -7,7 +7,7 @@ import { SiteLayout } from "@/components/site-layout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 export const Route = createFileRoute("/_authenticated/membership/checkout")({
-  head: () => ({ meta: [{ title: "Start Membership — Discover Diplomacy" }] }),
+  head: () => ({ meta: [{ title: "Start Membership | Discover Diplomacy" }] }),
   component: MembershipCheckoutPage,
 });
 
@@ -38,7 +38,7 @@ function MembershipCheckoutPage() {
         <div className="mx-auto max-w-4xl px-6 py-12 lg:px-10 lg:py-16">
           <div className="eyebrow">Checkout</div>
           <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-            Career Membership — $50/month
+            Career Membership · $50/month
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
             Billed monthly. Cancel anytime from your dashboard.

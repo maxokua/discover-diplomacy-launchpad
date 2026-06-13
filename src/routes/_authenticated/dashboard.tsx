@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   validateSearch: (s: Record<string, unknown>): { coaching?: string } => ({
     coaching: typeof s.coaching === "string" ? s.coaching : undefined,
   }),
-  head: () => ({ meta: [{ title: "Dashboard — Discover Diplomacy" }] }),
+  head: () => ({ meta: [{ title: "Dashboard | Discover Diplomacy" }] }),
   component: DashboardPage,
 });
 
@@ -97,7 +97,7 @@ function DashboardPage() {
   // Surface coaching-call return state once.
   useEffect(() => {
     if (coaching === "success") {
-      toast.success("Payment received — we'll email you a scheduling link shortly.");
+      toast.success("Payment received, we'll email you a scheduling link shortly.");
       navigate({ to: "/dashboard", replace: true });
     }
   }, [coaching, navigate]);
@@ -328,7 +328,7 @@ function DashboardPage() {
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
                     {showCanceledBanner
-                      ? `Access ends ${new Date(sub!.current_period_end!).toLocaleDateString()} — you've canceled but still have member access until then.`
+                      ? `Access ends ${new Date(sub!.current_period_end!).toLocaleDateString()}, you've canceled but still have member access until then.`
                       : sub?.current_period_end
                       ? `Renews ${new Date(sub.current_period_end).toLocaleDateString()}.`
                       : "Thanks for being here."}
@@ -337,7 +337,7 @@ function DashboardPage() {
               ) : (
                 <>
                   <h2 className="mt-3 font-display text-2xl text-navy-deep">
-                    Join the Career Membership — $50/month.
+                    Join the Career Membership · $50/month.
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Tailored resume for 5 target jobs, LinkedIn review, research, outreach,
@@ -354,7 +354,7 @@ function DashboardPage() {
                     onClick={() => setCallOpen((v) => !v)}
                     className="bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                   >
-                    {callOpen ? "Close" : "Book 30-min CEO call — $25"}
+                    {callOpen ? "Close" : "Book 30-min CEO call · $25"}
                   </button>
                 </>
               ) : (
@@ -362,7 +362,7 @@ function DashboardPage() {
                   to="/membership/checkout"
                   className="bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                 >
-                  Start membership — $50/mo
+                  Start membership · $50/mo
                 </Link>
               )}
             </div>
@@ -427,7 +427,7 @@ function DashboardPage() {
               to="/resume-review"
               className="inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
             >
-              Start a new review — $25
+              Start a new review · $25
             </Link>
           </div>
 

@@ -130,7 +130,7 @@ function CoachesPage() {
           <Reveal>
             <div className="eyebrow">Coach With Us</div>
             <h1 className="mt-5 max-w-4xl font-display text-4xl text-navy-deep lg:text-6xl">
-              Help the next generation break into international affairs — and get paid at the top of the market.
+              Help the next generation break into international affairs, and get paid at the top of the market.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
               Discover Diplomacy pays coaches a market-leading rate per client. If you've built a
@@ -150,7 +150,7 @@ function CoachesPage() {
             {[
               { t: "Top-of-market pay", d: "We pay coaches a market-leading rate per client. No platform fees skimmed off the top." },
               { t: "Flexible", d: "Coach as many or as few clients as your schedule allows. Fully remote." },
-              { t: "Motivated clients", d: "Our clients self-select — they're serious, prepared, and globally minded." },
+              { t: "Motivated clients", d: "Our clients self-select, they're serious, prepared, and globally minded." },
               { t: "Mission-driven", d: "Open the field for people who couldn't otherwise navigate it on their own." },
             ].map((v, i) => (
               <Reveal key={v.t} delay={i * 60}>

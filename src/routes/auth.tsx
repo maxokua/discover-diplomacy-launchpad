@@ -18,7 +18,7 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Sign in — Discover Diplomacy" },
+      { title: "Sign in | Discover Diplomacy" },
       { name: "description", content: "Sign in or create an account to manage your engagements with Discover Diplomacy." },
     ],
   }),

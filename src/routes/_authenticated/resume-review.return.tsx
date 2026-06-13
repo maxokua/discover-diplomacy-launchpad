@@ -7,7 +7,7 @@ const search = z.object({ session_id: z.string().optional() });
 
 export const Route = createFileRoute("/_authenticated/resume-review/return")({
   validateSearch: (s) => search.parse(s),
-  head: () => ({ meta: [{ title: "Order received — Discover Diplomacy" }] }),
+  head: () => ({ meta: [{ title: "Order received | Discover Diplomacy" }] }),
   component: ReturnPage,
 });
 

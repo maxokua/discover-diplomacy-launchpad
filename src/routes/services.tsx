@@ -6,17 +6,17 @@ import { Reveal } from "@/components/reveal";
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Services — Discover Diplomacy" },
+      { title: "Services | Discover Diplomacy" },
       {
         name: "description",
         content:
-          "Two services: a $25 expert resume review and our most popular $50/month Career Membership — month-to-month, with resume tailoring, LinkedIn review, research, outreach, interview prep, and a global opportunities Substack with 50 opportunities weekly.",
+          "Two services: a $25 expert resume review and our most popular $50/month Career Membership, month-to-month, with resume tailoring, LinkedIn review, research, outreach, interview prep, and a global opportunities Substack with 50 opportunities weekly.",
       },
-      { property: "og:title", content: "Services — Discover Diplomacy" },
+      { property: "og:title", content: "Services | Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "$25 resume review or $50/month Career Membership — month-to-month, no annual lock-in.",
+          "$25 resume review or $50/month Career Membership, month-to-month, no annual lock-in.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/services" },
     ],
@@ -32,6 +32,19 @@ export const Route = createFileRoute("/services")({
           itemListElement: [
             { "@type": "Service", position: 1, name: "Career Membership", description: "Month-to-month membership with resume tailoring, LinkedIn review, research, outreach, interview prep, and a weekly Substack of 50 global opportunities.", offers: { "@type": "Offer", price: "50", priceCurrency: "USD", priceSpecification: { "@type": "UnitPriceSpecification", price: "50", priceCurrency: "USD", unitText: "MONTH" } } },
             { "@type": "Service", position: 2, name: "Expert Resume Review", description: "One-time expert review of your resume for international affairs and global business roles.", offers: { "@type": "Offer", price: "25", priceCurrency: "USD" } },
+          ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "What services does Discover Diplomacy offer?", acceptedAnswer: { "@type": "Answer", text: "Two services: a one-time $25 expert resume review, and a $50 per month Career Membership covering resume tailoring, LinkedIn review, research, outreach, interview prep, and a weekly Substack of 50 global opportunities." } },
+            { "@type": "Question", name: "How much does a resume review cost?", acceptedAnswer: { "@type": "Answer", text: "A one-time expert resume review is $25. We return a revised resume tailored to international affairs, policy, and global business hiring conventions." } },
+            { "@type": "Question", name: "Is there an annual plan?", acceptedAnswer: { "@type": "Answer", text: "No. The membership is intentionally month-to-month at $50. Stay as long as it is useful, cancel when it is not." } },
+            { "@type": "Question", name: "What career fields do you cover?", acceptedAnswer: { "@type": "Answer", text: "Diplomacy and foreign service, international policy, multilateral institutions (UN, World Bank, IMF, regional banks), international development, government affairs, and global business." } },
           ],
         }),
       },
@@ -52,13 +65,13 @@ function ServicesPage() {
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
               We help globally minded students and early professionals figure out what they
-              actually want to do in international affairs — and give them the tools to land it.
+              actually want to do in international affairs, and give them the tools to land it.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* Service 01 — Career Membership (most popular) */}
+      {/* Service 01, Career Membership (most popular) */}
       <section id="membership" className="border-b border-border bg-paper">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
           <Reveal className="lg:col-span-5">
@@ -69,14 +82,14 @@ function ServicesPage() {
               Career Membership
             </h2>
             <p className="mt-5 text-muted-foreground">
-              Our most popular service. Month-to-month — no annual plans, because we're not about
+              Our most popular service. Month-to-month, no annual plans, because we're not about
               locking you in, we're about helping you. Cancel the day it stops being useful.
             </p>
             <Link
               to="/membership"
               className="mt-8 inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
             >
-              Join the membership — $50/mo
+              Join the membership · $50/mo
             </Link>
             <p className="mt-4 text-xs text-muted-foreground">
               Add a 30-min call with the CEO for $25. Otherwise, members get the CEO's email and
@@ -90,10 +103,10 @@ function ServicesPage() {
             <ul className="mt-5 space-y-3">
               {[
                 "Upload your documents to your profile so we can see everything",
-                "Tell us 5 target jobs — we tailor your resume specifically for each",
+                "Tell us 5 target jobs, we tailor your resume specifically for each",
                 "Full LinkedIn profile review",
                 "Industry and company research",
-                "Outreach assistance — direct help to build your network",
+                "Outreach assistance, direct help to build your network",
                 "Interview prep tailored to your target roles",
                 "Help drafting and tailoring each application",
                 "Substack with 50 opportunities weekly from every region of the world",
@@ -109,7 +122,7 @@ function ServicesPage() {
         </div>
       </section>
 
-      {/* Service 02 — Resume Review */}
+      {/* Service 02, Resume Review */}
       <section id="resume-review" className="border-b border-border bg-stone">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
           <Reveal className="lg:col-span-5">
@@ -128,7 +141,7 @@ function ServicesPage() {
               to="/resume-review"
               className="mt-8 inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
             >
-              Get started — $25
+              Get started · $25
             </Link>
           </Reveal>
           <Reveal className="lg:col-span-7" delay={120}>
@@ -168,7 +181,7 @@ function ServicesPage() {
             </div>
             <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
               <Link to="/membership" className="bg-paper px-5 py-3 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-paper/90">
-                Start membership — $50/mo
+                Start membership · $50/mo
               </Link>
               <Link to="/resume-review" className="border border-paper/40 px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-paper/10">
                 $25 resume review

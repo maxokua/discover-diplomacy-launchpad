@@ -6,13 +6,13 @@ import institution from "@/assets/institution.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Discover Diplomacy" },
+      { title: "About | Discover Diplomacy" },
       {
         name: "description",
         content:
           "Discover Diplomacy was founded in 2024 by four DC students who couldn't find a roadmap into international affairs. So they built one.",
       },
-      { property: "og:title", content: "About — Discover Diplomacy" },
+      { property: "og:title", content: "About | Discover Diplomacy" },
       {
         property: "og:description",
         content:
@@ -75,16 +75,16 @@ function AboutPage() {
                 Nobody told us what that actually meant.
               </p>
               <p>
-                So we built our own playbook — the hard way. Cold emails sent in batches of fifty.
+                So we built our own playbook, the hard way. Cold emails sent in batches of fifty.
                 Coffee chats that turned into mentors. Application cycles we started over from
                 scratch after the third rejection. We compared notes late at night about which
                 fellowships were worth the time and which were a tax on the unconnected. Slowly,
-                things started to land — on the Hill, at State, at multilaterals, in
+                things started to land, on the Hill, at State, at multilaterals, in
                 international business.
               </p>
               <p>
                 Discover Diplomacy exists because we wished it had. Our practice draws on direct,
-                lived experience — what worked, what wasted months, and what nobody tells you until
+                lived experience, what worked, what wasted months, and what nobody tells you until
                 you're already in the room.
               </p>
             </div>

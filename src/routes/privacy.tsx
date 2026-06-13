@@ -4,9 +4,9 @@ import { SiteLayout } from "@/components/site-layout";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy — Discover Diplomacy" },
+      { title: "Privacy Policy | Discover Diplomacy" },
       { name: "description", content: "How Discover Diplomacy collects, uses, and protects your personal information." },
-      { property: "og:title", content: "Privacy Policy — Discover Diplomacy" },
+      { property: "og:title", content: "Privacy Policy | Discover Diplomacy" },
       { property: "og:description", content: "How Discover Diplomacy collects, uses, and protects your personal information." },
     ],
   }),

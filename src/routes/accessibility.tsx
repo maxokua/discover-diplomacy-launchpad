@@ -4,9 +4,9 @@ import { SiteLayout } from "@/components/site-layout";
 export const Route = createFileRoute("/accessibility")({
   head: () => ({
     meta: [
-      { title: "Accessibility — Discover Diplomacy" },
+      { title: "Accessibility | Discover Diplomacy" },
       { name: "description", content: "Our commitment to making Discover Diplomacy usable by everyone." },
-      { property: "og:title", content: "Accessibility — Discover Diplomacy" },
+      { property: "og:title", content: "Accessibility | Discover Diplomacy" },
       { property: "og:description", content: "Our commitment to making Discover Diplomacy usable by everyone." },
     ],
   }),
