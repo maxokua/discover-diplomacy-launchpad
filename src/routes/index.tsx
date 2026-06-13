@@ -112,6 +112,8 @@ function Hero() {
                 alt="Classical institutional architecture at dusk"
                 width={1920}
                 height={1280}
+                fetchPriority="high"
+                decoding="async"
                 className="h-[460px] w-full scale-110 object-cover lg:h-[560px]"
               />
             </Parallax>
