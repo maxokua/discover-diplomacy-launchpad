@@ -29,6 +29,8 @@ import { Route as AuthenticatedResumeReviewReturnRouteImport } from './routes/_a
 import { Route as AuthenticatedResumeReviewCheckoutRouteImport } from './routes/_authenticated/resume-review.checkout'
 import { Route as AuthenticatedMembershipReturnRouteImport } from './routes/_authenticated/membership.return'
 import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_authenticated/membership.checkout'
+import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_authenticated/employer.resumes'
+import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -137,6 +139,18 @@ const AuthenticatedMembershipCheckoutRoute =
     path: '/membership/checkout',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedEmployerResumesRoute =
+  AuthenticatedEmployerResumesRouteImport.update({
+    id: '/employer/resumes',
+    path: '/employer/resumes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCoachClientsRoute =
+  AuthenticatedCoachClientsRouteImport.update({
+    id: '/coach/clients',
+    path: '/coach/clients',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminReviewsRoute =
   AuthenticatedAdminReviewsRouteImport.update({
     id: '/admin/reviews',
@@ -172,6 +186,8 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
@@ -196,6 +212,8 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
@@ -222,6 +240,8 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/_authenticated/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/_authenticated/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/_authenticated/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
@@ -248,6 +268,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/admin/reviews'
+    | '/coach/clients'
+    | '/employer/resumes'
     | '/membership/checkout'
     | '/membership/return'
     | '/resume-review/checkout'
@@ -272,6 +294,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/admin/reviews'
+    | '/coach/clients'
+    | '/employer/resumes'
     | '/membership/checkout'
     | '/membership/return'
     | '/resume-review/checkout'
@@ -297,6 +321,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_authenticated/dashboard'
     | '/_authenticated/admin/reviews'
+    | '/_authenticated/coach/clients'
+    | '/_authenticated/employer/resumes'
     | '/_authenticated/membership/checkout'
     | '/_authenticated/membership/return'
     | '/_authenticated/resume-review/checkout'
@@ -467,6 +493,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMembershipCheckoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/employer/resumes': {
+      id: '/_authenticated/employer/resumes'
+      path: '/employer/resumes'
+      fullPath: '/employer/resumes'
+      preLoaderRoute: typeof AuthenticatedEmployerResumesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/coach/clients': {
+      id: '/_authenticated/coach/clients'
+      path: '/coach/clients'
+      fullPath: '/coach/clients'
+      preLoaderRoute: typeof AuthenticatedCoachClientsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/reviews': {
       id: '/_authenticated/admin/reviews'
       path: '/admin/reviews'
@@ -494,6 +534,8 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
+  AuthenticatedCoachClientsRoute: typeof AuthenticatedCoachClientsRoute
+  AuthenticatedEmployerResumesRoute: typeof AuthenticatedEmployerResumesRoute
   AuthenticatedMembershipCheckoutRoute: typeof AuthenticatedMembershipCheckoutRoute
   AuthenticatedMembershipReturnRoute: typeof AuthenticatedMembershipReturnRoute
   AuthenticatedResumeReviewCheckoutRoute: typeof AuthenticatedResumeReviewCheckoutRoute
@@ -504,6 +546,8 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
+  AuthenticatedCoachClientsRoute: AuthenticatedCoachClientsRoute,
+  AuthenticatedEmployerResumesRoute: AuthenticatedEmployerResumesRoute,
   AuthenticatedMembershipCheckoutRoute: AuthenticatedMembershipCheckoutRoute,
   AuthenticatedMembershipReturnRoute: AuthenticatedMembershipReturnRoute,
   AuthenticatedResumeReviewCheckoutRoute:
