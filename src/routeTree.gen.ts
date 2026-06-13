@@ -24,6 +24,7 @@ import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GuideInternationalRelationsJobsRequirementsRouteImport } from './routes/guide.international-relations-jobs-requirements'
 import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
@@ -111,6 +112,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuideInternationalRelationsJobsRequirementsRoute =
+  GuideInternationalRelationsJobsRequirementsRouteImport.update({
+    id: '/guide/international-relations-jobs-requirements',
+    path: '/guide/international-relations-jobs-requirements',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CoachesApplyRoute = CoachesApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
@@ -199,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/coaches/apply': typeof CoachesApplyRoute
+  '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -227,6 +235,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/coaches/apply': typeof CoachesApplyRoute
+  '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -257,6 +266,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/coaches/apply': typeof CoachesApplyRoute
+  '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/coaches/apply'
+    | '/guide/international-relations-jobs-requirements'
     | '/admin/reviews'
     | '/coach/clients'
     | '/employer/resumes'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/coaches/apply'
+    | '/guide/international-relations-jobs-requirements'
     | '/admin/reviews'
     | '/coach/clients'
     | '/employer/resumes'
@@ -344,6 +356,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_authenticated/dashboard'
     | '/coaches/apply'
+    | '/guide/international-relations-jobs-requirements'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/coach/clients'
     | '/_authenticated/employer/resumes'
@@ -372,6 +385,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  GuideInternationalRelationsJobsRequirementsRoute: typeof GuideInternationalRelationsJobsRequirementsRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
@@ -481,6 +495,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guide/international-relations-jobs-requirements': {
+      id: '/guide/international-relations-jobs-requirements'
+      path: '/guide/international-relations-jobs-requirements'
+      fullPath: '/guide/international-relations-jobs-requirements'
+      preLoaderRoute: typeof GuideInternationalRelationsJobsRequirementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/coaches/apply': {
@@ -625,6 +646,8 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  GuideInternationalRelationsJobsRequirementsRoute:
+    GuideInternationalRelationsJobsRequirementsRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
