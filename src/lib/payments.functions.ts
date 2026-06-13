@@ -571,6 +571,7 @@ export const coachListClients = createServerFn({ method: "POST" })
       .from("resume_reviews")
       .select("id, user_id, target_role, notes, status, created_at")
       .in("status", ["paid", "in_review", "pending_payment"])
+      .eq("visible_to_coaches", true)
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) return { error: error.message };
@@ -608,6 +609,8 @@ export const employerListResumes = createServerFn({ method: "POST" })
       .select(
         "id, user_id, target_role, status, resume_path, reviewed_resume_path, created_at",
       )
+      .eq("visible_to_employers", true)
+      .in("status", ["paid", "in_review", "completed"])
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) return { error: error.message };
@@ -635,6 +638,32 @@ export const employerListResumes = createServerFn({ method: "POST" })
         email: profilesById[r.user_id as string]?.email ?? null,
       }));
     return { resumes };
+  });
+
+export const updateReviewVisibility = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: {
+    reviewId: string;
+    visibleToEmployers?: boolean;
+    visibleToCoaches?: boolean;
+  }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.reviewId)) throw new Error("Invalid reviewId");
+    return data;
+  })
+  .handler(async ({ data, context }) => {
+    const update: Record<string, boolean> = {};
+    if (typeof data.visibleToEmployers === "boolean")
+      update.visible_to_employers = data.visibleToEmployers;
+    if (typeof data.visibleToCoaches === "boolean")
+      update.visible_to_coaches = data.visibleToCoaches;
+    if (!Object.keys(update).length) return { ok: true };
+    const { error } = await context.supabase
+      .from("resume_reviews")
+      .update(update)
+      .eq("id", data.reviewId)
+      .eq("user_id", context.userId);
+    if (error) return { error: error.message };
+    return { ok: true };
   });
 
 export const employerGetResumeUrl = createServerFn({ method: "POST" })
