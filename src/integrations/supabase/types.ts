@@ -16,42 +16,96 @@ export type Database = {
     Tables: {
       coach_applications: {
         Row: {
+          agree_background_check: boolean
+          agree_terms: boolean
+          approach: string | null
           areas_of_expertise: string[]
+          availability: string | null
+          clients_capacity: number | null
+          coaching_experience: string | null
+          compensation_expectations: string | null
+          conflicts_disclosure: string | null
           created_at: string
           current_position: string | null
+          education: string | null
           email: string
           full_name: string
+          hours_per_week: number | null
           id: string
+          languages: string[]
           linkedin_url: string | null
+          location: string | null
           motivation: string
+          notable_experience: string | null
+          phone: string | null
+          preferred_client_levels: string[]
+          referral_source: string | null
           resume_path: string | null
+          start_date: string | null
           status: string
+          timezone: string | null
           years_experience: number | null
         }
         Insert: {
+          agree_background_check?: boolean
+          agree_terms?: boolean
+          approach?: string | null
           areas_of_expertise?: string[]
+          availability?: string | null
+          clients_capacity?: number | null
+          coaching_experience?: string | null
+          compensation_expectations?: string | null
+          conflicts_disclosure?: string | null
           created_at?: string
           current_position?: string | null
+          education?: string | null
           email: string
           full_name: string
+          hours_per_week?: number | null
           id?: string
+          languages?: string[]
           linkedin_url?: string | null
+          location?: string | null
           motivation: string
+          notable_experience?: string | null
+          phone?: string | null
+          preferred_client_levels?: string[]
+          referral_source?: string | null
           resume_path?: string | null
+          start_date?: string | null
           status?: string
+          timezone?: string | null
           years_experience?: number | null
         }
         Update: {
+          agree_background_check?: boolean
+          agree_terms?: boolean
+          approach?: string | null
           areas_of_expertise?: string[]
+          availability?: string | null
+          clients_capacity?: number | null
+          coaching_experience?: string | null
+          compensation_expectations?: string | null
+          conflicts_disclosure?: string | null
           created_at?: string
           current_position?: string | null
+          education?: string | null
           email?: string
           full_name?: string
+          hours_per_week?: number | null
           id?: string
+          languages?: string[]
           linkedin_url?: string | null
+          location?: string | null
           motivation?: string
+          notable_experience?: string | null
+          phone?: string | null
+          preferred_client_levels?: string[]
+          referral_source?: string | null
           resume_path?: string | null
+          start_date?: string | null
           status?: string
+          timezone?: string | null
           years_experience?: number | null
         }
         Relationships: []
