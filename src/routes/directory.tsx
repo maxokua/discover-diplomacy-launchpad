@@ -121,8 +121,8 @@ function DirectoryPage() {
           <div className="mt-3 grid grid-cols-2 gap-3">
             <Select value={category} onChange={setCategory} options={["All program types", ...CATEGORY_ORDER]} className="w-full" />
             <Select value={location} onChange={setLocation} options={["All locations", ...locations]} className="w-full" />
-            <Select value={interest} onChange={setInterest} options={["All focus areas", ...interests]} className="w-full" />
-            <Select value={subsection} onChange={setSubsection} options={["All subject areas", ...subsections]} className="w-full" />
+            <Select value={interest} onChange={setInterest} options={["All regional focuses", ...interests]} className="w-full" />
+            <Select value={subsection} onChange={setSubsection} options={["All interest areas", ...subsections]} className="w-full" />
           </div>
           <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
             <div>
