@@ -651,7 +651,7 @@ export const updateReviewVisibility = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data, context }) => {
-    const update: Record<string, boolean> = {};
+    const update: { visible_to_employers?: boolean; visible_to_coaches?: boolean } = {};
     if (typeof data.visibleToEmployers === "boolean")
       update.visible_to_employers = data.visibleToEmployers;
     if (typeof data.visibleToCoaches === "boolean")
