@@ -132,6 +132,37 @@ function ResumeReviewIntake() {
                 className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep file:mr-4 file:border-0 file:bg-stone file:px-4 file:py-2 file:text-xs file:uppercase file:tracking-wider file:text-navy-deep"
               />
             </div>
+            <fieldset className="space-y-3 border border-border bg-stone/30 p-4">
+              <legend className="px-2 text-xs font-medium uppercase tracking-wider text-navy-deep">
+                Opt-in visibility (optional)
+              </legend>
+              <p className="text-xs text-muted-foreground">
+                You decide who, if anyone, can see your submission. Both are off by default.
+                You can change these later from your dashboard.
+              </p>
+              <label className="flex items-start gap-3 text-sm text-navy-deep">
+                <input
+                  type="checkbox"
+                  checked={visibleToEmployers}
+                  onChange={(e) => setVisibleToEmployers(e.target.checked)}
+                  className="mt-1"
+                />
+                <span>
+                  Allow verified employers to view my name, target role, and resume.
+                </span>
+              </label>
+              <label className="flex items-start gap-3 text-sm text-navy-deep">
+                <input
+                  type="checkbox"
+                  checked={visibleToCoaches}
+                  onChange={(e) => setVisibleToCoaches(e.target.checked)}
+                  className="mt-1"
+                />
+                <span>
+                  Allow approved volunteer coaches to view my name and target role.
+                </span>
+              </label>
+            </fieldset>
             <div className="flex flex-wrap items-center gap-4 pt-4">
               <button
                 type="submit"
