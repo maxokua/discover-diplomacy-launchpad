@@ -52,10 +52,10 @@ function uniqSorted(arr: string[]) {
 
 function DirectoryPage() {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>("All");
-  const [location, setLocation] = useState<string>("All");
-  const [interest, setInterest] = useState<string>("All");
-  const [subsection, setSubsection] = useState<string>("All");
+  const [category, setCategory] = useState<string>("All program types");
+  const [location, setLocation] = useState<string>("All locations");
+  const [interest, setInterest] = useState<string>("All focus areas");
+  const [subsection, setSubsection] = useState<string>("All subject areas");
 
   const locations = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.location)), []);
   const interests = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.interest)), []);
@@ -64,10 +64,10 @@ function DirectoryPage() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return ALL_ENTRIES.filter((e) => {
-      if (category !== "All" && e.category !== category) return false;
-      if (location !== "All" && e.location !== location) return false;
-      if (interest !== "All" && e.interest !== interest) return false;
-      if (subsection !== "All" && e.subsection !== subsection) return false;
+      if (category !== "All program types" && e.category !== category) return false;
+      if (location !== "All locations" && e.location !== location) return false;
+      if (interest !== "All focus areas" && e.interest !== interest) return false;
+      if (subsection !== "All subject areas" && e.subsection !== subsection) return false;
       if (q && !`${e.name} ${e.location} ${e.interest} ${e.subsection}`.toLowerCase().includes(q))
         return false;
       return true;
@@ -85,10 +85,10 @@ function DirectoryPage() {
 
   function reset() {
     setQuery("");
-    setCategory("All");
-    setLocation("All");
-    setInterest("All");
-    setSubsection("All");
+    setCategory("All program types");
+    setLocation("All locations");
+    setInterest("All focus areas");
+    setSubsection("All subject areas");
   }
 
   return (
@@ -112,17 +112,17 @@ function DirectoryPage() {
 
       <section className="sticky top-[73px] z-30 border-b border-border bg-paper/95 backdrop-blur">
         <div className="mx-auto max-w-7xl px-6 py-4 lg:px-10">
-          <div className="grid gap-3 lg:grid-cols-12">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by name…"
-              className="lg:col-span-4 border border-border bg-paper px-4 py-2.5 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-            />
-            <Select value={category} onChange={setCategory} options={["All", ...CATEGORY_ORDER]} className="lg:col-span-2" />
-            <Select value={location} onChange={setLocation} options={["All", ...locations]} className="lg:col-span-2" />
-            <Select value={interest} onChange={setInterest} options={["All", ...interests]} className="lg:col-span-2" />
-            <Select value={subsection} onChange={setSubsection} options={["All", ...subsections]} className="lg:col-span-2" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by name…"
+            className="w-full border border-border bg-paper px-4 py-2.5 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+          />
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <Select value={category} onChange={setCategory} options={["All program types", ...CATEGORY_ORDER]} className="w-full" />
+            <Select value={location} onChange={setLocation} options={["All locations", ...locations]} className="w-full" />
+            <Select value={interest} onChange={setInterest} options={["All focus areas", ...interests]} className="w-full" />
+            <Select value={subsection} onChange={setSubsection} options={["All subject areas", ...subsections]} className="w-full" />
           </div>
           <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
             <div>
