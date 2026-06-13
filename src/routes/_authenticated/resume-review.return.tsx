@@ -24,9 +24,10 @@ function ReturnPage() {
             {session_id ? "Payment received." : "Order received."}
           </h1>
           <p className="mt-4 text-base text-muted-foreground">
-            An expert reviewer will be in touch within 3–5 business days with a tailored,
-            line-by-line revision optimized for ATS.
+            An expert reviewer will be in touch with a tailored, line-by-line revision
+            optimized for ATS. You'll see updates on your dashboard.
           </p>
+
           <div className="mt-10">
             <Link
               to="/dashboard"

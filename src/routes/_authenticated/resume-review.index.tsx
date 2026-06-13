@@ -87,9 +87,9 @@ function ResumeReviewIntake() {
           </h1>
           <p className="mt-4 max-w-2xl text-base text-muted-foreground">
             Upload your current resume and share the role or roles you're chasing. An expert
-            reviewer will return a line-by-line revision tuned for ATS keywords within 3–5
-            business days.
+            reviewer will return a line-by-line revision tuned for ATS keywords.
           </p>
+
 
           <form onSubmit={handleSubmit} className="mt-10 space-y-6">
             <div>

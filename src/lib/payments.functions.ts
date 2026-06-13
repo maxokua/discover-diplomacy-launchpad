@@ -545,3 +545,134 @@ export const adminFinalizeReview = createServerFn({ method: "POST" })
     if (error) return { error: error.message };
     return { ok: true as const };
   });
+
+// ─── Coach + Employer portals ───────────────────────────────────────────────
+
+type AppRole = "admin" | "coach" | "employer" | "moderator" | "user";
+
+async function requireAnyRole(context: any, roles: AppRole[]) {
+  for (const role of roles) {
+    const { data } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: role,
+    });
+    if (data) return role;
+  }
+  throw new Error("Forbidden");
+}
+
+
+export const coachListClients = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAnyRole(context, ["coach", "admin"]);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: reviews, error } = await supabaseAdmin
+      .from("resume_reviews")
+      .select("id, user_id, target_role, notes, status, created_at")
+      .in("status", ["paid", "in_review", "pending_payment"])
+      .order("created_at", { ascending: false })
+      .limit(300);
+    if (error) return { error: error.message };
+    const userIds = Array.from(new Set((reviews ?? []).map((r) => r.user_id)));
+    let profilesById: Record<string, { full_name: string | null; email: string | null }> = {};
+    if (userIds.length) {
+      const { data: profs } = await supabaseAdmin
+        .from("profiles")
+        .select("id, full_name, email")
+        .in("id", userIds);
+      profilesById = Object.fromEntries(
+        (profs ?? []).map((p) => [p.id as string, { full_name: p.full_name, email: p.email }]),
+      );
+    }
+    const clients = (reviews ?? []).map((r) => ({
+      id: r.id as string,
+      user_id: r.user_id as string,
+      target_role: r.target_role as string,
+      notes: (r.notes as string | null) ?? null,
+      status: r.status as string,
+      created_at: r.created_at as string,
+      full_name: profilesById[r.user_id as string]?.full_name ?? null,
+      email: profilesById[r.user_id as string]?.email ?? null,
+    }));
+    return { clients };
+  });
+
+export const employerListResumes = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAnyRole(context, ["employer", "admin"]);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: reviews, error } = await supabaseAdmin
+      .from("resume_reviews")
+      .select(
+        "id, user_id, target_role, status, resume_path, reviewed_resume_path, created_at",
+      )
+      .order("created_at", { ascending: false })
+      .limit(300);
+    if (error) return { error: error.message };
+    const userIds = Array.from(new Set((reviews ?? []).map((r) => r.user_id)));
+    let profilesById: Record<string, { full_name: string | null; email: string | null }> = {};
+    if (userIds.length) {
+      const { data: profs } = await supabaseAdmin
+        .from("profiles")
+        .select("id, full_name, email")
+        .in("id", userIds);
+      profilesById = Object.fromEntries(
+        (profs ?? []).map((p) => [p.id as string, { full_name: p.full_name, email: p.email }]),
+      );
+    }
+    const resumes = (reviews ?? [])
+      .filter((r) => r.resume_path || r.reviewed_resume_path)
+      .map((r) => ({
+        id: r.id as string,
+        user_id: r.user_id as string,
+        target_role: r.target_role as string,
+        status: r.status as string,
+        has_reviewed: !!r.reviewed_resume_path,
+        created_at: r.created_at as string,
+        full_name: profilesById[r.user_id as string]?.full_name ?? null,
+        email: profilesById[r.user_id as string]?.email ?? null,
+      }));
+    return { resumes };
+  });
+
+export const employerGetResumeUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { reviewId: string }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(data.reviewId)) throw new Error("Invalid reviewId");
+    return data;
+  })
+  .handler(async ({ data, context }) => {
+    await requireAnyRole(context, ["employer", "admin"]);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: review } = await supabaseAdmin
+      .from("resume_reviews")
+      .select("resume_path, reviewed_resume_path")
+      .eq("id", data.reviewId)
+      .single();
+    if (!review) return { error: "Not found" };
+    const path = (review.reviewed_resume_path ?? review.resume_path) as string | null;
+    if (!path) return { error: "No file" };
+    const { data: signed } = await supabaseAdmin.storage
+      .from("resumes")
+      .createSignedUrl(path, 600);
+    if (!signed) return { error: "Couldn't sign URL" };
+    return { url: signed.signedUrl };
+  });
+
+export const myPortalRoles = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const checks = await Promise.all(
+      (["admin", "coach", "employer"] as const).map(async (role) => {
+        const { data } = await context.supabase.rpc("has_role", {
+          _user_id: context.userId,
+          _role: role,
+        });
+        return [role, !!data] as const;
+      }),
+    );
+    return Object.fromEntries(checks) as { admin: boolean; coach: boolean; employer: boolean };
+  });
+

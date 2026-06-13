@@ -173,8 +173,9 @@ function CoachesPage() {
               </div>
               <h2 className="mt-8 font-display text-3xl text-navy-deep">Application received.</h2>
               <p className="mt-3 text-base text-muted-foreground">
-                We'll review and follow up by email within 1–2 weeks.
+                We'll review your application and follow up by email.
               </p>
+
             </div>
           ) : (
             <>
