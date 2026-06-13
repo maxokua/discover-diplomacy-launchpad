@@ -105,18 +105,6 @@ function ContactPage() {
                   </a>
                 </div>
               </li>
-              <li className="flex gap-4">
-                <Mail className="h-5 w-5 flex-shrink-0 text-emerald" />
-                <div>
-                  <div className="font-medium text-navy-deep">Press</div>
-                  <a
-                    href="mailto:press@discoverdiplomacy.com"
-                    className="text-muted-foreground hover:text-navy-deep"
-                  >
-                    press@discoverdiplomacy.com
-                  </a>
-                </div>
-              </li>
             </ul>
 
             <div className="mt-10 border-t border-border pt-8">
@@ -186,7 +174,6 @@ function ContactPage() {
                       "$25 Resume Review",
                       "Employer / candidate access",
                       "Coaching with us",
-                      "Press",
                       "Not yet sure",
                     ]}
                   />

@@ -251,10 +251,10 @@ function BackedBy() {
             <div className="hidden h-12 w-px bg-border md:block" aria-hidden />
             <div className="flex flex-col items-center">
               <div className="font-display text-2xl font-semibold tracking-tight text-navy-deep lg:text-3xl">
-                American University
+                Veloric Center for Entrepreneurship
               </div>
               <div className="mt-2 text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                School of International Service · Washington, DC
+                American University · Washington, DC
               </div>
             </div>
           </div>
