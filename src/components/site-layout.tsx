@@ -9,6 +9,7 @@ import { ScrollProgress } from "@/components/scroll-effects";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
+  { to: "/directory", label: "Directory" },
   { to: "/about", label: "About" },
   { to: "/coaches", label: "Coaches" },
   { to: "/employers", label: "Employers" },

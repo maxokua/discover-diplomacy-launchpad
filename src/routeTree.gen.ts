@@ -16,6 +16,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as EmployersRouteImport } from './routes/employers'
+import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoachesRouteImport } from './routes/coaches'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -69,6 +70,11 @@ const MembershipRoute = MembershipRouteImport.update({
 const EmployersRoute = EmployersRouteImport.update({
   id: '/employers',
   path: '/employers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DirectoryRoute = DirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
+  '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
   '/privacy': typeof PrivacyRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
+  '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
   '/privacy': typeof PrivacyRoute
@@ -239,6 +247,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
+  '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRoute
   '/membership': typeof MembershipRoute
   '/privacy': typeof PrivacyRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/coaches'
     | '/contact'
+    | '/directory'
     | '/employers'
     | '/membership'
     | '/privacy'
@@ -295,6 +305,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/coaches'
     | '/contact'
+    | '/directory'
     | '/employers'
     | '/membership'
     | '/privacy'
@@ -323,6 +334,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/coaches'
     | '/contact'
+    | '/directory'
     | '/employers'
     | '/membership'
     | '/privacy'
@@ -352,6 +364,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CoachesRoute: typeof CoachesRouteWithChildren
   ContactRoute: typeof ContactRoute
+  DirectoryRoute: typeof DirectoryRoute
   EmployersRoute: typeof EmployersRoute
   MembershipRoute: typeof MembershipRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/employers'
       fullPath: '/employers'
       preLoaderRoute: typeof EmployersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/directory': {
+      id: '/directory'
+      path: '/directory'
+      fullPath: '/directory'
+      preLoaderRoute: typeof DirectoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -597,6 +617,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CoachesRoute: CoachesRouteWithChildren,
   ContactRoute: ContactRoute,
+  DirectoryRoute: DirectoryRoute,
   EmployersRoute: EmployersRoute,
   MembershipRoute: MembershipRoute,
   PrivacyRoute: PrivacyRoute,
