@@ -32,6 +32,26 @@ export function ScrollRevealInit() {
     const roots = document.querySelectorAll(SELECTOR);
     roots.forEach(tag);
 
+    // Auto hover-lift: anything that looks like a card (rounded + border, or article)
+    document
+      .querySelectorAll<HTMLElement>(
+        'main article, main [class*="rounded-"][class*="border"]:not(button):not(input):not(textarea):not(select)',
+      )
+      .forEach((el) => {
+        if (!el.hasAttribute("data-hover-lift")) el.setAttribute("data-hover-lift", "");
+      });
+
+    // Auto hover-zoom on content images inside cards/articles
+    document
+      .querySelectorAll<HTMLImageElement>("main article img, main figure img")
+      .forEach((img) => {
+        const parent = img.parentElement;
+        if (parent && !parent.hasAttribute("data-img-zoom-wrap")) {
+          parent.setAttribute("data-img-zoom-wrap", "");
+        }
+        if (!img.hasAttribute("data-img-zoom")) img.setAttribute("data-img-zoom", "");
+      });
+
     // Light stagger for direct content children inside sections
     document.querySelectorAll("section").forEach((sec) => {
       const container =
