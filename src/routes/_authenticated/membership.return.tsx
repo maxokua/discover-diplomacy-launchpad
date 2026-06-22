@@ -23,7 +23,8 @@ function MembershipReturn() {
             <>
               <p className="mt-5 text-muted-foreground">
                 Your plan is active. Head to your dashboard to set up your profile and start
-                and tell us the 5 jobs you want us to tailor your materials for.
+                using your benefits.
+
               </p>
               <div className="mt-8">
                 <Link
