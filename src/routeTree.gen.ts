@@ -26,9 +26,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideInternationalRelationsJobsRequirementsRouteImport } from './routes/guide.international-relations-jobs-requirements'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AuthenticatedResumeReviewReturnRouteImport } from './routes/_authenticated/resume-review.return'
 import { Route as AuthenticatedResumeReviewCheckoutRouteImport } from './routes/_authenticated/resume-review.checkout'
 import { Route as AuthenticatedMembershipReturnRouteImport } from './routes/_authenticated/membership.return'
@@ -36,6 +38,8 @@ import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_a
 import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_authenticated/employer.resumes'
 import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -124,6 +128,11 @@ const GuideInternationalRelationsJobsRequirementsRoute =
     path: '/guide/international-relations-jobs-requirements',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesApplyRoute = CoachesApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
@@ -140,6 +149,11 @@ const AuthenticatedResumeReviewIndexRoute =
     path: '/resume-review/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedResumeReviewReturnRoute =
   AuthenticatedResumeReviewReturnRouteImport.update({
     id: '/resume-review/return',
@@ -182,6 +196,18 @@ const AuthenticatedAdminReviewsRoute =
     path: '/admin/reviews',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
@@ -213,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/coaches/apply': typeof CoachesApplyRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -221,9 +248,12 @@ export interface FileRoutesByFullPath {
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -243,6 +273,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/coaches/apply': typeof CoachesApplyRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -251,9 +282,12 @@ export interface FileRoutesByTo {
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/resume-review': typeof AuthenticatedResumeReviewIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -275,6 +309,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/coaches/apply': typeof CoachesApplyRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -283,9 +318,12 @@ export interface FileRoutesById {
   '/_authenticated/membership/return': typeof AuthenticatedMembershipReturnRoute
   '/_authenticated/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/_authenticated/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -307,6 +345,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/coaches/apply'
+    | '/email/unsubscribe'
     | '/guide/international-relations-jobs-requirements'
     | '/admin/reviews'
     | '/coach/clients'
@@ -315,9 +354,12 @@ export interface FileRouteTypes {
     | '/membership/return'
     | '/resume-review/checkout'
     | '/resume-review/return'
+    | '/lovable/email/suppression'
     | '/resume-review/'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -337,6 +379,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/coaches/apply'
+    | '/email/unsubscribe'
     | '/guide/international-relations-jobs-requirements'
     | '/admin/reviews'
     | '/coach/clients'
@@ -345,9 +388,12 @@ export interface FileRouteTypes {
     | '/membership/return'
     | '/resume-review/checkout'
     | '/resume-review/return'
+    | '/lovable/email/suppression'
     | '/resume-review'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -368,6 +414,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_authenticated/dashboard'
     | '/coaches/apply'
+    | '/email/unsubscribe'
     | '/guide/international-relations-jobs-requirements'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/coach/clients'
@@ -376,9 +423,12 @@ export interface FileRouteTypes {
     | '/_authenticated/membership/return'
     | '/_authenticated/resume-review/checkout'
     | '/_authenticated/resume-review/return'
+    | '/lovable/email/suppression'
     | '/_authenticated/resume-review/'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -398,9 +448,13 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   GuideInternationalRelationsJobsRequirementsRoute: typeof GuideInternationalRelationsJobsRequirementsRoute
+  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
+  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -524,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideInternationalRelationsJobsRequirementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coaches/apply': {
       id: '/coaches/apply'
       path: '/apply'
@@ -544,6 +605,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/resume-review/'
       preLoaderRoute: typeof AuthenticatedResumeReviewIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/resume-review/return': {
       id: '/_authenticated/resume-review/return'
@@ -593,6 +661,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/reviews'
       preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
@@ -667,10 +749,14 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   GuideInternationalRelationsJobsRequirementsRoute:
     GuideInternationalRelationsJobsRequirementsRoute,
+  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
+  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
