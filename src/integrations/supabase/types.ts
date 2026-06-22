@@ -278,6 +278,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          service_tier: string | null
           updated_at: string
         }
         Insert: {
@@ -285,6 +286,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          service_tier?: string | null
           updated_at?: string
         }
         Update: {
@@ -292,6 +294,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          service_tier?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -483,6 +486,10 @@ export type Database = {
           msg_id: number
           read_ct: number
         }[]
+      }
+      sync_user_service_tier: {
+        Args: { _env?: string; _user_id: string }
+        Returns: undefined
       }
     }
     Enums: {
