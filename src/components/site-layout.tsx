@@ -6,7 +6,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { ScrollProgress } from "@/components/scroll-effects";
 import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 
-
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/assessment", label: "Assessment" },
@@ -29,9 +28,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <ScrollRevealInit />
 
       <div className="hidden border-b border-border bg-navy-deep text-paper md:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-xs lg:px-10">
-          <span className="text-paper/70">Career coaching for globally minded professionals</span>
-          <div className="flex items-center gap-5 text-paper/70">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-xs lg:px-10">
+          <span className="truncate text-paper/70">
+            Career coaching for globally minded professionals
+          </span>
+          <div className="flex shrink-0 items-center gap-5 text-paper/70">
             <a href="mailto:hello@discoverdiplomacy.com" className="hover:text-paper">
               hello@discoverdiplomacy.com
             </a>
@@ -59,20 +60,31 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-border bg-paper/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
-          <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-            <img src={logoAsset.url} alt="Discover Diplomacy" className="h-9 w-9" />
-            <div className="leading-tight">
-              <div className="font-display text-[17px] font-semibold text-navy-deep">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:h-20 lg:gap-6 lg:px-10">
+          <Link
+            to="/"
+            className="flex min-w-0 shrink-0 items-center gap-3 pr-2"
+            onClick={() => setOpen(false)}
+          >
+            <img
+              src={logoAsset.url}
+              alt="Discover Diplomacy"
+              className="h-9 w-9 shrink-0 lg:h-10 lg:w-10"
+            />
+            <div className="min-w-0 leading-tight">
+              <div className="truncate font-display text-[15px] font-semibold text-navy-deep sm:text-[17px]">
                 Discover Diplomacy
               </div>
-              <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              <div className="hidden text-[10px] uppercase tracking-[0.22em] text-muted-foreground sm:block">
                 Global Career Advisory
               </div>
             </div>
           </Link>
 
-          <nav aria-label="Primary navigation" className="hidden items-center gap-7 md:flex">
+          <nav
+            aria-label="Primary navigation"
+            className="ml-auto hidden shrink-0 items-center gap-5 lg:flex xl:gap-7"
+          >
             {NAV.map((n) => {
               const active = pathname === n.to || (n.to !== "/" && pathname.startsWith(n.to));
               return (
@@ -80,8 +92,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   key={n.to}
                   to={n.to}
                   className={
-                    "text-sm transition-colors " +
-                    (active ? "text-navy-deep font-medium" : "text-muted-foreground hover:text-navy-deep")
+                    "whitespace-nowrap text-sm transition-colors " +
+                    (active
+                      ? "text-navy-deep font-medium"
+                      : "text-muted-foreground hover:text-navy-deep")
                   }
                 >
                   {n.label}
@@ -90,7 +104,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             })}
             <Link
               to={user ? "/dashboard" : "/auth"}
-              className="ml-2 inline-flex items-center rounded-sm bg-navy-deep px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
+              className="ml-1 inline-flex items-center whitespace-nowrap rounded-sm bg-navy-deep px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
             >
               {user ? "Dashboard" : "Sign in"}
             </Link>
@@ -100,7 +114,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             type="button"
             aria-label="Toggle menu"
             aria-expanded={open}
-            className="rounded-sm border border-border p-2 md:hidden"
+            className="ml-auto shrink-0 rounded-sm border border-border p-2 lg:hidden"
             onClick={() => setOpen((v) => !v)}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -108,8 +122,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
 
         {open && (
-          <nav aria-label="Mobile navigation" className="border-t border-border bg-paper md:hidden">
-            <div className="mx-auto flex max-w-7xl flex-col px-6 py-4">
+          <nav
+            aria-label="Mobile navigation"
+            className="border-t border-border bg-paper lg:hidden"
+          >
+            <div className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6">
               {NAV.map((n) => (
                 <Link
                   key={n.to}
@@ -132,7 +149,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main id="main-content" key={pathname} className="flex-1 page-enter">{children}</main>
+      <main id="main-content" key={pathname} className="flex-1 page-enter">
+        {children}
+      </main>
 
       <SiteFooter />
     </div>
@@ -140,6 +159,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 }
 
 function SiteFooter() {
+  const year = new Date().getFullYear();
   return (
     <footer className="border-t border-border bg-navy-deep text-paper">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-12 lg:px-10">
@@ -157,21 +177,31 @@ function SiteFooter() {
             A career advisory practice for students and early-career professionals pursuing roles
             in diplomacy, international policy, multilateral institutions, and global affairs.
           </p>
+          <p className="mt-4 text-sm text-paper/70">
+            <a
+              href="mailto:hello@discoverdiplomacy.com"
+              className="underline-offset-4 hover:text-paper hover:underline"
+            >
+              hello@discoverdiplomacy.com
+            </a>
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-8 lg:col-span-7 lg:grid-cols-3">
           <FooterCol
-            title="Practice"
+            title="Services"
             links={[
-              { to: "/services", label: "Services" },
-              { to: "/about", label: "About" },
+              { to: "/services", label: "Compass · $35/mo" },
+              { to: "/services", label: "Envoy · $150/mo" },
+              { to: "/services", label: "Resume Review · $25" },
+              { to: "/assessment", label: "Free career assessment" },
             ]}
           />
           <FooterCol
             title="Engage"
             links={[
-              { to: "/contact", label: "Consultation" },
-              { to: "/services", label: "Resume review" },
+              { to: "/about", label: "About" },
+              { to: "/contact", label: "Contact" },
               { to: "/coaches", label: "Become a coach" },
               { to: "/employers", label: "For employers" },
             ]}
@@ -191,11 +221,17 @@ function SiteFooter() {
       </div>
       <div className="border-t border-paper/10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-paper/60 lg:px-10">
-          <div>© {new Date().getFullYear()} Discover Diplomacy LLC. All rights reserved.</div>
+          <div>© {year} Discover Diplomacy LLC. All rights reserved.</div>
           <div className="flex gap-6">
-            <Link to="/privacy" className="hover:text-paper">Privacy</Link>
-            <Link to="/terms" className="hover:text-paper">Terms</Link>
-            <Link to="/accessibility" className="hover:text-paper">Accessibility</Link>
+            <Link to="/privacy" className="hover:text-paper">
+              Privacy
+            </Link>
+            <Link to="/terms" className="hover:text-paper">
+              Terms
+            </Link>
+            <Link to="/accessibility" className="hover:text-paper">
+              Accessibility
+            </Link>
           </div>
         </div>
       </div>

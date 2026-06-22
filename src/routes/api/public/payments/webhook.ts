@@ -26,6 +26,21 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   }
 }
 
+async function syncTier(userId: string | null | undefined, env: StripeEnv) {
+  if (!userId || env !== "live" && env !== "sandbox") return;
+  // Only mirror live subscriptions onto the user's tier so sandbox testing
+  // doesn't grant production access. Adjust if you want sandbox to gate too.
+  if (env !== "live") return;
+  try {
+    await (getSupabase().rpc as any)("sync_user_service_tier", {
+      _user_id: userId,
+      _env: env,
+    });
+  } catch (e) {
+    console.error("sync_user_service_tier failed", e);
+  }
+}
+
 async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
   const userId = subscription.metadata?.userId;
   if (!userId) {
@@ -57,6 +72,7 @@ async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
     },
     { onConflict: "stripe_subscription_id" },
   );
+  await syncTier(userId, env);
 }
 
 async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {
@@ -81,6 +97,7 @@ async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {
     })
     .eq("stripe_subscription_id", subscription.id)
     .eq("environment", env);
+  await syncTier(subscription.metadata?.userId, env);
 }
 
 async function handleSubscriptionDeleted(subscription: any, env: StripeEnv) {
@@ -91,7 +108,9 @@ async function handleSubscriptionDeleted(subscription: any, env: StripeEnv) {
     })
     .eq("stripe_subscription_id", subscription.id)
     .eq("environment", env);
+  await syncTier(subscription.metadata?.userId, env);
 }
+
 
 async function handleWebhook(req: Request, env: StripeEnv) {
   const event = await verifyWebhook(req, env);

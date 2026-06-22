@@ -22,8 +22,9 @@ function MembershipReturn() {
           {session_id ? (
             <>
               <p className="mt-5 text-muted-foreground">
-                Your Career Membership is active. Head to your dashboard to upload your documents
-                and tell us the 5 jobs you want us to tailor your materials for.
+                Your plan is active. Head to your dashboard to set up your profile and start
+                using your benefits.
+
               </p>
               <div className="mt-8">
                 <Link
