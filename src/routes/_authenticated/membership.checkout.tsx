@@ -23,8 +23,9 @@ const COPY = {
 } as const;
 
 function MembershipCheckoutPage() {
-  const { tier } = Route.useSearch();
+  const { tier } = Route.useSearch() as { tier: "compass" | "envoy" };
   const copy = COPY[tier];
+
 
   const options = useMemo(
     () => ({
