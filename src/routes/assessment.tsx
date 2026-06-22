@@ -609,7 +609,7 @@ function ResultsView({
             </button>
           </div>
           <p className="mt-3 text-[11px] text-muted-foreground print:hidden">
-            A copy has been saved to <span className="font-medium text-navy-deep">{email}</span>.
+            We've emailed your plan to <span className="font-medium text-navy-deep">{email}</span>. Check spam if you don't see it within a few minutes.
           </p>
         </div>
       </section>
