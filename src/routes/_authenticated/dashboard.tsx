@@ -1,13 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/site-layout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { toast } from "sonner";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { getStripeEnvironment } from "@/lib/stripe";
 import {
-  createCoachingCallCheckout,
   createPortalSession,
   cancelMembershipAtPeriodEnd,
   resumeMembership,
@@ -16,9 +14,6 @@ import {
 } from "@/lib/payments.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  validateSearch: (s: Record<string, unknown>): { coaching?: string } => ({
-    coaching: typeof s.coaching === "string" ? s.coaching : undefined,
-  }),
   head: () => ({ meta: [{ title: "Dashboard | Discover Diplomacy" }] }),
   component: DashboardPage,
 });
@@ -32,36 +27,46 @@ type Review = {
   reviewed_resume_path: string | null;
 };
 
-type Profile = { full_name: string | null; email: string | null };
+type Profile = { full_name: string | null; email: string | null; service_tier: string | null };
 
 type Sub = {
   status: string;
   current_period_end: string | null;
   cancel_at_period_end: boolean | null;
   stripe_customer_id?: string | null;
+  price_id?: string | null;
 };
+
+const ENVOY_CALENDLY_URL = "https://calendly.com/discoverdiplomacy/envoy-monthly-call";
+
+function tierLabel(t: string | null | undefined) {
+  if (t === "envoy") return "Envoy";
+  if (t === "compass") return "Compass";
+  return null;
+}
 
 function DashboardPage() {
   const navigate = useNavigate();
-  const { coaching } = Route.useSearch();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [sub, setSub] = useState<Sub | null>(null);
   const [loading, setLoading] = useState(true);
-  const [callOpen, setCallOpen] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [busy, setBusy] = useState(false);
 
-  // Re-fetch helper so we can refresh after cancel / resume / profile edit.
   async function load() {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return;
     setUserId(userData.user.id);
     const env = getStripeEnvironment();
     const [{ data: prof }, { data: revs }, { data: subRow }] = await Promise.all([
-      supabase.from("profiles").select("full_name, email").eq("id", userData.user.id).single(),
+      supabase
+        .from("profiles")
+        .select("full_name, email, service_tier")
+        .eq("id", userData.user.id)
+        .single(),
       supabase
         .from("resume_reviews")
         .select("id, status, target_role, created_at, amount_cents, reviewed_resume_path")
@@ -69,38 +74,29 @@ function DashboardPage() {
         .order("created_at", { ascending: false }),
       supabase
         .from("subscriptions")
-        .select("status, current_period_end, cancel_at_period_end, stripe_customer_id")
+        .select("status, current_period_end, cancel_at_period_end, stripe_customer_id, price_id")
         .eq("user_id", userData.user.id)
         .eq("environment", env)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle(),
     ]);
-    setProfile(prof ?? { full_name: null, email: userData.user.email ?? null });
+    setProfile(
+      (prof as Profile | null) ?? {
+        full_name: null,
+        email: userData.user.email ?? null,
+        service_tier: null,
+      },
+    );
     setReviews((revs ?? []) as Review[]);
     setSub((subRow ?? null) as Sub | null);
-    setNameInput(prof?.full_name ?? "");
+    setNameInput((prof as Profile | null)?.full_name ?? "");
     setLoading(false);
   }
 
   useEffect(() => {
-    let mounted = true;
-    load().then(() => {
-      if (!mounted) return;
-    });
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    load();
   }, []);
-
-  // Surface coaching-call return state once.
-  useEffect(() => {
-    if (coaching === "success") {
-      toast.success("Payment received, we'll email you a scheduling link shortly.");
-      navigate({ to: "/dashboard", replace: true });
-    }
-  }, [coaching, navigate]);
 
   const isActiveMember = useMemo(() => {
     if (!sub) return false;
@@ -114,27 +110,19 @@ function DashboardPage() {
     return false;
   }, [sub]);
 
-  // Re-create options whenever the panel opens so we never reuse a stale
-  // client secret from a previous open/close cycle.
-  const callOptions = useMemo(
-    () => ({
-      fetchClientSecret: async () => {
-        const result = await createCoachingCallCheckout({
-          data: {
-            environment: getStripeEnvironment(),
-            returnUrl: window.location.origin + "/dashboard?coaching=success",
-          },
-        });
-        if ("error" in result) throw new Error(result.error);
-        if (!result.clientSecret) throw new Error("No client secret returned");
-        return result.clientSecret;
-      },
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [callOpen],
-  );
+  // Tier derives from price_id on the active subscription (sandbox-safe).
+  const tier: "compass" | "envoy" | null = useMemo(() => {
+    if (!isActiveMember) return null;
+    if (sub?.price_id === "envoy_monthly") return "envoy";
+    if (sub?.price_id === "compass_monthly") return "compass";
+    // Fallback to profile.service_tier (only set in live env by webhook)
+    if (profile?.service_tier === "envoy" || profile?.service_tier === "compass") {
+      return profile.service_tier as "compass" | "envoy";
+    }
+    return null;
+  }, [isActiveMember, sub, profile]);
 
-  async function signOut() {
+  async function signOutAndGo() {
     await supabase.auth.signOut();
     toast.success("Signed out");
     navigate({ to: "/" });
@@ -159,14 +147,14 @@ function DashboardPage() {
   }
 
   async function handleCancel() {
-    if (!window.confirm("Cancel your membership at the end of the current period?")) return;
+    if (!window.confirm("Cancel your plan at the end of the current billing period?")) return;
     setBusy(true);
     try {
       const result = await cancelMembershipAtPeriodEnd({
         data: { environment: getStripeEnvironment() },
       });
       if ("error" in result) throw new Error(result.error);
-      toast.success("Membership will end at the period end.");
+      toast.success("Plan will end at the period end.");
       await load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't cancel");
@@ -180,7 +168,7 @@ function DashboardPage() {
     try {
       const result = await resumeMembership({ data: { environment: getStripeEnvironment() } });
       if ("error" in result) throw new Error(result.error);
-      toast.success("Membership resumed.");
+      toast.success("Plan resumed.");
       await load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't resume");
@@ -227,8 +215,8 @@ function DashboardPage() {
         <div className="border-b border-amber-300 bg-amber-50 px-6 py-3 text-sm text-amber-900">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 lg:px-4">
             <span>
-              <strong>Payment failed.</strong> Update your card to keep your membership before
-              access ends.
+              <strong>Payment failed.</strong> Update your card to keep your plan before access
+              ends.
             </span>
             <button
               onClick={openBillingPortal}
@@ -250,18 +238,10 @@ function DashboardPage() {
                 Welcome{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}.
               </h1>
               <p className="mt-3 text-sm text-muted-foreground">{profile?.email}</p>
-              {userId && (
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(userId);
-                    toast.success("User ID copied to clipboard");
-                  }}
-                  className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground hover:text-navy-deep"
-                  title="Click to copy"
-                >
-                  <span>ID: {userId}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                </button>
+              {tier && (
+                <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-emerald/30 bg-emerald/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">
+                  {tierLabel(tier)} plan · Active
+                </div>
               )}
             </div>
             <div className="flex flex-wrap gap-2">
@@ -272,7 +252,7 @@ function DashboardPage() {
                 {editingName ? "Close" : "Edit profile"}
               </button>
               <button
-                onClick={signOut}
+                onClick={signOutAndGo}
                 className="border border-border bg-paper px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-stone"
               >
                 Sign out
@@ -281,30 +261,20 @@ function DashboardPage() {
           </div>
 
           {editingName && (
-            <form
-              onSubmit={handleSaveName}
-              className="mt-6 grid max-w-xl gap-3 border border-border bg-stone p-5 sm:grid-cols-[1fr_auto]"
-            >
-              <div>
-                <label className="block text-xs font-medium uppercase tracking-wider text-navy-deep">
-                  Full name
-                </label>
+            <form onSubmit={handleSaveName} className="mt-8 flex max-w-xl flex-col gap-4">
+              <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Full name
                 <input
-                  required
                   type="text"
-                  maxLength={100}
                   value={nameInput}
                   onChange={(e) => setNameInput(e.target.value)}
-                  className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+                  className="mt-2 w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-2 focus:ring-navy-deep"
                 />
-                <p className="mt-2 text-xs text-muted-foreground">
-                  To change your email, contact careers@discoverdiplomacy.org.
-                </p>
-              </div>
+              </label>
               <button
                 type="submit"
                 disabled={busy}
-                className="self-end bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
+                className="self-start bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
               >
                 Save
               </button>
@@ -313,62 +283,51 @@ function DashboardPage() {
         </div>
       </section>
 
-      {/* Membership */}
+      {/* Plan summary */}
       <section className="border-b border-border bg-paper">
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10 lg:py-12">
           <div className="grid gap-6 border border-border bg-stone p-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-8">
-              <div className="eyebrow">Career Membership</div>
+              <div className="eyebrow">Your plan</div>
               {loading ? (
                 <div className="mt-3 text-sm text-muted-foreground">Loading…</div>
-              ) : isActiveMember ? (
+              ) : tier ? (
                 <>
                   <h2 className="mt-3 font-display text-2xl text-navy-deep">
-                    You're an active member.
+                    {tierLabel(tier)} · {tier === "envoy" ? "$150/month" : "$35/month"}
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
                     {showCanceledBanner
-                      ? `Access ends ${new Date(sub!.current_period_end!).toLocaleDateString()}, you've canceled but still have member access until then.`
+                      ? `Access ends ${new Date(sub!.current_period_end!).toLocaleDateString()}. You've canceled but keep access until then.`
                       : sub?.current_period_end
-                      ? `Renews ${new Date(sub.current_period_end).toLocaleDateString()}.`
-                      : "Thanks for being here."}
+                        ? `Renews ${new Date(sub.current_period_end).toLocaleDateString()}.`
+                        : "Thanks for being here."}
                   </p>
                 </>
               ) : (
                 <>
                   <h2 className="mt-3 font-display text-2xl text-navy-deep">
-                    Join the Career Membership · $50/month.
+                    Choose a plan to get started.
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Tailored resume for 5 target jobs, LinkedIn review, research, outreach,
-                    interview prep, applications, and the global opportunities Substack with 50
-                    opportunities weekly. Month to month, cancel anytime.
+                    Compass at $35/mo for self-directed job hunters. Envoy at $150/mo for
+                    hands-on coaching. Month-to-month, cancel anytime.
                   </p>
                 </>
               )}
             </div>
             <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
-              {isActiveMember ? (
-                <>
-                  <button
-                    onClick={() => setCallOpen((v) => !v)}
-                    className="bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
-                  >
-                    {callOpen ? "Close" : "Book 30-min CEO call · $25"}
-                  </button>
-                </>
-              ) : (
+              {!tier && (
                 <Link
-                  to="/membership/checkout"
+                  to="/services"
                   className="bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                 >
-                  Start membership · $50/mo
+                  Compare plans
                 </Link>
               )}
             </div>
           </div>
 
-          {/* Member billing actions */}
           {isActiveMember && (
             <div className="mt-4 flex flex-wrap items-center gap-3 text-xs">
               <button
@@ -384,7 +343,7 @@ function DashboardPage() {
                   disabled={busy}
                   className="border border-border bg-paper px-4 py-2 font-medium uppercase tracking-wider text-navy-deep hover:bg-stone disabled:opacity-60"
                 >
-                  Resume membership
+                  Resume plan
                 </button>
               ) : (
                 <button
@@ -395,33 +354,104 @@ function DashboardPage() {
                   Cancel at period end
                 </button>
               )}
-            </div>
-          )}
-
-          {isActiveMember && callOpen && (
-            <div className="mt-6 border border-border bg-paper p-6">
-              <div className="eyebrow">30-min CEO Coaching Call · $25</div>
-              <p className="mt-2 text-sm text-muted-foreground">
-                One-time add-on. After payment we'll email you a scheduling link.
-              </p>
-              <div className="mt-6">
-                <EmbeddedCheckoutProvider stripe={getStripe()} options={callOptions}>
-                  <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
-              </div>
+              {tier === "compass" && (
+                <Link
+                  to="/services"
+                  className="border border-emerald/40 bg-emerald/5 px-4 py-2 font-medium uppercase tracking-wider text-emerald hover:bg-emerald/10"
+                >
+                  Upgrade to Envoy
+                </Link>
+              )}
             </div>
           )}
         </div>
       </section>
 
+      {/* Tier-gated features */}
+      {tier && (
+        <section className="border-b border-border bg-paper">
+          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-16">
+            <div className="eyebrow">What's included for you</div>
+            <h2 className="mt-3 font-display text-2xl text-navy-deep lg:text-3xl">
+              Your {tierLabel(tier)} benefits
+            </h2>
+
+            <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <FeatureCard
+                title="Weekly opportunities feed"
+                desc="50 hand-curated global affairs roles from every region, delivered every week."
+                cta={{ label: "Open the feed", href: "https://discoverdiplomacy.substack.com" }}
+              />
+              <FeatureCard
+                title="Resource library"
+                desc="Federal, UN/multilateral, and private-sector resume templates, cover-letter examples, and outreach scripts."
+                cta={{ label: "Browse resources", href: "https://discoverdiplomacy.substack.com" }}
+              />
+              <FeatureCard
+                title="Monthly resume review"
+                desc="One async resume review per month, returned in 3–5 days."
+                cta={{ label: "Submit review", to: "/resume-review" }}
+              />
+
+              {tier === "envoy" ? (
+                <>
+                  <FeatureCard
+                    title="5 tailored resumes / month"
+                    desc="Resume tailored to up to 5 target roles each month."
+                    cta={{ label: "Submit a target role", to: "/contact" }}
+                  />
+                  <FeatureCard
+                    title="LinkedIn rewrite & optimization"
+                    desc="Full profile rewrite plus ongoing optimization for your target field."
+                    cta={{ label: "Request rewrite", to: "/contact" }}
+                  />
+                  <FeatureCard
+                    title="Company & role research"
+                    desc="Deep research on your target employers, hiring patterns, and decision-makers."
+                    cta={{ label: "Request research", to: "/contact" }}
+                  />
+                  <FeatureCard
+                    title="Async coach access"
+                    desc="Message your coach directly with replies within ~48 hours."
+                    cta={{ label: "Message coach", to: "/contact" }}
+                  />
+                  <FeatureCard
+                    title="Monthly 1:1 video call"
+                    desc="One 30–45 min coaching call per month, booked via Calendly."
+                    cta={{ label: "Book your call", href: ENVOY_CALENDLY_URL }}
+                  />
+                  <FeatureCard
+                    title="Tailored interview prep"
+                    desc="Prep tailored to your specific target roles and employers."
+                    cta={{ label: "Request prep", to: "/contact" }}
+                  />
+                </>
+              ) : (
+                <FeatureCard
+                  locked
+                  title="Envoy-only features"
+                  desc="5 tailored resumes/mo, LinkedIn rewrite, company research, coach messaging, monthly 1:1 call, and tailored interview prep."
+                  cta={{ label: "Upgrade to Envoy · $150/mo", to: "/services" }}
+                />
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Resume reviews (always available) */}
       <section className="bg-stone">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <div className="eyebrow">Your Orders</div>
               <h2 className="mt-4 font-display text-2xl text-navy-deep lg:text-3xl">
-                Resume reviews
+                Expert Resume Reviews
               </h2>
+              <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+                A one-time, line-by-line review by a coach. Available to anyone, with or without
+                a plan.
+              </p>
             </div>
             <Link
               to="/resume-review"
@@ -436,7 +466,7 @@ function DashboardPage() {
               <div className="p-8 text-sm text-muted-foreground">Loading…</div>
             ) : reviews.length === 0 ? (
               <div className="p-10 text-center text-sm text-muted-foreground">
-                No orders yet. Start a resume review to get expert, ATS-tailored feedback.
+                No reviews yet. Submit a resume to get expert, ATS-tailored feedback in 3–5 days.
               </div>
             ) : (
               <ul className="divide-y divide-border">
@@ -481,6 +511,49 @@ function DashboardPage() {
         </div>
       </section>
     </SiteLayout>
+  );
+}
+
+function FeatureCard({
+  title,
+  desc,
+  cta,
+  locked,
+}: {
+  title: string;
+  desc: string;
+  cta: { label: string; to?: string; href?: string };
+  locked?: boolean;
+}) {
+  return (
+    <div
+      className={
+        "border p-6 " +
+        (locked ? "border-dashed border-border bg-stone" : "border-border bg-stone")
+      }
+    >
+      <div className="font-display text-lg text-navy-deep">{title}</div>
+      <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+      <div className="mt-4">
+        {cta.to ? (
+          <Link
+            to={cta.to}
+            className="text-xs font-medium uppercase tracking-wider text-navy-deep underline-offset-4 hover:underline"
+          >
+            {cta.label} →
+          </Link>
+        ) : (
+          <a
+            href={cta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-medium uppercase tracking-wider text-navy-deep underline-offset-4 hover:underline"
+          >
+            {cta.label} →
+          </a>
+        )}
+      </div>
+    </div>
   );
 }
 
