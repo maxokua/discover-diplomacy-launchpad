@@ -33,9 +33,10 @@ function TermsPage() {
             </p>
             <h2 className="font-display text-xl text-navy-deep">Services</h2>
             <p>
-              We offer career advisory services, including a $25 Expert Resume Review and a $50/month
-              Career Membership (month-to-month, cancel anytime). Members may add a 30-minute CEO
-              coaching call for an additional $25. Service descriptions are good-faith summaries and may
+              We offer career advisory services, including a one-time $25 Expert Resume Review,
+              the Compass plan at $35/month, and the Envoy plan at $150/month (both
+              month-to-month, cancel anytime). Service descriptions are good-faith summaries and may
+
               evolve over time.
             </p>
             <h2 className="font-display text-xl text-navy-deep">Payments and refunds</h2>
