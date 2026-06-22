@@ -338,19 +338,21 @@ function CTA() {
           <div className="lg:col-span-8">
             <div className="eyebrow">Begin an Engagement</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-5xl">
-              Join the membership and get to work.
+              Pick a plan and get to work.
             </h2>
             <p className="mt-5 max-w-2xl text-muted-foreground">
-              $50/month, no annual lock-in. Tailored resume, LinkedIn review, research,
-              outreach, interview prep, and a weekly Substack of 50 global opportunities.
+              Compass at $35/mo for self-directed job hunters. Envoy at $150/mo for hands-on
+              coaching. Or grab a one-time Expert Resume Review for $25. Month-to-month, cancel
+              anytime.
             </p>
           </div>
           <div className="lg:col-span-4 lg:text-right">
             <Link
-              to="/membership"
+              to="/services"
               className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-7 py-4 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
-              Start a Membership
+              See plans
+
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
