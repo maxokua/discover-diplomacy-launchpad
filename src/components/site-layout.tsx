@@ -9,6 +9,7 @@ import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 
 const NAV = [
   { to: "/", label: "Home" },
+  { to: "/assessment", label: "Assessment" },
   { to: "/services", label: "Services" },
   { to: "/directory", label: "Directory" },
   { to: "/about", label: "About" },
