@@ -102,10 +102,12 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
     }
   });
 
-export const createMembershipCheckout = createServerFn({ method: "POST" })
+export const createSubscriptionCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(
-    (data: { returnUrl: string; environment: StripeEnv }) => {
+    (data: { tier: "compass" | "envoy"; returnUrl: string; environment: StripeEnv }) => {
+      if (data.tier !== "compass" && data.tier !== "envoy")
+        throw new Error("Invalid tier");
       if (!data.returnUrl || typeof data.returnUrl !== "string")
         throw new Error("Invalid returnUrl");
       if (data.environment !== "sandbox" && data.environment !== "live")
@@ -117,10 +119,10 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
     try {
       const { createStripeClient } = await import("@/lib/stripe.server");
 
-      // Prevent duplicate active memberships
+      // Prevent duplicate active subscriptions of any tier
       const { data: existing } = await context.supabase
         .from("subscriptions")
-        .select("status, current_period_end")
+        .select("status, current_period_end, price_id")
         .eq("user_id", context.userId)
         .eq("environment", data.environment)
         .order("created_at", { ascending: false })
@@ -130,17 +132,20 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
         existing &&
         ["active", "trialing", "past_due"].includes(existing.status as string)
       ) {
-        return { error: "You already have an active membership." };
+        return {
+          error:
+            "You already have an active plan. Manage or change it from your dashboard.",
+        };
       }
 
       const stripe = createStripeClient(data.environment);
 
-      const prices = await stripe.prices.list({ lookup_keys: ["career_membership_monthly"] });
+      const lookupKey = data.tier === "envoy" ? "envoy_monthly" : "compass_monthly";
+      const prices = await stripe.prices.list({ lookup_keys: [lookupKey] });
       if (!prices.data.length) throw new Error("Price not configured");
       const stripePrice = prices.data[0];
 
-      // Ensure promo codes exist once. IHEARTMAX = 100% off, 25 redemptions.
-      // IBELIEVE11 = 50% off, 50 redemptions.
+      // Ensure promo codes exist once (IHEARTMAX = 100% off, IBELIEVE11 = 50% off).
       const ensurePromo = async (opts: {
         code: string;
         couponId: string;
@@ -149,8 +154,8 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
         maxRedemptions: number;
         duration: "forever" | "once";
       }) => {
-        const existing = await stripe.promotionCodes.list({ code: opts.code, limit: 1 });
-        if (existing.data.length) return;
+        const exists = await stripe.promotionCodes.list({ code: opts.code, limit: 1 });
+        if (exists.data.length) return;
         let couponId: string | undefined;
         const coupons = await stripe.coupons.list({ limit: 100 });
         const match = coupons.data.find(
@@ -192,9 +197,8 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
           duration: "forever",
         });
       } catch (promoErr) {
-        console.error("[membership] promo ensure failed", promoErr);
+        console.error("[subscription] promo ensure failed", promoErr);
       }
-
 
       const email = (context.claims as { email?: string } | undefined)?.email;
       const customerId = await resolveOrCreateCustomer(stripe, {
@@ -209,8 +213,8 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         allow_promotion_codes: true,
-        metadata: { userId: context.userId },
-        subscription_data: { metadata: { userId: context.userId } },
+        metadata: { userId: context.userId, tier: data.tier },
+        subscription_data: { metadata: { userId: context.userId, tier: data.tier } },
       });
 
       return { clientSecret: session.client_secret ?? "" };
@@ -220,70 +224,7 @@ export const createMembershipCheckout = createServerFn({ method: "POST" })
     }
   });
 
-export const createCoachingCallCheckout = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (data: { returnUrl: string; environment: StripeEnv }) => {
-      if (!data.returnUrl || typeof data.returnUrl !== "string")
-        throw new Error("Invalid returnUrl");
-      if (data.environment !== "sandbox" && data.environment !== "live")
-        throw new Error("Invalid environment");
-      return data;
-    },
-  )
-  .handler(async ({ data, context }): Promise<CheckoutResult> => {
-    try {
-      const { createStripeClient } = await import("@/lib/stripe.server");
 
-      // Members only
-      const { data: sub } = await context.supabase
-        .from("subscriptions")
-        .select("status, current_period_end")
-        .eq("user_id", context.userId)
-        .eq("environment", data.environment)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      const isMember =
-        !!sub &&
-        (["active", "trialing"].includes(sub.status as string) ||
-          (sub.status === "canceled" &&
-            sub.current_period_end &&
-            new Date(sub.current_period_end as string) > new Date()));
-      if (!isMember) {
-        return { error: "The CEO coaching call is an add-on for active members." };
-      }
-
-      const stripe = createStripeClient(data.environment);
-      const prices = await stripe.prices.list({ lookup_keys: ["ceo_coaching_call_30"] });
-      if (!prices.data.length) throw new Error("Price not configured");
-      const stripePrice = prices.data[0];
-
-      const email = (context.claims as { email?: string } | undefined)?.email;
-      const customerId = await resolveOrCreateCustomer(stripe, {
-        email,
-        userId: context.userId,
-      });
-
-      const session = await stripe.checkout.sessions.create({
-        line_items: [{ price: stripePrice.id, quantity: 1 }],
-        mode: "payment",
-        ui_mode: "embedded_page",
-        return_url: data.returnUrl,
-        customer: customerId,
-        payment_intent_data: { description: "30-Minute CEO Coaching Call" },
-        metadata: { userId: context.userId, kind: "ceo_coaching_call" },
-        automatic_tax: { enabled: true },
-      });
-
-      return { clientSecret: session.client_secret ?? "" };
-    } catch (error) {
-      const { getStripeErrorMessage } = await import("@/lib/stripe.server");
-      return { error: getStripeErrorMessage(error) };
-    }
-  });
-
-// ─── Account / billing management ───────────────────────────────────────────
 
 type PortalResult = { url: string } | { error: string };
 
