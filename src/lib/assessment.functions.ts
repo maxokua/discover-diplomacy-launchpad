@@ -87,7 +87,7 @@ Produce:
       throw new Error("We couldn't generate your plan right now. Please try again in a moment.");
     }
 
-    // Persist lead via admin client (bypasses RLS for service operations)
+    // Persist lead + send plan email via admin client (bypasses RLS)
     try {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await supabaseAdmin.from("assessment_leads").insert({
@@ -99,8 +99,32 @@ Produce:
         consent_newsletter: data.consentNewsletter,
       });
     } catch (err) {
-      // Don't fail the user request if persistence fails — log and continue
       console.error("Failed to persist assessment lead", err);
+    }
+
+    // Fire the plan email (best-effort — failure does not block the user)
+    try {
+      const { sendInternalTransactionalEmail } = await import("./email/send-internal.server");
+      await sendInternalTransactionalEmail({
+        templateName: "assessment-plan",
+        recipientEmail: data.email,
+        idempotencyKey: `assessment-${data.email.toLowerCase()}-${Date.now()}`,
+        templateData: {
+          name: data.answers.name || undefined,
+          summary: plan.summary,
+          paths: plan.paths,
+          days0to30: plan.ninetyDayPlan.days0to30,
+          days30to60: plan.ninetyDayPlan.days30to60,
+          days60to90: plan.ninetyDayPlan.days60to90,
+          networkingStrategy: plan.networkingStrategy,
+          resumeUpdates: plan.resumeUpdates,
+          recommendedTier: plan.recommendedTier,
+          tierRationale: plan.tierRationale,
+          consultationUrl: "https://discoverdiplomacy.org/contact",
+        },
+      });
+    } catch (err) {
+      console.error("Failed to send plan email", err);
     }
 
     return { plan };
