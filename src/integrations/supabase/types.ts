@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_leads: {
+        Row: {
+          answers: Json
+          consent_newsletter: boolean
+          created_at: string
+          email: string
+          id: string
+          name: string | null
+          plan: Json
+          recommended_tier: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          answers: Json
+          consent_newsletter?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          name?: string | null
+          plan: Json
+          recommended_tier?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          answers?: Json
+          consent_newsletter?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string | null
+          plan?: Json
+          recommended_tier?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       coach_applications: {
         Row: {
           agree_background_check: boolean
