@@ -5,6 +5,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { SiteLayout } from "@/components/site-layout";
 import { toast } from "sonner";
+import { getMyRole, dashboardPathFor } from "@/lib/role.functions";
+
+async function resolvePostLoginPath(explicitNext: string | undefined): Promise<string> {
+  if (explicitNext) return explicitNext;
+  try {
+    const { role } = await getMyRole();
+    return dashboardPathFor(role);
+  } catch {
+    return "/dashboard";
+  }
+}
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { next?: string } => ({
