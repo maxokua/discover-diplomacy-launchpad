@@ -72,6 +72,43 @@ function ScoreGauge({ score }: { score: number }) {
   );
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  ats: "ATS-safety",
+  impact: "Impact",
+  keyword_alignment: "Keyword alignment",
+  clarity: "Clarity",
+  relevance: "Relevance",
+};
+
+function ScoreBreakdown({ scores }: { scores: Partial<Record<string, number>> }) {
+  const entries = Object.entries(CATEGORY_LABELS)
+    .map(([k, label]) => [k, label, scores[k]] as const)
+    .filter(([, , v]) => typeof v === "number");
+  if (entries.length === 0) return null;
+  return (
+    <div className="space-y-3 border-t pt-4">
+      <div className="text-sm uppercase tracking-wide text-muted-foreground">Score breakdown</div>
+      <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+        {entries.map(([k, label, v]) => {
+          const val = v as number;
+          const color = val >= 75 ? "bg-emerald-500" : val >= 60 ? "bg-amber-500" : "bg-rose-500";
+          return (
+            <div key={k}>
+              <div className="flex justify-between text-sm mb-1">
+                <span>{label}</span>
+                <span className="tabular-nums font-medium">{val}</span>
+              </div>
+              <div className="h-2 rounded-full bg-muted overflow-hidden">
+                <div className={`h-full ${color} transition-all`} style={{ width: `${val}%` }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function AnalysisReport() {
   const { analysisId } = Route.useParams();
   const { data } = useSuspenseQuery(opts(analysisId));
@@ -95,10 +132,37 @@ function AnalysisReport() {
         </div>
 
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-6 space-y-6">
             <ScoreGauge score={data.overallScore ?? 0} />
+            {data.summary ? (
+              <p className="text-sm leading-relaxed border-t pt-4">{data.summary}</p>
+            ) : null}
+            <ScoreBreakdown scores={data.categoryScores} />
           </CardContent>
         </Card>
+
+        {data.priorityFixes.length > 0 ? (
+          <Card className="border-primary/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                Priority fixes
+                <Badge>{data.priorityFixes.length}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ol className="space-y-3">
+                {data.priorityFixes.map((fix, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold tabular-nums">
+                      {i + 1}
+                    </span>
+                    <p className="text-sm leading-relaxed pt-0.5">{fix}</p>
+                  </li>
+                ))}
+              </ol>
+            </CardContent>
+          </Card>
+        ) : null}
 
         <Card>
           <CardHeader>
