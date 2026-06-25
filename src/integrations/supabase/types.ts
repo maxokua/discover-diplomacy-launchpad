@@ -302,13 +302,16 @@ export type Database = {
       resume_analyses: {
         Row: {
           ats_issues: Json
+          category_scores: Json
           created_at: string
           experience_level: string | null
           formatting_notes: Json
           id: string
           keyword_gaps: Json
           overall_score: number | null
+          priority_fixes: Json
           resume_id: string
+          summary: string | null
           target_field: string | null
           updated_at: string
           user_id: string
@@ -316,13 +319,16 @@ export type Database = {
         }
         Insert: {
           ats_issues?: Json
+          category_scores?: Json
           created_at?: string
           experience_level?: string | null
           formatting_notes?: Json
           id?: string
           keyword_gaps?: Json
           overall_score?: number | null
+          priority_fixes?: Json
           resume_id: string
+          summary?: string | null
           target_field?: string | null
           updated_at?: string
           user_id: string
@@ -330,13 +336,16 @@ export type Database = {
         }
         Update: {
           ats_issues?: Json
+          category_scores?: Json
           created_at?: string
           experience_level?: string | null
           formatting_notes?: Json
           id?: string
           keyword_gaps?: Json
           overall_score?: number | null
+          priority_fixes?: Json
           resume_id?: string
+          summary?: string | null
           target_field?: string | null
           updated_at?: string
           user_id?: string
