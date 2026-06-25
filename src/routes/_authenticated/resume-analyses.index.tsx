@@ -66,8 +66,8 @@ function AnalysesIndex() {
               >
                 <Card className="hover:border-primary/50 transition-colors">
                   <CardContent className="p-5 flex items-center gap-4">
-                    <div className={`shrink-0 rounded-lg px-3 py-2 text-xl font-bold tabular-nums ${scoreTone(a.overallScore)}`}>
-                      {a.overallScore}
+                    <div className={`shrink-0 rounded-lg px-3 py-2 text-xl font-bold tabular-nums ${scoreTone(a.overallScore ?? 0)}`}>
+                      {a.overallScore ?? "—"}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="font-medium truncate">{a.targetField}</div>

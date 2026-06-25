@@ -34,6 +34,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
+import { Route as AuthenticatedResumeAnalysesIndexRouteImport } from './routes/_authenticated/resume-analyses.index'
 import { Route as AuthenticatedEmployerIndexRouteImport } from './routes/_authenticated/employer.index'
 import { Route as AuthenticatedCoachIndexRouteImport } from './routes/_authenticated/coach.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -177,6 +178,12 @@ const AuthenticatedResumeReviewIndexRoute =
     path: '/resume-review/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedResumeAnalysesIndexRoute =
+  AuthenticatedResumeAnalysesIndexRouteImport.update({
+    id: '/resume-analyses/',
+    path: '/resume-analyses/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEmployerIndexRoute =
   AuthenticatedEmployerIndexRouteImport.update({
     id: '/',
@@ -306,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/coach/': typeof AuthenticatedCoachIndexRoute
   '/employer/': typeof AuthenticatedEmployerIndexRoute
+  '/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -345,6 +353,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/coach': typeof AuthenticatedCoachIndexRoute
   '/employer': typeof AuthenticatedEmployerIndexRoute
+  '/resume-analyses': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review': typeof AuthenticatedResumeReviewIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -389,6 +398,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/coach/': typeof AuthenticatedCoachIndexRoute
   '/_authenticated/employer/': typeof AuthenticatedEmployerIndexRoute
+  '/_authenticated/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/_authenticated/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -433,6 +443,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/coach/'
     | '/employer/'
+    | '/resume-analyses/'
     | '/resume-review/'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -472,6 +483,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/coach'
     | '/employer'
+    | '/resume-analyses'
     | '/resume-review'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -515,6 +527,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/'
     | '/_authenticated/coach/'
     | '/_authenticated/employer/'
+    | '/_authenticated/resume-analyses/'
     | '/_authenticated/resume-review/'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -726,6 +739,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResumeReviewIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/resume-analyses/': {
+      id: '/_authenticated/resume-analyses/'
+      path: '/resume-analyses'
+      fullPath: '/resume-analyses/'
+      preLoaderRoute: typeof AuthenticatedResumeAnalysesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/employer/': {
       id: '/_authenticated/employer/'
       path: '/'
@@ -893,6 +913,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMembershipReturnRoute: typeof AuthenticatedMembershipReturnRoute
   AuthenticatedResumeReviewCheckoutRoute: typeof AuthenticatedResumeReviewCheckoutRoute
   AuthenticatedResumeReviewReturnRoute: typeof AuthenticatedResumeReviewReturnRoute
+  AuthenticatedResumeAnalysesIndexRoute: typeof AuthenticatedResumeAnalysesIndexRoute
   AuthenticatedResumeReviewIndexRoute: typeof AuthenticatedResumeReviewIndexRoute
 }
 
@@ -906,6 +927,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedResumeReviewCheckoutRoute:
     AuthenticatedResumeReviewCheckoutRoute,
   AuthenticatedResumeReviewReturnRoute: AuthenticatedResumeReviewReturnRoute,
+  AuthenticatedResumeAnalysesIndexRoute: AuthenticatedResumeAnalysesIndexRoute,
   AuthenticatedResumeReviewIndexRoute: AuthenticatedResumeReviewIndexRoute,
 }
 
