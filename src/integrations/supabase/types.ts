@@ -299,6 +299,59 @@ export type Database = {
         }
         Relationships: []
       }
+      resume_analyses: {
+        Row: {
+          ats_issues: Json
+          created_at: string
+          experience_level: string | null
+          formatting_notes: Json
+          id: string
+          keyword_gaps: Json
+          overall_score: number | null
+          resume_id: string
+          target_field: string | null
+          updated_at: string
+          user_id: string
+          wording_suggestions: Json
+        }
+        Insert: {
+          ats_issues?: Json
+          created_at?: string
+          experience_level?: string | null
+          formatting_notes?: Json
+          id?: string
+          keyword_gaps?: Json
+          overall_score?: number | null
+          resume_id: string
+          target_field?: string | null
+          updated_at?: string
+          user_id: string
+          wording_suggestions?: Json
+        }
+        Update: {
+          ats_issues?: Json
+          created_at?: string
+          experience_level?: string | null
+          formatting_notes?: Json
+          id?: string
+          keyword_gaps?: Json
+          overall_score?: number | null
+          resume_id?: string
+          target_field?: string | null
+          updated_at?: string
+          user_id?: string
+          wording_suggestions?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resume_analyses_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "resumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       resume_reviews: {
         Row: {
           amount_cents: number
@@ -350,6 +403,39 @@ export type Database = {
           user_id?: string
           visible_to_coaches?: boolean
           visible_to_employers?: boolean
+        }
+        Relationships: []
+      }
+      resumes: {
+        Row: {
+          content_type: string | null
+          created_at: string
+          extracted_text: string | null
+          file_path: string
+          id: string
+          original_filename: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content_type?: string | null
+          created_at?: string
+          extracted_text?: string | null
+          file_path: string
+          id?: string
+          original_filename?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content_type?: string | null
+          created_at?: string
+          extracted_text?: string | null
+          file_path?: string
+          id?: string
+          original_filename?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
