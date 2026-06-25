@@ -216,7 +216,7 @@ function AnalysisReport() {
   );
 }
 
-import { listMyAnalyses } from "@/lib/resume-analysis.functions";
+
 const listOpts = () =>
   queryOptions({ queryKey: ["my-resume-analyses"], queryFn: () => listMyAnalyses() });
 
