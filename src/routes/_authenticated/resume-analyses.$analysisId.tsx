@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getAnalysis } from "@/lib/resume-analysis.functions";
+import { getAnalysis, listMyAnalyses } from "@/lib/resume-analysis.functions";
+
 
 const opts = (analysisId: string) =>
   queryOptions({
