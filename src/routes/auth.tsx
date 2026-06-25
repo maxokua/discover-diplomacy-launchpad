@@ -49,10 +49,10 @@ const nameSchema = z.string().trim().min(1, "Enter your name").max(100);
 function AuthPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
-  const nextPath =
+  const explicitNext =
     next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/\\")
       ? next
-      : "/dashboard";
+      : undefined;
   const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,10 +62,18 @@ function AuthPage() {
   const [resetSent, setResetSent] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) window.location.href = nextPath;
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (data.session) {
+        const dest = await resolvePostLoginPath(explicitNext);
+        window.location.href = dest;
+      }
     });
-  }, [navigate, nextPath]);
+  }, [navigate, explicitNext]);
+
+  async function goPostLogin() {
+    const dest = await resolvePostLoginPath(explicitNext);
+    window.location.href = dest;
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -85,14 +93,14 @@ function AuthPage() {
           email: parsedEmail,
           password: parsedPassword,
           options: {
-            emailRedirectTo: window.location.origin + nextPath,
+            emailRedirectTo: window.location.origin + "/auth",
             data: { full_name: parsedName },
           },
         });
         if (error) throw error;
         if (data.session) {
           toast.success("Account created");
-          window.location.href = nextPath;
+          await goPostLogin();
         } else {
           setSignupSent(true);
         }
@@ -104,7 +112,7 @@ function AuthPage() {
         });
         if (error) throw error;
         toast.success("Welcome back");
-        window.location.href = nextPath;
+        await goPostLogin();
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong";
@@ -117,8 +125,9 @@ function AuthPage() {
   async function handleGoogle() {
     setBusy(true);
     try {
+      // Always return to /auth; the useEffect above resolves role and redirects.
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin + nextPath,
+        redirect_uri: window.location.origin + "/auth",
       });
       if (result.error) {
         toast.error("Google sign-in failed");
@@ -126,12 +135,13 @@ function AuthPage() {
         return;
       }
       if (result.redirected) return;
-      window.location.href = nextPath;
+      await goPostLogin();
     } catch {
       toast.error("Google sign-in failed");
       setBusy(false);
     }
   }
+
 
   const heading =
     mode === "signin"
