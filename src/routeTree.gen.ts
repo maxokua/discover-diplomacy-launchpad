@@ -38,6 +38,7 @@ import { Route as AuthenticatedMembershipReturnRouteImport } from './routes/_aut
 import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_authenticated/membership.checkout'
 import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_authenticated/employer.resumes'
 import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -196,6 +197,11 @@ const AuthenticatedCoachClientsRoute =
     path: '/coach/clients',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminReviewsRoute =
   AuthenticatedAdminReviewsRouteImport.update({
     id: '/admin/reviews',
@@ -249,6 +255,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
@@ -284,6 +291,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
@@ -321,6 +329,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/_authenticated/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
@@ -358,6 +367,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/guide/international-relations-jobs-requirements'
     | '/admin/reviews'
+    | '/admin/users'
     | '/coach/clients'
     | '/employer/resumes'
     | '/membership/checkout'
@@ -393,6 +403,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/guide/international-relations-jobs-requirements'
     | '/admin/reviews'
+    | '/admin/users'
     | '/coach/clients'
     | '/employer/resumes'
     | '/membership/checkout'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/guide/international-relations-jobs-requirements'
     | '/_authenticated/admin/reviews'
+    | '/_authenticated/admin/users'
     | '/_authenticated/coach/clients'
     | '/_authenticated/employer/resumes'
     | '/_authenticated/membership/checkout'
@@ -675,6 +687,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCoachClientsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/reviews': {
       id: '/_authenticated/admin/reviews'
       path: '/admin/reviews'
@@ -716,6 +735,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedCoachClientsRoute: typeof AuthenticatedCoachClientsRoute
   AuthenticatedEmployerResumesRoute: typeof AuthenticatedEmployerResumesRoute
   AuthenticatedMembershipCheckoutRoute: typeof AuthenticatedMembershipCheckoutRoute
@@ -728,6 +748,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedCoachClientsRoute: AuthenticatedCoachClientsRoute,
   AuthenticatedEmployerResumesRoute: AuthenticatedEmployerResumesRoute,
   AuthenticatedMembershipCheckoutRoute: AuthenticatedMembershipCheckoutRoute,
