@@ -137,7 +137,7 @@ export const getAnalysis = createServerFn({ method: "GET" })
     const { data: row, error } = await supabase
       .from("resume_analyses")
       .select(
-        "id, resume_id, target_field, experience_level, overall_score, ats_issues, keyword_gaps, wording_suggestions, formatting_notes, created_at, resumes(original_filename, extracted_text)",
+        "id, resume_id, target_field, experience_level, overall_score, summary, category_scores, priority_fixes, ats_issues, keyword_gaps, wording_suggestions, formatting_notes, created_at, resumes(original_filename, extracted_text)",
       )
       .eq("id", data.analysisId)
       .eq("user_id", userId)
@@ -151,6 +151,11 @@ export const getAnalysis = createServerFn({ method: "GET" })
       targetField: row.target_field,
       experienceLevel: row.experience_level,
       overallScore: row.overall_score,
+      summary: row.summary ?? "",
+      categoryScores: (row.category_scores ?? {}) as Partial<{
+        ats: number; impact: number; keyword_alignment: number; clarity: number; relevance: number;
+      }>,
+      priorityFixes: (row.priority_fixes ?? []) as string[],
       atsIssues: (row.ats_issues ?? []) as string[],
       keywordGaps: (row.keyword_gaps ?? []) as string[],
       wordingSuggestions: (row.wording_suggestions ?? []) as Array<{ original: string; improved: string }>,
