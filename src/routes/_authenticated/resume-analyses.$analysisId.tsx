@@ -95,10 +95,37 @@ function AnalysisReport() {
         </div>
 
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-6 space-y-6">
             <ScoreGauge score={data.overallScore ?? 0} />
+            {data.summary ? (
+              <p className="text-sm leading-relaxed border-t pt-4">{data.summary}</p>
+            ) : null}
+            <ScoreBreakdown scores={data.categoryScores} />
           </CardContent>
         </Card>
+
+        {data.priorityFixes.length > 0 ? (
+          <Card className="border-primary/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                Priority fixes
+                <Badge>{data.priorityFixes.length}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ol className="space-y-3">
+                {data.priorityFixes.map((fix, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold tabular-nums">
+                      {i + 1}
+                    </span>
+                    <p className="text-sm leading-relaxed pt-0.5">{fix}</p>
+                  </li>
+                ))}
+              </ol>
+            </CardContent>
+          </Card>
+        ) : null}
 
         <Card>
           <CardHeader>
