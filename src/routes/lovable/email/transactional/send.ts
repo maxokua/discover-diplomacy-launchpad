@@ -115,6 +115,27 @@ export const Route = createFileRoute("/lovable/email/transactional/send")({
           )
         }
 
+        // SECURITY: prevent the authenticated send route from being used as an
+        // open mailer. Allow only:
+        //   (a) templates with a fixed `to` (admin notifications), or
+        //   (b) sending to the caller's own verified email address.
+        // Internal/system sends to arbitrary addresses must go through
+        // sendInternalTransactionalEmail (service-role only, no public route).
+        const callerEmail = (user.email ?? '').toLowerCase()
+        const isFixedTemplateRecipient = !!template.to
+        if (!isFixedTemplateRecipient && effectiveRecipient.toLowerCase() !== callerEmail) {
+          console.warn('Refusing cross-recipient send', {
+            templateName,
+            caller_redacted: redactEmail(callerEmail),
+            recipient_redacted: redactEmail(effectiveRecipient),
+          })
+          return Response.json(
+            { error: 'Recipient must match the authenticated user' },
+            { status: 403 }
+          )
+        }
+
+
         // 2. Check suppression list (fail-closed: if we can't verify, don't send)
         const { data: suppressed, error: suppressionError } = await supabase
           .from('suppressed_emails')

@@ -50,6 +50,27 @@ export const generateAssessment = createServerFn({ method: "POST" })
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new Error("AI service not configured");
 
+    const normalizedEmail = data.email.toLowerCase().trim();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // ── Per-email rate limit ───────────────────────────────────────────────
+    // Refuse to spend AI credits or queue another email if the same address
+    // already received an assessment in the last hour. Returns the cached
+    // plan so the UI still works for the legitimate user.
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { data: recent } = await supabaseAdmin
+      .from("assessment_leads")
+      .select("plan, created_at")
+      .eq("email", normalizedEmail)
+      .gte("created_at", oneHourAgo)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (recent?.plan) {
+      return { plan: recent.plan as AssessmentPlan, cached: true };
+    }
+
     const gateway = createLovableAiGatewayProvider(key);
     const model = gateway("openai/gpt-5-mini");
 
@@ -92,9 +113,8 @@ Required output:
 
     // Persist lead + send plan email via admin client (bypasses RLS)
     try {
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await supabaseAdmin.from("assessment_leads").insert({
-        email: data.email,
+        email: normalizedEmail,
         name: data.answers.name || null,
         answers: data.answers,
         plan,
@@ -105,13 +125,16 @@ Required output:
       console.error("Failed to persist assessment lead", err);
     }
 
-    // Fire the plan email (best-effort — failure does not block the user)
+    // Fire the plan email (best-effort — failure does not block the user).
+    // Idempotency key is stable per email per day so repeated calls collapse
+    // to a single queued send instead of flooding the recipient.
     try {
+      const today = new Date().toISOString().slice(0, 10);
       const { sendInternalTransactionalEmail } = await import("./email/send-internal.server");
       await sendInternalTransactionalEmail({
         templateName: "assessment-plan",
-        recipientEmail: data.email,
-        idempotencyKey: `assessment-${data.email.toLowerCase()}-${Date.now()}`,
+        recipientEmail: normalizedEmail,
+        idempotencyKey: `assessment-${normalizedEmail}-${today}`,
         templateData: {
           name: data.answers.name || undefined,
           summary: plan.summary,
