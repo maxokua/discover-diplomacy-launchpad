@@ -72,6 +72,43 @@ function ScoreGauge({ score }: { score: number }) {
   );
 }
 
+const CATEGORY_LABELS: Record<string, string> = {
+  ats: "ATS-safety",
+  impact: "Impact",
+  keyword_alignment: "Keyword alignment",
+  clarity: "Clarity",
+  relevance: "Relevance",
+};
+
+function ScoreBreakdown({ scores }: { scores: Partial<Record<string, number>> }) {
+  const entries = Object.entries(CATEGORY_LABELS)
+    .map(([k, label]) => [k, label, scores[k]] as const)
+    .filter(([, , v]) => typeof v === "number");
+  if (entries.length === 0) return null;
+  return (
+    <div className="space-y-3 border-t pt-4">
+      <div className="text-sm uppercase tracking-wide text-muted-foreground">Score breakdown</div>
+      <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+        {entries.map(([k, label, v]) => {
+          const val = v as number;
+          const color = val >= 75 ? "bg-emerald-500" : val >= 60 ? "bg-amber-500" : "bg-rose-500";
+          return (
+            <div key={k}>
+              <div className="flex justify-between text-sm mb-1">
+                <span>{label}</span>
+                <span className="tabular-nums font-medium">{val}</span>
+              </div>
+              <div className="h-2 rounded-full bg-muted overflow-hidden">
+                <div className={`h-full ${color} transition-all`} style={{ width: `${val}%` }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function AnalysisReport() {
   const { analysisId } = Route.useParams();
   const { data } = useSuspenseQuery(opts(analysisId));
