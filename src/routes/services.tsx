@@ -81,6 +81,7 @@ export const Route = createFileRoute("/services")({
 });
 
 const COMPASS = [
+  "Access to Diplomat-level coaches",
   "Weekly newsletter of 50 global opportunities from every region",
   "Resource library: field-specific resume/CV templates (US federal, UN/multilateral, global private sector)",
   "Cover-letter examples and networking outreach scripts",
@@ -90,6 +91,7 @@ const COMPASS = [
 
 const ENVOY = [
   "Everything in Compass",
+  "Access to all coach levels — Diplomat, Ambassador, and Presidential",
   "Resume tailored to up to 5 target roles per month",
   "Full LinkedIn profile rewrite plus ongoing optimization",
   "Company and role research on your target employers",
