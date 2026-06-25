@@ -123,3 +123,61 @@ export const analyzeResume = createServerFn({ method: "POST" })
 
     return { analysisId: inserted.id, analysis };
   });
+
+const IdInput = z.object({ analysisId: z.string().uuid() });
+
+export const getAnalysis = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => IdInput.parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: row, error } = await supabase
+      .from("resume_analyses")
+      .select(
+        "id, resume_id, target_field, experience_level, overall_score, ats_issues, keyword_gaps, wording_suggestions, formatting_notes, created_at, resumes(original_filename, extracted_text)",
+      )
+      .eq("id", data.analysisId)
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!row) throw new Error("Analysis not found");
+    const resume = (row as unknown as { resumes: { original_filename: string | null; extracted_text: string | null } | null }).resumes;
+    return {
+      id: row.id,
+      resumeId: row.resume_id,
+      targetField: row.target_field,
+      experienceLevel: row.experience_level,
+      overallScore: row.overall_score,
+      atsIssues: (row.ats_issues ?? []) as string[],
+      keywordGaps: (row.keyword_gaps ?? []) as string[],
+      wordingSuggestions: (row.wording_suggestions ?? []) as Array<{ original: string; improved: string }>,
+      formattingNotes: (row.formatting_notes ?? []) as string[],
+      createdAt: row.created_at,
+      resumeFilename: resume?.original_filename ?? null,
+      extractedText: resume?.extracted_text ?? "",
+    };
+  });
+
+export const listMyAnalyses = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data, error } = await supabase
+      .from("resume_analyses")
+      .select("id, target_field, experience_level, overall_score, created_at, resumes(original_filename)")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    return (data ?? []).map((r) => {
+      const resume = (r as unknown as { resumes: { original_filename: string | null } | null }).resumes;
+      return {
+        id: r.id,
+        targetField: r.target_field,
+        experienceLevel: r.experience_level,
+        overallScore: r.overall_score,
+        createdAt: r.created_at,
+        resumeFilename: resume?.original_filename ?? null,
+      };
+    });
+  });
