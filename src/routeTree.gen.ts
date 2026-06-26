@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WaitlistRouteImport } from './routes/waitlist'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
+import { Route as UniversitiesRouteImport } from './routes/universities'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -35,6 +36,7 @@ import { Route as EmployersResumeDropRouteImport } from './routes/employers.resu
 import { Route as EmployersApplyRouteImport } from './routes/employers.apply'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
+import { Route as AuthenticatedUniversityRouteImport } from './routes/_authenticated/university'
 import { Route as AuthenticatedEmployerRouteImport } from './routes/_authenticated/employer'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
@@ -53,6 +55,7 @@ import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_a
 import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_authenticated/employer.resumes'
 import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
+import { Route as AuthenticatedAdminUniversitiesRouteImport } from './routes/_authenticated/admin.universities'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as AuthenticatedAdminOrganizationsRouteImport } from './routes/_authenticated/admin.organizations'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
@@ -68,6 +71,11 @@ const WaitlistRoute = WaitlistRouteImport.update({
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
   path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UniversitiesRoute = UniversitiesRouteImport.update({
+  id: '/universities',
+  path: '/universities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -190,6 +198,11 @@ const CoachesApplyRoute = CoachesApplyRouteImport.update({
   path: '/apply',
   getParentRoute: () => CoachesRoute,
 } as any)
+const AuthenticatedUniversityRoute = AuthenticatedUniversityRouteImport.update({
+  id: '/university',
+  path: '/university',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEmployerRoute = AuthenticatedEmployerRouteImport.update({
   id: '/employer',
   path: '/employer',
@@ -290,6 +303,12 @@ const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminUniversitiesRoute =
+  AuthenticatedAdminUniversitiesRouteImport.update({
+    id: '/universities',
+    path: '/universities',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminReviewsRoute =
   AuthenticatedAdminReviewsRouteImport.update({
     id: '/reviews',
@@ -344,12 +363,14 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/coach': typeof AuthenticatedCoachRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/employer': typeof AuthenticatedEmployerRouteWithChildren
+  '/university': typeof AuthenticatedUniversityRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
@@ -359,6 +380,7 @@ export interface FileRoutesByFullPath {
   '/coaches/': typeof CoachesIndexRoute
   '/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -394,9 +416,11 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/university': typeof AuthenticatedUniversityRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
@@ -406,6 +430,7 @@ export interface FileRoutesByTo {
   '/coaches': typeof CoachesIndexRoute
   '/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -444,12 +469,14 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/coach': typeof AuthenticatedCoachRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/employer': typeof AuthenticatedEmployerRouteWithChildren
+  '/_authenticated/university': typeof AuthenticatedUniversityRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
@@ -459,6 +486,7 @@ export interface FileRoutesById {
   '/coaches/': typeof CoachesIndexRoute
   '/_authenticated/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/_authenticated/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
   '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
@@ -497,12 +525,14 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
+    | '/universities'
     | '/unsubscribe'
     | '/waitlist'
     | '/admin'
     | '/coach'
     | '/dashboard'
     | '/employer'
+    | '/university'
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
@@ -512,6 +542,7 @@ export interface FileRouteTypes {
     | '/coaches/'
     | '/admin/organizations'
     | '/admin/reviews'
+    | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
     | '/employer/resumes'
@@ -547,9 +578,11 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
+    | '/universities'
     | '/unsubscribe'
     | '/waitlist'
     | '/dashboard'
+    | '/university'
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
@@ -559,6 +592,7 @@ export interface FileRouteTypes {
     | '/coaches'
     | '/admin/organizations'
     | '/admin/reviews'
+    | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
     | '/employer/resumes'
@@ -596,12 +630,14 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/terms'
+    | '/universities'
     | '/unsubscribe'
     | '/waitlist'
     | '/_authenticated/admin'
     | '/_authenticated/coach'
     | '/_authenticated/dashboard'
     | '/_authenticated/employer'
+    | '/_authenticated/university'
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
@@ -611,6 +647,7 @@ export interface FileRouteTypes {
     | '/coaches/'
     | '/_authenticated/admin/organizations'
     | '/_authenticated/admin/reviews'
+    | '/_authenticated/admin/universities'
     | '/_authenticated/admin/users'
     | '/_authenticated/coach/clients'
     | '/_authenticated/employer/resumes'
@@ -649,6 +686,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  UniversitiesRoute: typeof UniversitiesRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   WaitlistRoute: typeof WaitlistRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
@@ -674,6 +712,13 @@ declare module '@tanstack/react-router' {
       path: '/unsubscribe'
       fullPath: '/unsubscribe'
       preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/universities': {
+      id: '/universities'
+      path: '/universities'
+      fullPath: '/universities'
+      preLoaderRoute: typeof UniversitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -844,6 +889,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesApplyRouteImport
       parentRoute: typeof CoachesRoute
     }
+    '/_authenticated/university': {
+      id: '/_authenticated/university'
+      path: '/university'
+      fullPath: '/university'
+      preLoaderRoute: typeof AuthenticatedUniversityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/employer': {
       id: '/_authenticated/employer'
       path: '/employer'
@@ -970,6 +1022,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/universities': {
+      id: '/_authenticated/admin/universities'
+      path: '/universities'
+      fullPath: '/admin/universities'
+      preLoaderRoute: typeof AuthenticatedAdminUniversitiesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/reviews': {
       id: '/_authenticated/admin/reviews'
       path: '/reviews'
@@ -1018,6 +1077,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminOrganizationsRoute: typeof AuthenticatedAdminOrganizationsRoute
   AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
+  AuthenticatedAdminUniversitiesRoute: typeof AuthenticatedAdminUniversitiesRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -1025,6 +1085,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminOrganizationsRoute: AuthenticatedAdminOrganizationsRoute,
   AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
+  AuthenticatedAdminUniversitiesRoute: AuthenticatedAdminUniversitiesRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
@@ -1065,6 +1126,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmployerRoute: typeof AuthenticatedEmployerRouteWithChildren
+  AuthenticatedUniversityRoute: typeof AuthenticatedUniversityRoute
   AuthenticatedMembershipCheckoutRoute: typeof AuthenticatedMembershipCheckoutRoute
   AuthenticatedMembershipReturnRoute: typeof AuthenticatedMembershipReturnRoute
   AuthenticatedResumeAnalysesAnalysisIdRoute: typeof AuthenticatedResumeAnalysesAnalysisIdRoute
@@ -1079,6 +1141,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCoachRoute: AuthenticatedCoachRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmployerRoute: AuthenticatedEmployerRouteWithChildren,
+  AuthenticatedUniversityRoute: AuthenticatedUniversityRoute,
   AuthenticatedMembershipCheckoutRoute: AuthenticatedMembershipCheckoutRoute,
   AuthenticatedMembershipReturnRoute: AuthenticatedMembershipReturnRoute,
   AuthenticatedResumeAnalysesAnalysisIdRoute:
@@ -1140,6 +1203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  UniversitiesRoute: UniversitiesRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   WaitlistRoute: WaitlistRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,

@@ -841,6 +841,161 @@ export type Database = {
         }
         Relationships: []
       }
+      university_cohort_members: {
+        Row: {
+          activated_at: string | null
+          cohort_id: string
+          created_at: string
+          email: string
+          full_name: string | null
+          graduation_year: number | null
+          id: string
+          invited_at: string
+          removed_at: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          activated_at?: string | null
+          cohort_id: string
+          created_at?: string
+          email: string
+          full_name?: string | null
+          graduation_year?: number | null
+          id?: string
+          invited_at?: string
+          removed_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          activated_at?: string | null
+          cohort_id?: string
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          graduation_year?: number | null
+          id?: string
+          invited_at?: string
+          removed_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "university_cohort_members_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "university_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      university_cohorts: {
+        Row: {
+          admin_user_id: string | null
+          contact_email: string
+          created_at: string
+          funding_model: string
+          id: string
+          monthly_rate_cents: number
+          notes: string | null
+          program_name: string | null
+          renewal_at: string | null
+          started_at: string | null
+          status: string
+          student_count: number
+          university_name: string
+          updated_at: string
+        }
+        Insert: {
+          admin_user_id?: string | null
+          contact_email: string
+          created_at?: string
+          funding_model?: string
+          id?: string
+          monthly_rate_cents?: number
+          notes?: string | null
+          program_name?: string | null
+          renewal_at?: string | null
+          started_at?: string | null
+          status?: string
+          student_count?: number
+          university_name: string
+          updated_at?: string
+        }
+        Update: {
+          admin_user_id?: string | null
+          contact_email?: string
+          created_at?: string
+          funding_model?: string
+          id?: string
+          monthly_rate_cents?: number
+          notes?: string | null
+          program_name?: string | null
+          renewal_at?: string | null
+          started_at?: string | null
+          status?: string
+          student_count?: number
+          university_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      university_leads: {
+        Row: {
+          budget_cycle: string | null
+          contact_email: string
+          contact_name: string
+          contact_title: string | null
+          created_at: string
+          department: string
+          est_students: number
+          funding_model: string
+          id: string
+          notes: string | null
+          start_date_pref: string | null
+          status: string
+          university_name: string
+          updated_at: string
+        }
+        Insert: {
+          budget_cycle?: string | null
+          contact_email: string
+          contact_name: string
+          contact_title?: string | null
+          created_at?: string
+          department: string
+          est_students: number
+          funding_model: string
+          id?: string
+          notes?: string | null
+          start_date_pref?: string | null
+          status?: string
+          university_name: string
+          updated_at?: string
+        }
+        Update: {
+          budget_cycle?: string | null
+          contact_email?: string
+          contact_name?: string
+          contact_title?: string | null
+          created_at?: string
+          department?: string
+          est_students?: number
+          funding_model?: string
+          id?: string
+          notes?: string | null
+          start_date_pref?: string | null
+          status?: string
+          university_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -948,9 +1103,28 @@ export type Database = {
         Args: { _env?: string; _user_id: string }
         Returns: undefined
       }
+      university_cohort_engagement: {
+        Args: { _cohort_id: string }
+        Returns: {
+          active_members: number
+          graduated_members: number
+          resume_analyses: number
+          resume_drop_optins: number
+          resume_reviews: number
+          resumes_uploaded: number
+          total_members: number
+        }[]
+      }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user" | "coach" | "employer" | "member"
+      app_role:
+        | "admin"
+        | "moderator"
+        | "user"
+        | "coach"
+        | "employer"
+        | "member"
+        | "university_admin"
       org_category:
         | "government"
         | "ngo"
@@ -1095,7 +1269,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user", "coach", "employer", "member"],
+      app_role: [
+        "admin",
+        "moderator",
+        "user",
+        "coach",
+        "employer",
+        "member",
+        "university_admin",
+      ],
       org_category: [
         "government",
         "ngo",
