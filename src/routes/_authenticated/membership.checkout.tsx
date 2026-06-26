@@ -9,6 +9,7 @@ import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 const search = z.object({
   tier: z.enum(["compass", "envoy"]).default("compass"),
+  cadence: z.enum(["monthly", "annual"]).default("monthly"),
 });
 
 export const Route = createFileRoute("/_authenticated/membership/checkout")({
@@ -18,13 +19,17 @@ export const Route = createFileRoute("/_authenticated/membership/checkout")({
 });
 
 const COPY = {
-  compass: { name: "Compass", price: "$20/month" },
-  envoy: { name: "Envoy", price: "$150/month" },
+  compass: { name: "Compass", monthly: "$20 / month", annual: "$192 / year (save $48)" },
+  envoy: { name: "Envoy", monthly: "$150 / month", annual: "$1,440 / year (save $360)" },
 } as const;
 
 function MembershipCheckoutPage() {
-  const { tier } = Route.useSearch() as { tier: "compass" | "envoy" };
+  const { tier, cadence } = Route.useSearch() as {
+    tier: "compass" | "envoy";
+    cadence: "monthly" | "annual";
+  };
   const copy = COPY[tier];
+  const price = cadence === "annual" ? copy.annual : copy.monthly;
 
 
   const options = useMemo(
@@ -33,6 +38,7 @@ function MembershipCheckoutPage() {
         const result = await createSubscriptionCheckout({
           data: {
             tier,
+            cadence,
             environment: getStripeEnvironment(),
             returnUrl:
               window.location.origin +
@@ -44,7 +50,7 @@ function MembershipCheckoutPage() {
         return result.clientSecret;
       },
     }),
-    [tier],
+    [tier, cadence],
   );
 
   return (
