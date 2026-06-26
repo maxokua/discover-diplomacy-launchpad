@@ -458,6 +458,26 @@ function DashboardPage() {
         </section>
       )}
 
+      {/* Resume Drop (Member Pool) */}
+      <section className="border-b border-border bg-paper">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10 lg:py-12">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              {dropStatus ? (
+                <ResumeDropCard status={dropStatus} onChanged={loadDrop} />
+              ) : (
+                <div className="border border-border bg-paper p-8 text-sm text-muted-foreground">
+                  Loading Resume Drop status…
+                </div>
+              )}
+            </div>
+            <div>
+              <NotificationsList />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Resume reviews (always available) */}
       <section className="bg-stone">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
@@ -529,6 +549,12 @@ function DashboardPage() {
           </div>
         </div>
       </section>
+
+      <ResumeDropIntroModal
+        open={introOpen}
+        onClose={() => setIntroOpen(false)}
+        onSaved={loadDrop}
+      />
     </SiteLayout>
   );
 }
