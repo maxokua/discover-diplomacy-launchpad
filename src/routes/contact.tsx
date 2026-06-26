@@ -221,9 +221,9 @@ function ContactPage() {
                     className="mt-0.5 h-4 w-4 border-border text-navy-deep"
                   />
                   <span>
-                    I acknowledge that submission of this form does not constitute
-                    an advisory engagement and I consent to the practice contacting
-                    me regarding my inquiry.
+                    I acknowledge that submitting this form does not constitute a
+                    paid engagement, and I consent to the Discover Diplomacy team
+                    contacting me about my inquiry.
                   </span>
                 </label>
 
