@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, Compass, Target } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Compass, Target, DoorOpen } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 import { Parallax } from "@/components/scroll-effects";
 import { MagneticLink } from "@/components/magnetic";
+import { BRAND, PILLARS, TRACTION } from "@/lib/brand";
 import institution from "@/assets/institution.jpg";
 import ypfpLogo from "@/assets/ypfp-logo.jpg.asset.json";
 import americanUniversityLogo from "@/assets/american-university-logo.png.asset.json";
