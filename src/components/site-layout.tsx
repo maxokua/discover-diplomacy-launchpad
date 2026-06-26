@@ -193,7 +193,6 @@ function SiteFooter() {
           <FooterCol
             title="Plans"
             links={[
-              { to: "/services", label: "Explorer · Free" },
               { to: "/services", label: "Compass · $20/mo" },
               { to: "/services", label: "Envoy · $150/mo" },
               { to: "/services", label: "Resume Review · $25" },
