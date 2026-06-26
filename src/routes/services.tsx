@@ -146,13 +146,13 @@ function ServicesPage() {
               </ul>
               <div className="mt-8">
                 <Link
-                  to="/membership/checkout"
-                  search={{ tier: "compass" }}
+                  to="/waitlist"
+                  search={{ interest: "compass" }}
                   className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                 >
-                  Start Compass · $35/mo
+                  Join the waitlist
                 </Link>
-                <p className="mt-3 text-xs text-muted-foreground">Cancel anytime.</p>
+                <p className="mt-3 text-xs text-muted-foreground">Launching soon — no charge yet.</p>
               </div>
             </div>
           </Reveal>
@@ -181,13 +181,13 @@ function ServicesPage() {
               </ul>
               <div className="mt-8">
                 <Link
-                  to="/membership/checkout"
-                  search={{ tier: "envoy" }}
+                  to="/waitlist"
+                  search={{ interest: "envoy" }}
                   className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                 >
-                  Start Envoy · $150/mo
+                  Join the waitlist
                 </Link>
-                <p className="mt-3 text-xs text-muted-foreground">Cancel anytime.</p>
+                <p className="mt-3 text-xs text-muted-foreground">Launching soon — no charge yet.</p>
               </div>
             </div>
           </Reveal>
@@ -213,10 +213,11 @@ function ServicesPage() {
               Standalone purchase. Available to anyone, whether or not you have a plan.
             </p>
             <Link
-              to="/resume-review"
+              to="/waitlist"
+              search={{ interest: "resume-review" }}
               className="mt-8 inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
             >
-              Get started · $25
+              Join the waitlist
             </Link>
           </Reveal>
           <Reveal className="lg:col-span-7" delay={120}>
