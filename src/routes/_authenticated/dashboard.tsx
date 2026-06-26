@@ -381,6 +381,14 @@ function DashboardPage() {
                   Upgrade to Envoy
                 </Link>
               )}
+              {tier === "envoy" && (
+                <Link
+                  to="/services"
+                  className="border border-border bg-paper px-4 py-2 font-medium uppercase tracking-wider text-navy-deep hover:bg-stone"
+                >
+                  Switch to Compass
+                </Link>
+              )}
             </div>
           )}
         </div>
