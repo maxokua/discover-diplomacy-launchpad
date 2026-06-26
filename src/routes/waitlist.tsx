@@ -34,7 +34,8 @@ const COPY = {
 } as const;
 
 function WaitlistPage() {
-  const { interest } = Route.useSearch();
+  const searchParams = Route.useSearch() as { interest?: keyof typeof COPY };
+  const interest = searchParams.interest;
   const [email, setEmail] = useState("");
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
