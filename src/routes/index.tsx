@@ -240,10 +240,8 @@ function Traction() {
   const stats = [
     { v: TRACTION.peopleReached, l: "Professionals reached" },
     { v: TRACTION.directoryViews, l: "Views to our opportunity directory" },
-    { v: "2,500+", l: "Vetted candidates" },
-    { v: "200+", l: "Coaches in our network" },
-    { v: "500+", l: "Employers accessing talent" },
     { v: TRACTION.weeklyOpportunities, l: "Global opportunities curated weekly" },
+    { v: "75+", l: "Countries reached" },
   ];
   return (
     <section className="border-b border-border bg-paper">
@@ -251,7 +249,7 @@ function Traction() {
         <Reveal>
           <div className="eyebrow">By the numbers</div>
         </Reveal>
-        <ul className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s, i) => (
             <Reveal key={s.l} delay={i * 60} className="bg-paper p-8">
               <div className="font-display text-4xl text-navy-deep lg:text-5xl">{s.v}</div>
