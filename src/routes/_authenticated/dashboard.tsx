@@ -375,7 +375,8 @@ function DashboardPage() {
               )}
               {tier === "compass" && (
                 <Link
-                  to="/services"
+                  to="/membership/checkout"
+                  search={{ tier: "envoy", cadence: "monthly" }}
                   className="border border-emerald/40 bg-emerald/5 px-4 py-2 font-medium uppercase tracking-wider text-emerald hover:bg-emerald/10"
                 >
                   Upgrade to Envoy
@@ -383,7 +384,8 @@ function DashboardPage() {
               )}
               {tier === "envoy" && (
                 <Link
-                  to="/services"
+                  to="/membership/checkout"
+                  search={{ tier: "compass", cadence: "monthly" }}
                   className="border border-border bg-paper px-4 py-2 font-medium uppercase tracking-wider text-navy-deep hover:bg-stone"
                 >
                   Switch to Compass
