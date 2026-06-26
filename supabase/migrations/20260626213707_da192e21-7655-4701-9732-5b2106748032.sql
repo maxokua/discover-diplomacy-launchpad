@@ -1,0 +1,1 @@
+CREATE POLICY "Users delete own resume files" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'resumes' AND (auth.uid())::text = (storage.foldername(name))[1]);
