@@ -137,8 +137,9 @@ function ContactPage() {
                   Inquiry received.
                 </h2>
                 <p className="mt-4 max-w-lg text-muted-foreground">
-                  Thank you. A senior advisor will review your submission and follow up by
-                  email. If your inquiry is time-sensitive, please also write directly to{" "}
+                  Thank you. Someone from the Discover Diplomacy team will review
+                  your submission and follow up by email. If it's time-sensitive,
+                  also write to{" "}
                   <a
                     href="mailto:hello@discoverdiplomacy.org"
                     className="text-navy-deep underline underline-offset-4"
