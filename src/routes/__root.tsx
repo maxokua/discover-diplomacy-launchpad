@@ -111,7 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           name: "Discover Diplomacy",
           legalName: "Discover Diplomacy LLC",
           url: "https://discoverdiplomacy.org",
-          description: "Career advisory for students and early-career professionals pursuing roles in diplomacy, international policy, multilateral institutions, and global business.",
+          description: "The talent infrastructure layer for internationally-focused careers — combining a curated opportunity directory, instant expert-designed application help, vetted insider coaches, and direct access to employers.",
           areaServed: "Worldwide",
           address: { "@type": "PostalAddress", addressLocality: "Washington", addressRegion: "DC", addressCountry: "US" },
           email: "hello@discoverdiplomacy.org",
