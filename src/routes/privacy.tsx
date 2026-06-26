@@ -161,8 +161,8 @@ function PrivacyPage() {
             <h2 className="font-display text-xl text-navy-deep">Your choices</h2>
             <p>
               You may request access to, correction of, or deletion of your data by emailing{" "}
-              <a className="underline" href="mailto:hello@discoverdiplomacy.com">
-                hello@discoverdiplomacy.com
+              <a className="underline" href="mailto:hello@discoverdiplomacy.org">
+                hello@discoverdiplomacy.org
               </a>
               . You may unsubscribe from marketing emails at any time. Some records, such as
               payment receipts, must be retained for legal and accounting purposes.
@@ -211,8 +211,8 @@ function PrivacyPage() {
             <h2 className="font-display text-xl text-navy-deep">Contact</h2>
             <p>
               Questions, requests, or concerns:{" "}
-              <a className="underline" href="mailto:hello@discoverdiplomacy.com">
-                hello@discoverdiplomacy.com
+              <a className="underline" href="mailto:hello@discoverdiplomacy.org">
+                hello@discoverdiplomacy.org
               </a>
               .
             </p>

@@ -112,8 +112,8 @@ function EmployerResumesPage() {
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
             Browse and download resumes from members who consented to employer review. To
             connect with a candidate, email{" "}
-            <a className="underline" href="mailto:employers@discoverdiplomacy.com">
-              employers@discoverdiplomacy.com
+            <a className="underline" href="mailto:hello@discoverdiplomacy.org">
+              hello@discoverdiplomacy.org
             </a>{" "}
             with the candidate's name.
           </p>

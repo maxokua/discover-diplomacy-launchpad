@@ -33,8 +33,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             Career coaching for globally minded professionals
           </span>
           <div className="flex shrink-0 items-center gap-5 text-paper/70">
-            <a href="mailto:hello@discoverdiplomacy.com" className="hover:text-paper">
-              hello@discoverdiplomacy.com
+            <a href="mailto:hello@discoverdiplomacy.org" className="hover:text-paper">
+              hello@discoverdiplomacy.org
             </a>
             <span aria-hidden>·</span>
             <span>Based in Washington, DC</span>
@@ -179,10 +179,10 @@ function SiteFooter() {
           </p>
           <p className="mt-4 text-sm text-paper/70">
             <a
-              href="mailto:hello@discoverdiplomacy.com"
+              href="mailto:hello@discoverdiplomacy.org"
               className="underline-offset-4 hover:text-paper hover:underline"
             >
-              hello@discoverdiplomacy.com
+              hello@discoverdiplomacy.org
             </a>
           </p>
         </div>

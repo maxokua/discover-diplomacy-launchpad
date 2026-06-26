@@ -41,7 +41,7 @@ function AccessibilityPage() {
             <h2 className="font-display text-xl text-navy-deep">Report an issue</h2>
             <p>
               If you encounter an accessibility barrier, email{" "}
-              <a className="underline" href="mailto:hello@discoverdiplomacy.com">hello@discoverdiplomacy.com</a>{" "}
+              <a className="underline" href="mailto:hello@discoverdiplomacy.org">hello@discoverdiplomacy.org</a>{" "}
               and we will work to address it promptly.
             </p>
           </div>
