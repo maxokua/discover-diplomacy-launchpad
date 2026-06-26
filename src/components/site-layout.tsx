@@ -172,13 +172,13 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   <ul className="pb-3">
                     {g.links.map((l, i) => (
                       <li key={`${l.to}-${i}`}>
-                        <Link
+                        <NavItem
                           to={l.to}
                           onClick={() => setOpen(false)}
                           className="block py-2 pl-3 text-sm text-muted-foreground hover:text-navy-deep"
                         >
                           {l.label}
-                        </Link>
+                        </NavItem>
                       </li>
                     ))}
                   </ul>
