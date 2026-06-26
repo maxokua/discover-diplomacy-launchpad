@@ -75,11 +75,15 @@ export type Database = {
           notable_experience: string | null
           phone: string | null
           preferred_client_levels: string[]
+          references_text: string | null
           referral_source: string | null
+          responses: Json | null
           resume_path: string | null
           start_date: string | null
           status: string
           timezone: string | null
+          video1_url: string | null
+          video2_url: string | null
           years_experience: number | null
         }
         Insert: {
@@ -106,11 +110,15 @@ export type Database = {
           notable_experience?: string | null
           phone?: string | null
           preferred_client_levels?: string[]
+          references_text?: string | null
           referral_source?: string | null
+          responses?: Json | null
           resume_path?: string | null
           start_date?: string | null
           status?: string
           timezone?: string | null
+          video1_url?: string | null
+          video2_url?: string | null
           years_experience?: number | null
         }
         Update: {
@@ -137,11 +145,15 @@ export type Database = {
           notable_experience?: string | null
           phone?: string | null
           preferred_client_levels?: string[]
+          references_text?: string | null
           referral_source?: string | null
+          responses?: Json | null
           resume_path?: string | null
           start_date?: string | null
           status?: string
           timezone?: string | null
+          video1_url?: string | null
+          video2_url?: string | null
           years_experience?: number | null
         }
         Relationships: []
