@@ -127,7 +127,7 @@ function UnsubscribePage() {
                 <p className="text-base text-navy-deep">You've been unsubscribed.</p>
                 <p className="mt-2 text-sm text-muted-foreground">
                   We've removed you from our list. If this was a mistake, email{" "}
-                  <a href="mailto:hello@discoverdiplomacy.com" className="underline">hello@discoverdiplomacy.com</a>{" "}
+                  <a href="mailto:hello@discoverdiplomacy.org" className="underline">hello@discoverdiplomacy.org</a>{" "}
                   and we'll re-subscribe you.
                 </p>
               </>

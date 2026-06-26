@@ -50,10 +50,10 @@ function EmployersPage() {
                 Apply for employer access <ArrowRight className="h-4 w-4" />
               </Link>
               <a
-                href="mailto:employers@discoverdiplomacy.com"
+                href="mailto:hello@discoverdiplomacy.org"
                 className="text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
               >
-                employers@discoverdiplomacy.com
+                hello@discoverdiplomacy.org
               </a>
             </div>
           </Reveal>

@@ -108,7 +108,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           description: "Career advisory for students and early-career professionals pursuing roles in diplomacy, international policy, multilateral institutions, and global business.",
           areaServed: "Worldwide",
           address: { "@type": "PostalAddress", addressLocality: "Washington", addressRegion: "DC", addressCountry: "US" },
-          email: "hello@discoverdiplomacy.com",
+          email: "hello@discoverdiplomacy.org",
           sameAs: [],
           memberOf: [
             { "@type": "Organization", name: "Young Professionals in Foreign Policy" },

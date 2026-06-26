@@ -350,7 +350,7 @@ function CoachApplyPage() {
                   rows={5} value={form.q15_references} onChange={(v) => setForm({ ...form, q15_references: v })} required />
               </Section>
 
-              <Section title="Section 4 — Video responses" subtitle="2–3 minutes each. Use your phone, Zoom, or any recorder. Be yourself — authenticity matters more than production quality. Paste a shareable link (Loom, Google Drive, Dropbox, YouTube unlisted), or email files to coaches@discoverdiplomacy.org.">
+              <Section title="Section 4 — Video responses" subtitle="2–3 minutes each. Use your phone, Zoom, or any recorder. Be yourself — authenticity matters more than production quality. Paste a shareable link (Loom, Google Drive, Dropbox, YouTube unlisted), or email files to hello@discoverdiplomacy.org.">
                 <div className="space-y-6">
                   <div>
                     <NumLabel num="V1" text="Why do you want to coach, and why should you coach?" />

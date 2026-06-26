@@ -81,8 +81,8 @@ function CoachClientsPage() {
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
             Browse current members and the roles they're targeting. To claim a client, email{" "}
-            <a className="underline" href="mailto:coaches@discoverdiplomacy.com">
-              coaches@discoverdiplomacy.com
+            <a className="underline" href="mailto:hello@discoverdiplomacy.org">
+              hello@discoverdiplomacy.org
             </a>{" "}
             with the client's name and the role they're pursuing.
           </p>

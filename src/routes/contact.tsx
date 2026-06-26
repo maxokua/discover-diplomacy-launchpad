@@ -91,10 +91,10 @@ function ContactPage() {
                 <div>
                   <div className="font-medium text-navy-deep">General Inquiries</div>
                   <a
-                    href="mailto:hello@discoverdiplomacy.com"
+                    href="mailto:hello@discoverdiplomacy.org"
                     className="text-muted-foreground hover:text-navy-deep"
                   >
-                    hello@discoverdiplomacy.com
+                    hello@discoverdiplomacy.org
                   </a>
                 </div>
               </li>
@@ -103,10 +103,10 @@ function ContactPage() {
                 <div>
                   <div className="font-medium text-navy-deep">Engagements</div>
                   <a
-                    href="mailto:engagements@discoverdiplomacy.com"
+                    href="mailto:hello@discoverdiplomacy.org"
                     className="text-muted-foreground hover:text-navy-deep"
                   >
-                    engagements@discoverdiplomacy.com
+                    hello@discoverdiplomacy.org
                   </a>
                 </div>
               </li>
@@ -140,10 +140,10 @@ function ContactPage() {
                   Thank you. A senior advisor will review your submission and follow up by
                   email. If your inquiry is time-sensitive, please also write directly to{" "}
                   <a
-                    href="mailto:engagements@discoverdiplomacy.com"
+                    href="mailto:hello@discoverdiplomacy.org"
                     className="text-navy-deep underline underline-offset-4"
                   >
-                    engagements@discoverdiplomacy.com
+                    hello@discoverdiplomacy.org
                   </a>
                   .
                 </p>

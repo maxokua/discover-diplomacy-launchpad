@@ -312,7 +312,7 @@ function ServicesPage() {
               proof of income, no awkwardness — just tell us where you are.
             </p>
             <a
-              href="mailto:hello@discoverdiplomacy.com"
+              href="mailto:hello@discoverdiplomacy.org"
               className="mt-6 inline-flex items-center bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
             >
               Email us
