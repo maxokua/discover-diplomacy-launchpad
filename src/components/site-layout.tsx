@@ -174,8 +174,10 @@ function SiteFooter() {
             </div>
           </div>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-paper/70">
-            A career advisory practice for students and early-career professionals pursuing roles
-            in diplomacy, international policy, multilateral institutions, and global affairs.
+            The talent infrastructure layer for internationally-focused careers.
+            Discover opportunities, prepare your materials, and reach vetted insider
+            coaches and verified employers — built for diplomacy, multilaterals,
+            global policy, and international business.
           </p>
           <p className="mt-4 text-sm text-paper/70">
             <a
@@ -189,21 +191,30 @@ function SiteFooter() {
 
         <div className="grid grid-cols-2 gap-8 lg:col-span-7 lg:grid-cols-3">
           <FooterCol
-            title="Services"
+            title="Plans"
             links={[
-              { to: "/services", label: "Compass · $35/mo" },
+              { to: "/services", label: "Explorer · Free" },
+              { to: "/services", label: "Compass · $20/mo" },
               { to: "/services", label: "Envoy · $150/mo" },
               { to: "/services", label: "Resume Review · $25" },
-              { to: "/assessment", label: "Free career assessment" },
             ]}
           />
           <FooterCol
             title="Engage"
             links={[
+              { to: "/assessment", label: "Free assessment" },
+              { to: "/waitlist", label: "Weekly digest" },
+              { to: "/directory", label: "Opportunity directory" },
               { to: "/about", label: "About" },
               { to: "/contact", label: "Contact" },
+            ]}
+          />
+          <FooterCol
+            title="Network"
+            links={[
               { to: "/coaches", label: "Become a coach" },
               { to: "/employers", label: "For employers" },
+              { to: "/brand-guide", label: "Brand & voice" },
             ]}
           />
           <div>
