@@ -213,6 +213,7 @@ function SiteFooter() {
             links={[
               { to: "/coaches", label: "Become a coach" },
               { to: "/employers", label: "For employers" },
+              { to: "/universities", label: "For universities" },
               { to: "/brand-guide", label: "Brand & voice" },
             ]}
           />
