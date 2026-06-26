@@ -175,7 +175,7 @@ function ContactPage() {
                     id="practice"
                     label="What are you interested in?"
                     options={[
-                      "Compass plan ($35/mo)",
+                      "Compass plan ($20/mo)",
                       "Envoy plan ($150/mo)",
                       "Expert Resume Review ($25)",
                       "Employer / candidate access",

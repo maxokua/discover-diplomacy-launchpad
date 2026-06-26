@@ -341,7 +341,7 @@ function CTA() {
               Pick a plan and get to work.
             </h2>
             <p className="mt-5 max-w-2xl text-muted-foreground">
-              Compass at $35/mo for self-directed job hunters. Envoy at $150/mo for hands-on
+              Compass at $20/mo for self-directed job hunters. Envoy at $150/mo for hands-on
               coaching. Or grab a one-time Expert Resume Review for $25. Month-to-month, cancel
               anytime.
             </p>
