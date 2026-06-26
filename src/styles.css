@@ -36,41 +36,56 @@
 
   --color-navy: var(--navy);
   --color-navy-deep: var(--navy-deep);
-  --color-emerald: var(--emerald);
+  --color-ink: var(--ink);
+  --color-gilt: var(--gilt);
+  --color-azure: var(--azure);
+  --color-slate: var(--slate);
+  --color-muted-ink: var(--muted-ink);
+  --color-hairline: var(--hairline);
+  /* Legacy emerald token is now mapped to gilt so older classes keep rendering
+     with the new brand accent until they're migrated. */
+  --color-emerald: var(--gilt);
   --color-stone: var(--stone);
   --color-paper: var(--paper);
-  --color-rule: var(--rule);
+  --color-rule: var(--hairline);
 }
 
 :root {
   --radius: 0.25rem;
 
-  /* Corporate palette — derived from compass logo, restrained */
-  --navy-deep: oklch(0.215 0.075 264);  /* deep institutional navy */
-  --navy: oklch(0.30 0.10 262);
-  --emerald: oklch(0.42 0.12 152);       /* sober dark green, used sparingly */
-  --paper: oklch(0.985 0.004 80);        /* off-white */
-  --stone: oklch(0.955 0.006 80);        /* warm light grey */
-  --rule: oklch(0.86 0.008 80);          /* hairline rules */
+  /* Brand palette — see BRAND.md §9 */
+  --navy-deep: #0E1E36;       /* primary dark grounds */
+  --navy: #15233D;            /* slightly lifted navy / heading ink */
+  --ink: #15233D;             /* headings */
+  --gilt: #C8A24A;            /* single accent: gold, used sparingly */
+  --azure: #2E6FB0;           /* secondary / links */
+  --paper: #FAFBFD;           /* light backgrounds */
+  --slate: #1F2838;           /* body text */
+  --muted-ink: #5C6675;       /* secondary text */
+  --hairline: #DBE1EA;        /* dividers */
+  --stone: #F1F3F7;           /* warm light surface */
+  /* Legacy alias retained for old utilities */
+  --emerald: var(--gilt);
+  --rule: var(--hairline);
 
   --background: var(--paper);
-  --foreground: oklch(0.18 0.04 264);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 264);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 264);
+  --foreground: var(--slate);
+  --card: #FFFFFF;
+  --card-foreground: var(--slate);
+  --popover: #FFFFFF;
+  --popover-foreground: var(--slate);
   --primary: var(--navy-deep);
   --primary-foreground: var(--paper);
   --secondary: var(--stone);
   --secondary-foreground: var(--navy-deep);
   --muted: var(--stone);
-  --muted-foreground: oklch(0.40 0.025 264);
-  --accent: var(--emerald);
-  --accent-foreground: var(--paper);
+  --muted-foreground: var(--muted-ink);
+  --accent: var(--gilt);
+  --accent-foreground: var(--navy-deep);
   --destructive: oklch(0.50 0.22 27);
   --destructive-foreground: var(--paper);
-  --border: var(--rule);
-  --input: var(--rule);
+  --border: var(--hairline);
+  --input: var(--hairline);
   --ring: var(--navy);
 }
 
