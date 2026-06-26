@@ -264,6 +264,31 @@ function NavDropdown({ group }: { group: NavGroup }) {
   );
 }
 
+function NavItem({
+  to,
+  onClick,
+  className,
+  children,
+}: {
+  to: string;
+  onClick?: () => void;
+  className?: string;
+  children: ReactNode;
+}) {
+  if (to.includes("?") || to.startsWith("http")) {
+    return (
+      <a href={to} onClick={onClick} className={className}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link to={to} onClick={onClick} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 function SiteFooter() {
   const year = new Date().getFullYear();
   return (
