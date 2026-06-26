@@ -284,6 +284,75 @@ export type Database = {
         }
         Relationships: []
       }
+      employer_applications: {
+        Row: {
+          acknowledged_terms: boolean
+          admin_notes: string | null
+          contact_full_name: string
+          contact_linkedin: string
+          contact_phone: string | null
+          contact_title: string
+          contact_work_email: string
+          created_at: string
+          hiring_roles: string
+          hiring_timeline: string | null
+          hq_country: string
+          id: string
+          organization_name: string
+          organization_type: string
+          organization_website: string
+          references_text: string | null
+          status: string
+          target_hires: number | null
+          updated_at: string
+          why_us: string
+        }
+        Insert: {
+          acknowledged_terms?: boolean
+          admin_notes?: string | null
+          contact_full_name: string
+          contact_linkedin: string
+          contact_phone?: string | null
+          contact_title: string
+          contact_work_email: string
+          created_at?: string
+          hiring_roles: string
+          hiring_timeline?: string | null
+          hq_country: string
+          id?: string
+          organization_name: string
+          organization_type: string
+          organization_website: string
+          references_text?: string | null
+          status?: string
+          target_hires?: number | null
+          updated_at?: string
+          why_us: string
+        }
+        Update: {
+          acknowledged_terms?: boolean
+          admin_notes?: string | null
+          contact_full_name?: string
+          contact_linkedin?: string
+          contact_phone?: string | null
+          contact_title?: string
+          contact_work_email?: string
+          created_at?: string
+          hiring_roles?: string
+          hiring_timeline?: string | null
+          hq_country?: string
+          id?: string
+          organization_name?: string
+          organization_type?: string
+          organization_website?: string
+          references_text?: string | null
+          status?: string
+          target_hires?: number | null
+          updated_at?: string
+          why_us?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
