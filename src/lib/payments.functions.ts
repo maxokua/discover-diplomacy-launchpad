@@ -254,9 +254,20 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         allow_promotion_codes: true,
-        metadata: { userId: context.userId, tier: data.tier },
-        subscription_data: { metadata: { userId: context.userId, tier: data.tier } },
-      });
+        metadata: {
+          userId: context.userId,
+          tier: data.tier,
+          cadence: data.cadence,
+        },
+        subscription_data: {
+          metadata: {
+            userId: context.userId,
+            tier: data.tier,
+            cadence: data.cadence,
+          },
+        },
+        managed_payments: { enabled: true },
+      } as any);
 
       return { clientSecret: session.client_secret ?? "" };
     } catch (error) {
