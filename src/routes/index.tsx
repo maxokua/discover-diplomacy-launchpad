@@ -13,30 +13,24 @@ import americanUniversityLogo from "@/assets/american-university-logo.png.asset.
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Discover Diplomacy — Careers in Global Affairs" },
+      { title: "Discover Diplomacy — Talent Infrastructure for Global Careers" },
       {
         name: "description",
         content:
-          "Career advisory for students and early-career professionals pursuing diplomacy, international policy, multilateral institutions, and global business.",
+          "Discover the opportunities. Prepare the materials. Open the doors. Get hired. A curated directory, instant expert-designed application help, vetted insider coaches, and direct access to employers — built for international careers.",
       },
-      { property: "og:title", content: "Discover Diplomacy — Careers in Global Affairs" },
+      { property: "og:title", content: "Discover Diplomacy — Talent Infrastructure for Global Careers" },
       {
         property: "og:description",
         content:
-          "Helping the next generation discover what they want to do in international affairs and global business, and how to land those roles.",
+          "Turn ambition into offers in diplomacy, multilaterals, global policy, and international business.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/" },
-      { name: "twitter:title", content: "Discover Diplomacy | Career Advisory" },
-      { name: "twitter:description", content: "Career coaching for students and early-career professionals in diplomacy, policy, and global business." },
+      { name: "twitter:title", content: "Discover Diplomacy — Talent Infrastructure for Global Careers" },
+      { name: "twitter:description", content: "Curated opportunities, expert-designed prep, vetted coaches, and direct employer access." },
     ],
     links: [
       { rel: "canonical", href: "https://discoverdiplomacy.org/" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600;700&display=swap",
-      },
     ],
     scripts: [
       {
@@ -46,10 +40,10 @@ export const Route = createFileRoute("/")({
           "@type": "ProfessionalService",
           name: "Discover Diplomacy",
           url: "https://discoverdiplomacy.org",
-          description: "Career advisory for students and early-career professionals pursuing diplomacy, international policy, multilateral institutions, and global business.",
+          description: BRAND.positioning,
           areaServed: "Worldwide",
           address: { "@type": "PostalAddress", addressLocality: "Washington", addressRegion: "DC", addressCountry: "US" },
-          serviceType: ["Career coaching", "Resume review", "Interview preparation", "Career membership"],
+          serviceType: ["Opportunity directory", "Resume review", "Career coaching", "Interview preparation", "Employer access"],
         }),
       },
     ],
@@ -61,7 +55,9 @@ function HomePage() {
   return (
     <SiteLayout>
       <Hero />
+      <Traction />
       <BackedBy />
+      <Pillars />
       <Practice />
       <Engagement />
       <ForEmployers />
