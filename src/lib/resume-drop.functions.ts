@@ -302,19 +302,19 @@ export const requestEmployerAccess = createServerFn({ method: "POST" })
 
 // ============ PLACEMENT FEES (public) ============
 export const getPlacementFees = createServerFn({ method: "GET" }).handler(async () => {
-  const { createClient } = await import("@supabase/supabase-js");
-  const c = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
-    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-  });
-  const { data } = await c.from("placement_fee_config").select("*").maybeSingle();
-  return {
-    fees: data ?? {
-      alacarte_fee_cents: 120000,
-      alacarte_credits_back: 3,
-      starter_fee_cents: 70000,
-      starter_credits_back: 4,
-      professional_fee_cents: 50000,
-      professional_credits_back: 5,
-    },
+  const defaults = {
+    alacarte_fee_cents: 120000,
+    alacarte_credits_back: 3,
+    starter_fee_cents: 70000,
+    starter_credits_back: 4,
+    professional_fee_cents: 50000,
+    professional_credits_back: 5,
   };
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin.from("placement_fee_config").select("*").maybeSingle();
+    return { fees: data ?? defaults };
+  } catch {
+    return { fees: defaults };
+  }
 });
