@@ -248,13 +248,13 @@ function NavDropdown({ group }: { group: NavGroup }) {
           <ul className="py-2">
             {group.links.map((l, i) => (
               <li key={`${l.to}-${i}`}>
-                <Link
+                <NavItem
                   to={l.to}
                   onClick={() => setOpen(false)}
                   className="block px-4 py-2 text-sm text-navy-deep hover:bg-stone"
                 >
                   {l.label}
-                </Link>
+                </NavItem>
               </li>
             ))}
           </ul>
