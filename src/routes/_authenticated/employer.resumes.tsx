@@ -6,7 +6,9 @@ import {
   employerListResumes,
   employerGetResumeUrl,
   myPortalRoles,
+  getEmployerCreditBalance,
 } from "@/lib/payments.functions";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export const Route = createFileRoute("/_authenticated/employer/resumes")({
   head: () => ({
@@ -28,10 +30,21 @@ type Resume = {
 
 function EmployerResumesPage() {
   const [allowed, setAllowed] = useState<null | boolean>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [rows, setRows] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [balance, setBalance] = useState<number | null>(null);
+
+  async function refreshBalance() {
+    try {
+      const b = await getEmployerCreditBalance();
+      setBalance(b.balance);
+    } catch {
+      /* ignore */
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -42,7 +55,8 @@ function EmployerResumesPage() {
           return;
         }
         setAllowed(true);
-        const result = await employerListResumes();
+        setIsAdmin(!!roles.admin);
+        const [result] = await Promise.all([employerListResumes(), refreshBalance()]);
         if ("error" in result) toast.error(result.error);
         else setRows(result.resumes as Resume[]);
       } catch {
@@ -56,15 +70,26 @@ function EmployerResumesPage() {
   async function openResume(id: string) {
     setBusyId(id);
     try {
-      const r = await employerGetResumeUrl({ data: { reviewId: id } });
-      if ("error" in r) throw new Error(r.error);
+      const r = await employerGetResumeUrl({
+        data: { reviewId: id, environment: getStripeEnvironment() },
+      });
+      if ("error" in r) {
+        if ("needsCredits" in r && r.needsCredits) {
+          toast.error("Out of credits. Buy more to unlock this candidate.");
+        } else {
+          throw new Error(r.error);
+        }
+        return;
+      }
       window.open(r.url, "_blank", "noopener,noreferrer");
+      refreshBalance();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't open resume");
     } finally {
       setBusyId(null);
     }
   }
+
 
   if (allowed === null) {
     return (
