@@ -27,7 +27,9 @@ import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as GuideInternationalRelationsJobsRequirementsRouteImport } from './routes/guide.international-relations-jobs-requirements'
+import { Route as EmployersApplyRouteImport } from './routes/employers.apply'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
 import { Route as AuthenticatedEmployerRouteImport } from './routes/_authenticated/employer'
@@ -143,12 +145,22 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesIndexRoute = CoachesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CoachesRoute,
+} as any)
 const GuideInternationalRelationsJobsRequirementsRoute =
   GuideInternationalRelationsJobsRequirementsRouteImport.update({
     id: '/guide/international-relations-jobs-requirements',
     path: '/guide/international-relations-jobs-requirements',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EmployersApplyRoute = EmployersApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => EmployersRoute,
+} as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -299,7 +311,7 @@ export interface FileRoutesByFullPath {
   '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
-  '/employers': typeof EmployersRoute
+  '/employers': typeof EmployersRouteWithChildren
   '/membership': typeof MembershipRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -314,7 +326,9 @@ export interface FileRoutesByFullPath {
   '/employer': typeof AuthenticatedEmployerRouteWithChildren
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/employers/apply': typeof EmployersApplyRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
+  '/coaches/': typeof CoachesIndexRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -341,10 +355,9 @@ export interface FileRoutesByTo {
   '/accessibility': typeof AccessibilityRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
-  '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
-  '/employers': typeof EmployersRoute
+  '/employers': typeof EmployersRouteWithChildren
   '/membership': typeof MembershipRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -356,7 +369,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/employers/apply': typeof EmployersApplyRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
+  '/coaches': typeof CoachesIndexRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -388,7 +403,7 @@ export interface FileRoutesById {
   '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
-  '/employers': typeof EmployersRoute
+  '/employers': typeof EmployersRouteWithChildren
   '/membership': typeof MembershipRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -403,7 +418,9 @@ export interface FileRoutesById {
   '/_authenticated/employer': typeof AuthenticatedEmployerRouteWithChildren
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/employers/apply': typeof EmployersApplyRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
+  '/coaches/': typeof CoachesIndexRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -450,7 +467,9 @@ export interface FileRouteTypes {
     | '/employer'
     | '/coaches/apply'
     | '/email/unsubscribe'
+    | '/employers/apply'
     | '/guide/international-relations-jobs-requirements'
+    | '/coaches/'
     | '/admin/reviews'
     | '/admin/users'
     | '/coach/clients'
@@ -477,7 +496,6 @@ export interface FileRouteTypes {
     | '/accessibility'
     | '/assessment'
     | '/auth'
-    | '/coaches'
     | '/contact'
     | '/directory'
     | '/employers'
@@ -492,7 +510,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/coaches/apply'
     | '/email/unsubscribe'
+    | '/employers/apply'
     | '/guide/international-relations-jobs-requirements'
+    | '/coaches'
     | '/admin/reviews'
     | '/admin/users'
     | '/coach/clients'
@@ -538,7 +558,9 @@ export interface FileRouteTypes {
     | '/_authenticated/employer'
     | '/coaches/apply'
     | '/email/unsubscribe'
+    | '/employers/apply'
     | '/guide/international-relations-jobs-requirements'
+    | '/coaches/'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/users'
     | '/_authenticated/coach/clients'
@@ -570,7 +592,7 @@ export interface RootRouteChildren {
   CoachesRoute: typeof CoachesRouteWithChildren
   ContactRoute: typeof ContactRoute
   DirectoryRoute: typeof DirectoryRoute
-  EmployersRoute: typeof EmployersRoute
+  EmployersRoute: typeof EmployersRouteWithChildren
   MembershipRoute: typeof MembershipRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -716,12 +738,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/': {
+      id: '/coaches/'
+      path: '/'
+      fullPath: '/coaches/'
+      preLoaderRoute: typeof CoachesIndexRouteImport
+      parentRoute: typeof CoachesRoute
+    }
     '/guide/international-relations-jobs-requirements': {
       id: '/guide/international-relations-jobs-requirements'
       path: '/guide/international-relations-jobs-requirements'
       fullPath: '/guide/international-relations-jobs-requirements'
       preLoaderRoute: typeof GuideInternationalRelationsJobsRequirementsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/employers/apply': {
+      id: '/employers/apply'
+      path: '/apply'
+      fullPath: '/employers/apply'
+      preLoaderRoute: typeof EmployersApplyRouteImport
+      parentRoute: typeof EmployersRoute
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -979,14 +1015,28 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface CoachesRouteChildren {
   CoachesApplyRoute: typeof CoachesApplyRoute
+  CoachesIndexRoute: typeof CoachesIndexRoute
 }
 
 const CoachesRouteChildren: CoachesRouteChildren = {
   CoachesApplyRoute: CoachesApplyRoute,
+  CoachesIndexRoute: CoachesIndexRoute,
 }
 
 const CoachesRouteWithChildren =
   CoachesRoute._addFileChildren(CoachesRouteChildren)
+
+interface EmployersRouteChildren {
+  EmployersApplyRoute: typeof EmployersApplyRoute
+}
+
+const EmployersRouteChildren: EmployersRouteChildren = {
+  EmployersApplyRoute: EmployersApplyRoute,
+}
+
+const EmployersRouteWithChildren = EmployersRoute._addFileChildren(
+  EmployersRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -998,7 +1048,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesRoute: CoachesRouteWithChildren,
   ContactRoute: ContactRoute,
   DirectoryRoute: DirectoryRoute,
-  EmployersRoute: EmployersRoute,
+  EmployersRoute: EmployersRouteWithChildren,
   MembershipRoute: MembershipRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,

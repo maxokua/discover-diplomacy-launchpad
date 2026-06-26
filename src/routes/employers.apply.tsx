@@ -94,8 +94,8 @@ const schema = z.object({
   hiring_timeline: z.string().min(1, "Select a timeline"),
   why_us: z.string().trim().min(10).max(5000),
   references_text: z.string().trim().max(3000).optional().or(z.literal("")),
-  acknowledged_terms: z.literal(true, {
-    errorMap: () => ({ message: "You must agree to the terms" }),
+  acknowledged_terms: z.boolean().refine((v) => v === true, {
+    message: "You must agree to the terms",
   }),
 });
 
