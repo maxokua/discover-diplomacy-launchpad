@@ -143,6 +143,42 @@ function EmployerResumesPage() {
             with the candidate's name.
           </p>
 
+          {!isAdmin && (
+            <div className="mt-8 grid gap-4 border border-border bg-cream/30 p-6 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <div className="eyebrow">Unlock credits</div>
+                <div className="mt-2 font-display text-2xl text-navy-deep">
+                  Balance:{" "}
+                  <span className="text-emerald">
+                    {balance === null ? "…" : balance}
+                  </span>{" "}
+                  credit{balance === 1 ? "" : "s"}
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Each unique candidate unlock costs 1 credit. Re-opening a resume you've
+                  already unlocked is free.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  to="/employer/credits/checkout"
+                  search={{ pack: "single" }}
+                  className="border border-navy-deep px-4 py-2 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-navy-deep hover:text-paper"
+                >
+                  Buy 1 · $18
+                </Link>
+                <Link
+                  to="/employer/credits/checkout"
+                  search={{ pack: "pack20" }}
+                  className="border border-navy-deep bg-navy-deep px-4 py-2 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                >
+                  Buy 20-pack · $300
+                </Link>
+              </div>
+            </div>
+          )}
+
+
           <div className="mt-8">
             <input
               value={query}
