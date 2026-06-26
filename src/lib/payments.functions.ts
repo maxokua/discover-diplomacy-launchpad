@@ -76,7 +76,7 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
         typeof stripePrice.product === "string"
           ? stripePrice.product
           : stripePrice.product?.id;
-      if (productId) await ensureProductTaxCode(stripe, productId, "txcd_20030000");
+      if (productId) await ensureProductTaxCode(stripe, productId, "txcd_10000000");
 
       const email = (context.claims as { email?: string } | undefined)?.email;
       const customerId = await resolveOrCreateCustomer(stripe, {
