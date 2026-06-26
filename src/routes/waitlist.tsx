@@ -53,7 +53,7 @@ function WaitlistPage() {
         })
         .parse({ email, note });
 
-      const { error } = await supabase.from("waitlist").insert({
+      const { error } = await (supabase.from("waitlist" as never) as any).insert({
         email: parsed.email,
         interest: interest ?? null,
         note: parsed.note || null,
