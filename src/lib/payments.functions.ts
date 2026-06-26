@@ -72,6 +72,12 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
       if (!prices.data.length) throw new Error("Price not configured");
       const stripePrice = prices.data[0];
 
+      const productId =
+        typeof stripePrice.product === "string"
+          ? stripePrice.product
+          : stripePrice.product?.id;
+      if (productId) await ensureProductTaxCode(stripe, productId, "txcd_20030000");
+
       const email = (context.claims as { email?: string } | undefined)?.email;
       const customerId = await resolveOrCreateCustomer(stripe, {
         email,
@@ -86,8 +92,8 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
         customer: customerId,
         payment_intent_data: { description: "Expert Resume Review" },
         metadata: { userId: context.userId, reviewId: data.reviewId },
-        automatic_tax: { enabled: true },
-      });
+        managed_payments: { enabled: true },
+      } as any);
 
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await supabaseAdmin
