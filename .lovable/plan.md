@@ -1,53 +1,70 @@
+## Decisions locked in
+- **Compass stays $20/mo.** I'll use $20 everywhere the prompt says $35 — the rest of the messaging stays as you wrote it.
+- **Ship in one pass.** All 10 deliverables this turn.
+- **Rename routes with redirects:** `/services` → `/pricing`, `/coaches` → `/for-coaches`, `/employers` → `/for-employers`. Old URLs redirect via thin route files so existing links/SEO don't break.
+- **Create employer Stripe tiers:** Starter $30/mo, Professional $100/mo, à la carte unlock $18 one-time. Free tier = no Stripe product.
 
-## What you'll get
+## What I'll build
 
-### Candidate side (members)
-- **First-login modal** (`ResumeDropIntroModal`): full-screen overlay shown once after a member signs up, with the "Get discovered" copy and two CTAs. Dismissal is tracked so it doesn't re-show.
-- **Org selection component** (`OrgSelector`): "All orgs" vs "Cherry-pick" radio; cherry-pick reveals a searchable, category-filtered, paginated list of verified orgs from the `organizations` table. (Table seeded empty; admins add orgs.) Saves to `member_resume_drop`.
-- **Dashboard card** on `/dashboard` showing: discoverable status, # orgs that can see them, unlocks this month, intros received, "Edit who can see me", "Opt out" buttons, and an expandable "How does this work if I get hired?" explainer.
-- **Opt-out confirmation modal**.
-- **In-app notification** ("[Company] unlocked your profile") via a `notifications` table + a small bell/list on the dashboard.
+### 1. Navigation (`src/components/site-layout.tsx`)
+Header: Logo · **For Candidates ▾** (Compass, Envoy, Coach Directory, Resume Drop, Free Assessment, Sign In) · **For Universities ▾** (Program, Demo) · **For Employers ▾** (Browse, Pricing, Demo) · **For Coaches ▾** (Apply, Directory) · About · Contact.
+Mobile: accordion sections mirroring the dropdowns.
+Footer: 5 columns (Candidates / Universities / Employers / Coaches / Company) + social row.
 
-### Employer side
-- **`/employers/resume-drop`** product page with hero, How It Works, pricing table (Free / Starter $30 / Pro $100 / À la carte), placement-fee table, benefits, feature grid, traction, FAQ accordion, final CTA, sample profile cards.
-- **`/employers/sample-profiles`** page rendering three anonymized but realistic candidate cards (blurred photo, redacted name, role tags, languages, location, "Member (unlockable)" badge).
-- **Request-access form** that writes to existing `employer_applications` (extended with a `source` field) and triggers an internal email notification.
-- Link from `/employers` → `/employers/resume-drop`.
+### 2. Homepage (`src/routes/index.tsx`)
+- New hero: "Discover the opportunities. Prepare the materials. Get hired. Fast." + subhead + 3 CTAs (Start with Compass · See Envoy + Coaching · For universities).
+- **Three paths** section: Compass / Envoy / Universities cards (prompt copy, $20 not $35).
+- **Built for international careers** section: Clarity / Preparation / Access cards.
+- **Social proof** with the new numbers (X placements left as `—` for you to fill, won't fabricate).
+- Pre-footer university callout.
 
-### Admin
-- **`/admin/organizations`** simple CRUD page to add/edit/verify orgs (name, category, logo URL, verification_status). Admin-only via existing `has_role` RBAC.
+### 3. Pricing page (`src/routes/pricing.tsx` — new, replaces /services)
+Three-tab layout (Individuals / Universities / Employers):
+- **Individuals:** keep existing Compass vs Envoy comparison, annual toggle, FAQ.
+- **Universities:** pull in the universities-page pricing block.
+- **Employers:** Free / Starter $30 / Pro $100 / $18 à la carte, with placement fee note.
+Old `/services` becomes a 1-line redirect → `/pricing`.
 
-### Data model (new tables, all with RLS + GRANTs)
-- `organizations` — id, name, slug, category (enum: government / ngo / think_tank / multilateral / company / foundation), logo_url, verification_status, timestamps. Public SELECT for verified rows; admin-only writes.
-- `member_resume_drop` — user_id PK, status (`opted_in` / `opted_out`), visibility (`all` / `selected`), seen_intro_at, timestamps. Member-scoped RLS.
-- `member_resume_drop_orgs` — (user_id, org_id) join table for cherry-pick. Member-scoped RLS.
-- `resume_unlocks` — id, member_id, employer_user_id, org_id, credits_used, unlocked_at. Member can read own; employer can read own; admin all.
-- `employer_intros` — id, unlock_id, member_id, employer_user_id, message, status, created_at. Same scoping.
-- `notifications` — id, user_id, kind, title, body, link, read_at, created_at. Owner-scoped.
-- `placement_fee_config` — single-row config table: alacarte/starter/pro fees + credits-back. Public SELECT, admin write. (Lets you change fees without code.)
+### 4. `/for-coaches` (new, replaces /coaches/index)
+Existing content + clearer "Coaches earn a share of bookings. Apply to join." + visible link into the coach directory. `/coaches` → redirect.
 
-Stats on the dashboard card pull from `resume_unlocks` and `employer_intros` filtered to the current user.
+### 5. `/for-employers` (new, replaces /employers)
+Existing content + Resume Drop section + tier clarification (Free=browse public, Starter/Pro=unlock Member Pool) + placement-fee block. `/employers` → redirect.
 
-### Server functions (`createServerFn`, all auth-gated via `requireSupabaseAuth`)
-- `getResumeDropStatus` — returns opt-in state, visibility, selected org ids, stats.
-- `optInToResumeDrop({ visibility, orgIds })`, `optOutOfResumeDrop()`, `updateResumeDropOrgs({ visibility, orgIds })`.
-- `listOrganizations({ search, category, cursor })` — paginated.
-- `listMyNotifications`, `markNotificationRead`.
-- Admin: `adminUpsertOrganization`, `adminDeleteOrganization`, `adminUpdatePlacementFees` — gated with `has_role(_,'admin')`.
-- Public: `requestEmployerAccess({ ... })` writes to `employer_applications` (source=`resume_drop`).
+### 6. `/about`
+Add audiences paragraph + "talent infrastructure layer" line. Light touch — preserve existing story.
 
-### Voice & visuals
-Copy follows BRAND.md (no "AI/sell your profile/algorithm"; uses "discoverable", "unlock", "verified organizations", "placement fee"). Uses existing Navy + Gilt tokens, Fraunces for headings, Inter for body. No purple/indigo gradients.
+### 7. Stripe employer tiers
+Create products: `employer_starter` ($30/mo), `employer_professional` ($100/mo), `employer_unlock_credit` ($18 one-time, quantity 1–100). Wire into the Employers tab.
 
-## Out of scope (this build)
-- Actual Stripe credit-purchase / subscription billing for employers, automated email delivery of intros, and the placement-fee invoicing flow — the UI, tables, and configuration are in place; payment wiring follows the same pattern we already use for Compass/Envoy and can be added after the schema is approved.
-- A live "2,500+ members" counter — shown as a real count from the DB, will read 0 until members opt in.
+### 8. Email templates (`src/lib/email-templates/`)
+Four React Email templates + registry entries:
+- `compass-welcome` — post-signup
+- `compass-upsell-30day` — low engagement nudge to Envoy
+- `university-cohort-monthly` — director report
+- `employer-first-unlock` — post-unlock guidance
+No sender wiring this turn (those triggers depend on data we haven't built); templates ship registered and previewable.
 
-## Technical notes
+### 9. Messaging guide (`MESSAGING.md`)
+Internal doc: old → new phrasing table, tier vocabulary, audience tone rules.
 
-- Files added under `src/routes/_authenticated/` for member/admin pages; `src/routes/employers.resume-drop.tsx` + `src/routes/employers.sample-profiles.tsx` for public pages.
-- Components under `src/components/resume-drop/`.
-- Server fns under `src/lib/resume-drop.functions.ts` and `src/lib/organizations.functions.ts`.
-- All new public-schema tables follow the required `CREATE → GRANT → RLS → POLICY` order.
-- Sample profile photos use CSS blur on a placeholder gradient (no fake faces, no stock photos misrepresenting real people).
-- The intro modal "seen" state is stored on `member_resume_drop` (`seen_intro_at`), not localStorage, so it persists across devices.
+### 10. Global terminology pass
+Targeted ripgrep + replace across routes/components for:
+- "membership" (in candidate context) → "Compass" or "Compass or Envoy"
+- "platform" / "advisory practice" → "international career platform"
+- "$35" (residual) → "$20"
+- "Start a Membership" → "Start with Compass"
+Skip auto-generated files, types, migrations, and email-infra code.
+
+## What I'm NOT doing
+- Not changing `/membership` checkout flow — it already points to Compass/Envoy.
+- Not wiring email triggers (templates registered, send call sites later when each event source exists).
+- Not fabricating a placement count for social proof — leaving an editable placeholder.
+- Not touching authenticated dashboards' copy beyond what's already correct.
+
+## Verification
+- `tsgo` typecheck after writes.
+- Spot-check homepage, /pricing tabs, /for-coaches, /for-employers, /universities in preview.
+- Confirm old URLs redirect.
+
+Estimated: ~25–30 file writes. One pass, no follow-up questions.
