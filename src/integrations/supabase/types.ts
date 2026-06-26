@@ -302,6 +302,7 @@ export type Database = {
           organization_type: string
           organization_website: string
           references_text: string | null
+          source: string
           status: string
           target_hires: number | null
           updated_at: string
@@ -324,6 +325,7 @@ export type Database = {
           organization_type: string
           organization_website: string
           references_text?: string | null
+          source?: string
           status?: string
           target_hires?: number | null
           updated_at?: string
@@ -346,10 +348,210 @@ export type Database = {
           organization_type?: string
           organization_website?: string
           references_text?: string | null
+          source?: string
           status?: string
           target_hires?: number | null
           updated_at?: string
           why_us?: string
+        }
+        Relationships: []
+      }
+      employer_intros: {
+        Row: {
+          created_at: string
+          employer_user_id: string
+          id: string
+          member_id: string
+          message: string | null
+          status: string
+          unlock_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          employer_user_id: string
+          id?: string
+          member_id: string
+          message?: string | null
+          status?: string
+          unlock_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          employer_user_id?: string
+          id?: string
+          member_id?: string
+          message?: string | null
+          status?: string
+          unlock_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employer_intros_unlock_id_fkey"
+            columns: ["unlock_id"]
+            isOneToOne: false
+            referencedRelation: "resume_unlocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      member_resume_drop: {
+        Row: {
+          created_at: string
+          opted_in_at: string | null
+          opted_out_at: string | null
+          seen_intro_at: string | null
+          status: Database["public"]["Enums"]["resume_drop_status"]
+          updated_at: string
+          user_id: string
+          visibility: Database["public"]["Enums"]["resume_drop_visibility"]
+        }
+        Insert: {
+          created_at?: string
+          opted_in_at?: string | null
+          opted_out_at?: string | null
+          seen_intro_at?: string | null
+          status?: Database["public"]["Enums"]["resume_drop_status"]
+          updated_at?: string
+          user_id: string
+          visibility?: Database["public"]["Enums"]["resume_drop_visibility"]
+        }
+        Update: {
+          created_at?: string
+          opted_in_at?: string | null
+          opted_out_at?: string | null
+          seen_intro_at?: string | null
+          status?: Database["public"]["Enums"]["resume_drop_status"]
+          updated_at?: string
+          user_id?: string
+          visibility?: Database["public"]["Enums"]["resume_drop_visibility"]
+        }
+        Relationships: []
+      }
+      member_resume_drop_orgs: {
+        Row: {
+          created_at: string
+          org_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          org_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          org_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_resume_drop_orgs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          kind: string
+          link: string | null
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      organizations: {
+        Row: {
+          category: Database["public"]["Enums"]["org_category"]
+          created_at: string
+          id: string
+          logo_url: string | null
+          name: string
+          slug: string
+          updated_at: string
+          verification_status: Database["public"]["Enums"]["org_verification_status"]
+          website: string | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["org_category"]
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string
+          verification_status?: Database["public"]["Enums"]["org_verification_status"]
+          website?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["org_category"]
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string
+          verification_status?: Database["public"]["Enums"]["org_verification_status"]
+          website?: string | null
+        }
+        Relationships: []
+      }
+      placement_fee_config: {
+        Row: {
+          alacarte_credits_back: number
+          alacarte_fee_cents: number
+          id: boolean
+          professional_credits_back: number
+          professional_fee_cents: number
+          starter_credits_back: number
+          starter_fee_cents: number
+          updated_at: string
+        }
+        Insert: {
+          alacarte_credits_back?: number
+          alacarte_fee_cents?: number
+          id?: boolean
+          professional_credits_back?: number
+          professional_fee_cents?: number
+          starter_credits_back?: number
+          starter_fee_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          alacarte_credits_back?: number
+          alacarte_fee_cents?: number
+          id?: boolean
+          professional_credits_back?: number
+          professional_fee_cents?: number
+          starter_credits_back?: number
+          starter_fee_cents?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -495,6 +697,44 @@ export type Database = {
           visible_to_employers?: boolean
         }
         Relationships: []
+      }
+      resume_unlocks: {
+        Row: {
+          created_at: string
+          credits_used: number
+          employer_user_id: string
+          id: string
+          member_id: string
+          org_id: string | null
+          unlocked_at: string
+        }
+        Insert: {
+          created_at?: string
+          credits_used?: number
+          employer_user_id: string
+          id?: string
+          member_id: string
+          org_id?: string | null
+          unlocked_at?: string
+        }
+        Update: {
+          created_at?: string
+          credits_used?: number
+          employer_user_id?: string
+          id?: string
+          member_id?: string
+          org_id?: string | null
+          unlocked_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resume_unlocks_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       resumes: {
         Row: {
@@ -711,6 +951,17 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "coach" | "employer" | "member"
+      org_category:
+        | "government"
+        | "ngo"
+        | "think_tank"
+        | "multilateral"
+        | "company"
+        | "foundation"
+        | "other"
+      org_verification_status: "pending" | "verified" | "rejected"
+      resume_drop_status: "opted_in" | "opted_out"
+      resume_drop_visibility: "all" | "selected"
       review_status:
         | "pending_payment"
         | "paid"
@@ -845,6 +1096,18 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user", "coach", "employer", "member"],
+      org_category: [
+        "government",
+        "ngo",
+        "think_tank",
+        "multilateral",
+        "company",
+        "foundation",
+        "other",
+      ],
+      org_verification_status: ["pending", "verified", "rejected"],
+      resume_drop_status: ["opted_in", "opted_out"],
+      resume_drop_visibility: ["all", "selected"],
       review_status: [
         "pending_payment",
         "paid",
