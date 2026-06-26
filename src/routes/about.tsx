@@ -163,11 +163,12 @@ function AboutPage() {
               Built on a real audience, not a deck.
             </h2>
           </Reveal>
-          <ul className="mt-10 grid gap-px border border-border bg-border md:grid-cols-3">
+          <ul className="mt-10 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
             {[
               { v: TRACTION.peopleReached, l: "People reached through the directory and digest" },
               { v: TRACTION.directoryViews, l: "Views on our curated opportunity directory" },
               { v: TRACTION.weeklyOpportunities, l: "Global opportunities curated every week" },
+              { v: "75+", l: "Countries reached" },
             ].map((s, i) => (
               <Reveal key={s.l} delay={i * 80} className="bg-paper p-8">
                 <div className="font-display text-4xl text-navy-deep lg:text-5xl">{s.v}</div>
