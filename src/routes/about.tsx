@@ -13,7 +13,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Discover Diplomacy is the talent infrastructure layer for internationally-focused careers — combining a curated opportunity directory, instant expert-designed application help, vetted insider coaches, and direct access to employers.",
+          "Discover Diplomacy is the platform for global careers — a directory of opportunities, instant application help, vetted coaches, and direct access to verified employers.",
       },
       { property: "og:title", content: "About | Discover Diplomacy" },
       {
@@ -38,7 +38,7 @@ function AboutPage() {
           <Reveal>
             <div className="eyebrow">About the Platform</div>
             <h1 className="mt-5 max-w-4xl font-display text-4xl text-navy-deep lg:text-6xl">
-              The talent infrastructure layer for internationally-focused careers.
+              Discover Diplomacy for global careers.
             </h1>
             <p className="mt-7 max-w-3xl text-lg leading-relaxed text-muted-foreground">
               International careers — diplomacy, multilaterals, global policy, international
@@ -46,9 +46,8 @@ function AboutPage() {
               who-you-know. Discover Diplomacy is the platform that turns ambition into offers.
             </p>
             <p className="mt-5 max-w-3xl text-base leading-relaxed text-navy-deep/85">
-              We're building the talent infrastructure layer for international careers. Four
-              audiences, one mission: get serious people into roles they love — candidates,
-              universities, employers, and the coaches who mentor them.
+              Four audiences, one mission: get serious people into roles they love —
+              candidates, universities, employers, and the coaches who mentor them.
             </p>
           </Reveal>
 

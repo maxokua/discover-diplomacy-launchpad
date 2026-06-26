@@ -15,6 +15,7 @@ import { Route as UniversitiesRouteImport } from './routes/universities'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ResumeDropRouteImport } from './routes/resume-drop'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -38,6 +39,7 @@ import { Route as EmployersApplyRouteImport } from './routes/employers.apply'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
 import { Route as AuthenticatedUniversityRouteImport } from './routes/_authenticated/university'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedEmployerRouteImport } from './routes/_authenticated/employer'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
@@ -54,6 +56,7 @@ import { Route as AuthenticatedResumeAnalysesAnalysisIdRouteImport } from './rou
 import { Route as AuthenticatedMembershipReturnRouteImport } from './routes/_authenticated/membership.return'
 import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_authenticated/membership.checkout'
 import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_authenticated/employer.resumes'
+import { Route as AuthenticatedEmployerBrowseRouteImport } from './routes/_authenticated/employer.browse'
 import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminUniversitiesRouteImport } from './routes/_authenticated/admin.universities'
@@ -94,6 +97,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeDropRoute = ResumeDropRouteImport.update({
+  id: '/resume-drop',
+  path: '/resume-drop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -211,6 +219,11 @@ const AuthenticatedUniversityRoute = AuthenticatedUniversityRouteImport.update({
   path: '/university',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEmployerRoute = AuthenticatedEmployerRouteImport.update({
   id: '/employer',
   path: '/employer',
@@ -300,6 +313,12 @@ const AuthenticatedEmployerResumesRoute =
     path: '/resumes',
     getParentRoute: () => AuthenticatedEmployerRoute,
   } as any)
+const AuthenticatedEmployerBrowseRoute =
+  AuthenticatedEmployerBrowseRouteImport.update({
+    id: '/browse',
+    path: '/browse',
+    getParentRoute: () => AuthenticatedEmployerRoute,
+  } as any)
 const AuthenticatedCoachClientsRoute =
   AuthenticatedCoachClientsRouteImport.update({
     id: '/clients',
@@ -381,6 +400,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-drop': typeof ResumeDropRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -391,6 +411,7 @@ export interface FileRoutesByFullPath {
   '/coach': typeof AuthenticatedCoachRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/employer': typeof AuthenticatedEmployerRouteWithChildren
+  '/profile': typeof AuthenticatedProfileRoute
   '/university': typeof AuthenticatedUniversityRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -404,6 +425,7 @@ export interface FileRoutesByFullPath {
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
@@ -437,6 +459,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-drop': typeof ResumeDropRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -444,6 +467,7 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/university': typeof AuthenticatedUniversityRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -457,6 +481,7 @@ export interface FileRoutesByTo {
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
@@ -493,6 +518,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-drop': typeof ResumeDropRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -503,6 +529,7 @@ export interface FileRoutesById {
   '/_authenticated/coach': typeof AuthenticatedCoachRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/employer': typeof AuthenticatedEmployerRouteWithChildren
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/university': typeof AuthenticatedUniversityRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -516,6 +543,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/_authenticated/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/_authenticated/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/_authenticated/membership/return': typeof AuthenticatedMembershipReturnRoute
@@ -552,6 +580,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/reset-password'
+    | '/resume-drop'
     | '/services'
     | '/sitemap.xml'
     | '/terms'
@@ -562,6 +591,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/dashboard'
     | '/employer'
+    | '/profile'
     | '/university'
     | '/coaches/apply'
     | '/email/unsubscribe'
@@ -575,6 +605,7 @@ export interface FileRouteTypes {
     | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
+    | '/employer/browse'
     | '/employer/resumes'
     | '/membership/checkout'
     | '/membership/return'
@@ -608,6 +639,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/reset-password'
+    | '/resume-drop'
     | '/services'
     | '/sitemap.xml'
     | '/terms'
@@ -615,6 +647,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/waitlist'
     | '/dashboard'
+    | '/profile'
     | '/university'
     | '/coaches/apply'
     | '/email/unsubscribe'
@@ -628,6 +661,7 @@ export interface FileRouteTypes {
     | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
+    | '/employer/browse'
     | '/employer/resumes'
     | '/membership/checkout'
     | '/membership/return'
@@ -663,6 +697,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/reset-password'
+    | '/resume-drop'
     | '/services'
     | '/sitemap.xml'
     | '/terms'
@@ -673,6 +708,7 @@ export interface FileRouteTypes {
     | '/_authenticated/coach'
     | '/_authenticated/dashboard'
     | '/_authenticated/employer'
+    | '/_authenticated/profile'
     | '/_authenticated/university'
     | '/coaches/apply'
     | '/email/unsubscribe'
@@ -686,6 +722,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/universities'
     | '/_authenticated/admin/users'
     | '/_authenticated/coach/clients'
+    | '/_authenticated/employer/browse'
     | '/_authenticated/employer/resumes'
     | '/_authenticated/membership/checkout'
     | '/_authenticated/membership/return'
@@ -722,6 +759,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ResumeDropRoute: typeof ResumeDropRoute
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
@@ -779,6 +817,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume-drop': {
+      id: '/resume-drop'
+      path: '/resume-drop'
+      fullPath: '/resume-drop'
+      preLoaderRoute: typeof ResumeDropRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -942,6 +987,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUniversityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/employer': {
       id: '/_authenticated/employer'
       path: '/employer'
@@ -1052,6 +1104,13 @@ declare module '@tanstack/react-router' {
       path: '/resumes'
       fullPath: '/employer/resumes'
       preLoaderRoute: typeof AuthenticatedEmployerResumesRouteImport
+      parentRoute: typeof AuthenticatedEmployerRoute
+    }
+    '/_authenticated/employer/browse': {
+      id: '/_authenticated/employer/browse'
+      path: '/browse'
+      fullPath: '/employer/browse'
+      preLoaderRoute: typeof AuthenticatedEmployerBrowseRouteImport
       parentRoute: typeof AuthenticatedEmployerRoute
     }
     '/_authenticated/coach/clients': {
@@ -1167,6 +1226,7 @@ const AuthenticatedCoachRouteWithChildren =
   AuthenticatedCoachRoute._addFileChildren(AuthenticatedCoachRouteChildren)
 
 interface AuthenticatedEmployerRouteChildren {
+  AuthenticatedEmployerBrowseRoute: typeof AuthenticatedEmployerBrowseRoute
   AuthenticatedEmployerResumesRoute: typeof AuthenticatedEmployerResumesRoute
   AuthenticatedEmployerIndexRoute: typeof AuthenticatedEmployerIndexRoute
   AuthenticatedEmployerCreditsCheckoutRoute: typeof AuthenticatedEmployerCreditsCheckoutRoute
@@ -1174,6 +1234,7 @@ interface AuthenticatedEmployerRouteChildren {
 }
 
 const AuthenticatedEmployerRouteChildren: AuthenticatedEmployerRouteChildren = {
+  AuthenticatedEmployerBrowseRoute: AuthenticatedEmployerBrowseRoute,
   AuthenticatedEmployerResumesRoute: AuthenticatedEmployerResumesRoute,
   AuthenticatedEmployerIndexRoute: AuthenticatedEmployerIndexRoute,
   AuthenticatedEmployerCreditsCheckoutRoute:
@@ -1192,6 +1253,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmployerRoute: typeof AuthenticatedEmployerRouteWithChildren
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedUniversityRoute: typeof AuthenticatedUniversityRoute
   AuthenticatedMembershipCheckoutRoute: typeof AuthenticatedMembershipCheckoutRoute
   AuthenticatedMembershipReturnRoute: typeof AuthenticatedMembershipReturnRoute
@@ -1207,6 +1269,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCoachRoute: AuthenticatedCoachRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmployerRoute: AuthenticatedEmployerRouteWithChildren,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedUniversityRoute: AuthenticatedUniversityRoute,
   AuthenticatedMembershipCheckoutRoute: AuthenticatedMembershipCheckoutRoute,
   AuthenticatedMembershipReturnRoute: AuthenticatedMembershipReturnRoute,
@@ -1267,6 +1330,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ResumeDropRoute: ResumeDropRoute,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,

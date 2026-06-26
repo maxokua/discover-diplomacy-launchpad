@@ -13,10 +13,11 @@ const GROUPS: NavGroup[] = [
   {
     label: "For Candidates",
     links: [
-      { to: "/pricing", label: "Compass — $20/mo" },
-      { to: "/pricing", label: "Envoy — $150/mo" },
-      { to: "/directory", label: "Coach Directory" },
-      { to: "/employers/resume-drop", label: "Resume Drop" },
+      { to: "/resume-drop", label: "Resume Drop" },
+      { to: "/profile", label: "Your Profile" },
+      { to: "/directory", label: "Opportunity Directory" },
+      { to: "/coaches", label: "Coach Directory" },
+      { to: "/pricing", label: "Membership Pricing" },
       { to: "/assessment", label: "Free Assessment" },
     ],
   },
@@ -30,8 +31,8 @@ const GROUPS: NavGroup[] = [
   {
     label: "For Employers",
     links: [
-      { to: "/employers", label: "Browse Candidates" },
-      { to: "/pricing", label: "Employer Pricing" },
+      { to: "/employer/browse", label: "Browse Talent" },
+      { to: "/pricing?tab=employers", label: "Employer Pricing" },
       { to: "/employers/apply", label: "Request Access" },
     ],
   },
@@ -39,7 +40,7 @@ const GROUPS: NavGroup[] = [
     label: "For Coaches",
     links: [
       { to: "/coaches/apply", label: "Apply to Coach" },
-      { to: "/directory", label: "Coach Directory" },
+      { to: "/coaches", label: "Coach Directory" },
     ],
   },
 ];
@@ -108,7 +109,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 Discover Diplomacy
               </div>
               <div className="hidden text-[10px] uppercase tracking-[0.22em] text-muted-foreground sm:block">
-                Talent Infrastructure for Global Careers
+                Discover Diplomacy for Global Careers
               </div>
             </div>
           </Link>
@@ -171,13 +172,13 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   <ul className="pb-3">
                     {g.links.map((l, i) => (
                       <li key={`${l.to}-${i}`}>
-                        <Link
+                        <NavItem
                           to={l.to}
                           onClick={() => setOpen(false)}
                           className="block py-2 pl-3 text-sm text-muted-foreground hover:text-navy-deep"
                         >
                           {l.label}
-                        </Link>
+                        </NavItem>
                       </li>
                     ))}
                   </ul>
@@ -247,19 +248,44 @@ function NavDropdown({ group }: { group: NavGroup }) {
           <ul className="py-2">
             {group.links.map((l, i) => (
               <li key={`${l.to}-${i}`}>
-                <Link
+                <NavItem
                   to={l.to}
                   onClick={() => setOpen(false)}
                   className="block px-4 py-2 text-sm text-navy-deep hover:bg-stone"
                 >
                   {l.label}
-                </Link>
+                </NavItem>
               </li>
             ))}
           </ul>
         </div>
       )}
     </div>
+  );
+}
+
+function NavItem({
+  to,
+  onClick,
+  className,
+  children,
+}: {
+  to: string;
+  onClick?: () => void;
+  className?: string;
+  children: ReactNode;
+}) {
+  if (to.includes("?") || to.startsWith("http")) {
+    return (
+      <a href={to} onClick={onClick} className={className}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link to={to} onClick={onClick} className={className}>
+      {children}
+    </Link>
   );
 }
 
@@ -274,7 +300,7 @@ function SiteFooter() {
             <div>
               <div className="font-display text-lg">Discover Diplomacy</div>
               <div className="text-[10px] uppercase tracking-[0.22em] text-paper/60">
-                Talent Infrastructure for Global Careers
+                Discover Diplomacy for Global Careers
               </div>
             </div>
           </div>
@@ -297,12 +323,12 @@ function SiteFooter() {
           <FooterCol
             title="Candidates"
             links={[
-              { to: "/pricing", label: "Compass" },
-              { to: "/pricing", label: "Envoy" },
-              { to: "/directory", label: "Coach Directory" },
-              { to: "/employers/resume-drop", label: "Resume Drop" },
+              { to: "/pricing", label: "Membership Pricing" },
+              { to: "/resume-drop", label: "Resume Drop" },
+              { to: "/profile", label: "Your Profile" },
+              { to: "/coaches", label: "Coach Directory" },
+              { to: "/directory", label: "Opportunity Directory" },
               { to: "/assessment", label: "Free Assessment" },
-              { to: "/auth", label: "Sign In" },
             ]}
           />
           <FooterCol
@@ -315,9 +341,9 @@ function SiteFooter() {
           <FooterCol
             title="Employers"
             links={[
-              { to: "/employers", label: "Browse Candidates" },
-              { to: "/pricing", label: "Pricing" },
-              { to: "/employers/apply", label: "How it Works" },
+              { to: "/employer/browse", label: "Browse Talent" },
+              { to: "/pricing", label: "Employer Pricing" },
+              { to: "/employers/apply", label: "Request Access" },
             ]}
           />
           <FooterCol

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Check,
   Star,
@@ -44,6 +44,11 @@ type Tab = "individuals" | "universities" | "employers";
 
 function PricingPage() {
   const [tab, setTab] = useState<Tab>("individuals");
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const p = new URLSearchParams(window.location.search).get("tab");
+    if (p === "individuals" || p === "universities" || p === "employers") setTab(p);
+  }, []);
 
   return (
     <SiteLayout>

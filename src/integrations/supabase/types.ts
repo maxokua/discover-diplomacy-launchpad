@@ -50,6 +50,54 @@ export type Database = {
         }
         Relationships: []
       }
+      candidate_profiles: {
+        Row: {
+          bio: string | null
+          created_at: string
+          education: Json
+          experience_level: string | null
+          headline: string | null
+          languages: Json
+          regions: string[]
+          sectors: string[]
+          skills: string[]
+          target_roles: string[]
+          updated_at: string
+          user_id: string
+          visibility: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          education?: Json
+          experience_level?: string | null
+          headline?: string | null
+          languages?: Json
+          regions?: string[]
+          sectors?: string[]
+          skills?: string[]
+          target_roles?: string[]
+          updated_at?: string
+          user_id: string
+          visibility?: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          education?: Json
+          experience_level?: string | null
+          headline?: string | null
+          languages?: Json
+          regions?: string[]
+          sectors?: string[]
+          skills?: string[]
+          target_roles?: string[]
+          updated_at?: string
+          user_id?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
       coach_applications: {
         Row: {
           agree_background_check: boolean
