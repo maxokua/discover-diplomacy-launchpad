@@ -111,10 +111,10 @@ function EmployersPage() {
               Professional tiers unlock monthly candidate credits to reach them directly.
             </p>
             <Link
-              to="/employers/resume-drop"
+              to="/employer/browse"
               className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
             >
-              Learn more about Resume Drop <ArrowRight className="h-4 w-4" />
+              Browse the candidate pool <ArrowRight className="h-4 w-4" />
             </Link>
           </Reveal>
           <Reveal className="lg:col-span-7" delay={120}>
