@@ -323,12 +323,12 @@ function SiteFooter() {
           <FooterCol
             title="Candidates"
             links={[
-              { to: "/pricing", label: "Compass" },
-              { to: "/pricing", label: "Envoy" },
-              { to: "/directory", label: "Coach Directory" },
-              { to: "/employers/resume-drop", label: "Resume Drop" },
+              { to: "/pricing", label: "Membership Pricing" },
+              { to: "/resume-drop", label: "Resume Drop" },
+              { to: "/profile", label: "Your Profile" },
+              { to: "/coaches", label: "Coach Directory" },
+              { to: "/directory", label: "Opportunity Directory" },
               { to: "/assessment", label: "Free Assessment" },
-              { to: "/auth", label: "Sign In" },
             ]}
           />
           <FooterCol
@@ -341,9 +341,9 @@ function SiteFooter() {
           <FooterCol
             title="Employers"
             links={[
-              { to: "/employers", label: "Browse Candidates" },
-              { to: "/pricing", label: "Pricing" },
-              { to: "/employers/apply", label: "How it Works" },
+              { to: "/employer/browse", label: "Browse Talent" },
+              { to: "/pricing", label: "Employer Pricing" },
+              { to: "/employers/apply", label: "Request Access" },
             ]}
           />
           <FooterCol
