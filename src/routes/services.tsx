@@ -13,16 +13,17 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Free Explorer account, Compass at $20/mo, and Envoy at $150/mo — plus a one-time Expert Resume Review at $25. Month-to-month, cancel anytime.",
+          "Free Explorer account, Compass at $20/mo ($192/yr — save 20%), Envoy at $150/mo ($1,440/yr — save 20%), plus one-time Expert Resume Review at $25.",
       },
       { property: "og:title", content: "Plans & Services | Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "Free Explorer with Diplomat coach access. Compass $20/mo. Envoy $150/mo with 2 complimentary Diplomat sessions. Resume Review $25.",
+          "Free Explorer with Diplomat coach access. Compass $20/mo or $192/yr. Envoy $150/mo or $1,440/yr with 2 complimentary Diplomat sessions. Resume Review $25.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/services" },
     ],
+
     links: [{ rel: "canonical", href: "https://discoverdiplomacy.org/services" }],
     scripts: [
       {
