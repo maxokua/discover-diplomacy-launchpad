@@ -44,10 +44,16 @@ function EmployersPage() {
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
-                to="/employers/apply"
+                to="/employers/resume-drop"
                 className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper hover:bg-navy"
               >
-                Apply for employer access <ArrowRight className="h-4 w-4" />
+                Explore the Member Resume Drop <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/employers/apply"
+                className="text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
+              >
+                Apply for employer access →
               </Link>
               <a
                 href="mailto:hello@discoverdiplomacy.org"
