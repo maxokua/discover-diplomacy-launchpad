@@ -169,7 +169,7 @@ function SiteFooter() {
             <div>
               <div className="font-display text-lg">Discover Diplomacy</div>
               <div className="text-[10px] uppercase tracking-[0.22em] text-paper/60">
-                Global Career Advisory
+                Talent Infrastructure for Global Careers
               </div>
             </div>
           </div>
