@@ -11,6 +11,7 @@ import {
   resumeMembership,
   updateProfile,
   getReviewedResumeUrl,
+  downgradeToCompass,
 } from "@/lib/payments.functions";
 import { getResumeDropStatus } from "@/lib/resume-drop.functions";
 import { ResumeDropCard } from "@/components/resume-drop/ResumeDropCard";
@@ -383,13 +384,35 @@ function DashboardPage() {
                 </Link>
               )}
               {tier === "envoy" && (
-                <Link
-                  to="/membership/checkout"
-                  search={{ tier: "compass", cadence: "monthly" }}
-                  className="border border-border bg-paper px-4 py-2 font-medium uppercase tracking-wider text-navy-deep hover:bg-stone"
+                <button
+                  onClick={async () => {
+                    if (
+                      !window.confirm(
+                        "Downgrade to Compass at the end of the current billing period?",
+                      )
+                    )
+                      return;
+                    setBusy(true);
+                    try {
+                      const result = await downgradeToCompass({
+                        data: { environment: getStripeEnvironment() },
+                      });
+                      if ("error" in result) throw new Error(result.error);
+                      toast.success("You'll switch to Compass at the period end.");
+                      await load();
+                    } catch (err) {
+                      toast.error(
+                        err instanceof Error ? err.message : "Couldn't downgrade",
+                      );
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                  disabled={busy}
+                  className="border border-border bg-paper px-4 py-2 font-medium uppercase tracking-wider text-navy-deep hover:bg-stone disabled:opacity-60"
                 >
-                  Switch to Compass
-                </Link>
+                  Downgrade to Compass
+                </button>
               )}
             </div>
           )}

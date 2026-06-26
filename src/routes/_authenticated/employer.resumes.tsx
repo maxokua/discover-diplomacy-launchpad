@@ -6,7 +6,9 @@ import {
   employerListResumes,
   employerGetResumeUrl,
   myPortalRoles,
+  getEmployerCreditBalance,
 } from "@/lib/payments.functions";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export const Route = createFileRoute("/_authenticated/employer/resumes")({
   head: () => ({
@@ -28,10 +30,21 @@ type Resume = {
 
 function EmployerResumesPage() {
   const [allowed, setAllowed] = useState<null | boolean>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [rows, setRows] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [balance, setBalance] = useState<number | null>(null);
+
+  async function refreshBalance() {
+    try {
+      const b = await getEmployerCreditBalance();
+      setBalance(b.balance);
+    } catch {
+      /* ignore */
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -42,7 +55,8 @@ function EmployerResumesPage() {
           return;
         }
         setAllowed(true);
-        const result = await employerListResumes();
+        setIsAdmin(!!roles.admin);
+        const [result] = await Promise.all([employerListResumes(), refreshBalance()]);
         if ("error" in result) toast.error(result.error);
         else setRows(result.resumes as Resume[]);
       } catch {
@@ -56,15 +70,26 @@ function EmployerResumesPage() {
   async function openResume(id: string) {
     setBusyId(id);
     try {
-      const r = await employerGetResumeUrl({ data: { reviewId: id } });
-      if ("error" in r) throw new Error(r.error);
+      const r = await employerGetResumeUrl({
+        data: { reviewId: id, environment: getStripeEnvironment() },
+      });
+      if ("error" in r) {
+        if ("needsCredits" in r && r.needsCredits) {
+          toast.error("Out of credits. Buy more to unlock this candidate.");
+        } else {
+          throw new Error(r.error);
+        }
+        return;
+      }
       window.open(r.url, "_blank", "noopener,noreferrer");
+      refreshBalance();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Couldn't open resume");
     } finally {
       setBusyId(null);
     }
   }
+
 
   if (allowed === null) {
     return (
@@ -117,6 +142,42 @@ function EmployerResumesPage() {
             </a>{" "}
             with the candidate's name.
           </p>
+
+          {!isAdmin && (
+            <div className="mt-8 grid gap-4 border border-border bg-cream/30 p-6 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <div className="eyebrow">Unlock credits</div>
+                <div className="mt-2 font-display text-2xl text-navy-deep">
+                  Balance:{" "}
+                  <span className="text-emerald">
+                    {balance === null ? "…" : balance}
+                  </span>{" "}
+                  credit{balance === 1 ? "" : "s"}
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Each unique candidate unlock costs 1 credit. Re-opening a resume you've
+                  already unlocked is free.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  to="/employer/credits/checkout"
+                  search={{ pack: "single" }}
+                  className="border border-navy-deep px-4 py-2 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-navy-deep hover:text-paper"
+                >
+                  Buy 1 · $18
+                </Link>
+                <Link
+                  to="/employer/credits/checkout"
+                  search={{ pack: "pack20" }}
+                  className="border border-navy-deep bg-navy-deep px-4 py-2 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                >
+                  Buy 20-pack · $300
+                </Link>
+              </div>
+            </div>
+          )}
+
 
           <div className="mt-8">
             <input

@@ -1,0 +1,2 @@
+REVOKE EXECUTE ON FUNCTION public.employer_spend_credit(uuid, uuid, text) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.employer_grant_purchase(uuid, integer, text, text) FROM PUBLIC, anon, authenticated;

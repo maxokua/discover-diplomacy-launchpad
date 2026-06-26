@@ -24,6 +24,24 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
       })
       .eq("id", reviewId);
   }
+
+  // Employer credit purchases (one-time)
+  if (session.metadata?.kind === "employer_credits") {
+    const userId = session.metadata?.userId;
+    const credits = parseInt(session.metadata?.credits ?? "0", 10);
+    if (userId && credits > 0) {
+      try {
+        await (getSupabase().rpc as any)("employer_grant_purchase", {
+          _user_id: userId,
+          _credits: credits,
+          _stripe_session_id: session.id,
+          _env: env,
+        });
+      } catch (e) {
+        console.error("employer_grant_purchase failed", e);
+      }
+    }
+  }
 }
 
 async function syncTier(userId: string | null | undefined, env: StripeEnv) {

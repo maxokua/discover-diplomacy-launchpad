@@ -667,16 +667,20 @@ export const updateReviewVisibility = createServerFn({ method: "POST" })
 
 export const employerGetResumeUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { reviewId: string }) => {
+  .inputValidator((data: { reviewId: string; environment?: StripeEnv }) => {
     if (!/^[0-9a-f-]{36}$/i.test(data.reviewId)) throw new Error("Invalid reviewId");
-    return data;
+    const env: StripeEnv =
+      data.environment === "live" || data.environment === "sandbox"
+        ? data.environment
+        : "sandbox";
+    return { reviewId: data.reviewId, environment: env };
   })
   .handler(async ({ data, context }) => {
     await requireAnyRole(context, ["employer", "admin"]);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: review } = await supabaseAdmin
       .from("resume_reviews")
-      .select("resume_path, reviewed_resume_path, visible_to_employers")
+      .select("user_id, resume_path, reviewed_resume_path, visible_to_employers")
       .eq("id", data.reviewId)
       .single();
     if (!review) return { error: "Not found" };
@@ -686,11 +690,182 @@ export const employerGetResumeUrl = createServerFn({ method: "POST" })
     if (!review.visible_to_employers && !isAdmin) return { error: "Not available" };
     const path = (review.reviewed_resume_path ?? review.resume_path) as string | null;
     if (!path) return { error: "No file" };
+
+    // Credit gating: admins bypass; otherwise spend 1 credit per unique
+    // candidate, idempotent via resume_unlocks.
+    if (!isAdmin) {
+      const memberId = review.user_id as string;
+      const { data: existing } = await supabaseAdmin
+        .from("resume_unlocks")
+        .select("id")
+        .eq("employer_user_id", context.userId)
+        .eq("member_id", memberId)
+        .maybeSingle();
+
+      if (!existing) {
+        const { data: newBalance, error: spendErr } = await (supabaseAdmin.rpc as any)(
+          "employer_spend_credit",
+          { _user_id: context.userId, _resume_id: data.reviewId, _env: data.environment },
+        );
+        if (spendErr) return { error: spendErr.message };
+        if (newBalance === null) {
+          return { error: "Out of credits", needsCredits: true as const };
+        }
+        await (supabaseAdmin.from("resume_unlocks") as any).insert({
+          employer_user_id: context.userId,
+          member_id: memberId,
+          credits_used: 1,
+        });
+      }
+    }
+
     const { data: signed } = await supabaseAdmin.storage
       .from("resumes")
       .createSignedUrl(path, 600);
     if (!signed) return { error: "Couldn't sign URL" };
     return { url: signed.signedUrl };
+  });
+
+// ─── Employer credits ───────────────────────────────────────────────────────
+
+export const getEmployerCreditBalance = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAnyRole(context, ["employer", "admin"]);
+    const { data } = await context.supabase
+      .from("employer_credits")
+      .select("balance, granted_total, spent_total")
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    return {
+      balance: (data?.balance as number) ?? 0,
+      grantedTotal: (data?.granted_total as number) ?? 0,
+      spentTotal: (data?.spent_total as number) ?? 0,
+    };
+  });
+
+export const createEmployerCreditsCheckout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (data: {
+      pack: "single" | "pack20";
+      returnUrl: string;
+      environment: StripeEnv;
+    }) => {
+      if (data.pack !== "single" && data.pack !== "pack20")
+        throw new Error("Invalid pack");
+      if (!data.returnUrl || typeof data.returnUrl !== "string")
+        throw new Error("Invalid returnUrl");
+      if (data.environment !== "sandbox" && data.environment !== "live")
+        throw new Error("Invalid environment");
+      return data;
+    },
+  )
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      await requireAnyRole(context, ["employer", "admin"]);
+      const { createStripeClient } = await import("@/lib/stripe.server");
+      const stripe = createStripeClient(data.environment);
+
+      const lookupKey =
+        data.pack === "pack20" ? "employer_credit_pack20" : "employer_credit_single";
+      const credits = data.pack === "pack20" ? 20 : 1;
+
+      const prices = await stripe.prices.list({ lookup_keys: [lookupKey] });
+      if (!prices.data.length) throw new Error("Price not configured");
+      const stripePrice = prices.data[0];
+      const productId =
+        typeof stripePrice.product === "string"
+          ? stripePrice.product
+          : stripePrice.product?.id;
+      if (productId) await ensureProductTaxCode(stripe, productId, "txcd_10000000");
+
+      const email = (context.claims as { email?: string } | undefined)?.email;
+      const customerId = await resolveOrCreateCustomer(stripe, {
+        email,
+        userId: context.userId,
+      });
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{ price: stripePrice.id, quantity: 1 }],
+        mode: "payment",
+        ui_mode: "embedded_page",
+        return_url: data.returnUrl,
+        customer: customerId,
+        payment_intent_data: {
+          description:
+            data.pack === "pack20"
+              ? "Employer Credits — 20 Pack"
+              : "Employer Credit (Single)",
+        },
+        metadata: {
+          userId: context.userId,
+          kind: "employer_credits",
+          credits: String(credits),
+          pack: data.pack,
+        },
+        managed_payments: { enabled: true },
+      } as any);
+
+      return { clientSecret: session.client_secret ?? "" };
+    } catch (error) {
+      const { getStripeErrorMessage } = await import("@/lib/stripe.server");
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+// Downgrade Envoy → Compass at next renewal (no proration; uses cadence of
+// current subscription). Replaces the subscription item with the Compass price.
+export const downgradeToCompass = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { environment: StripeEnv }) => {
+    if (data.environment !== "sandbox" && data.environment !== "live")
+      throw new Error("Invalid environment");
+    return data;
+  })
+  .handler(async ({ data, context }) => {
+    try {
+      const { data: sub } = await context.supabase
+        .from("subscriptions")
+        .select("stripe_subscription_id, status, price_id")
+        .eq("user_id", context.userId)
+        .eq("environment", data.environment)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!sub?.stripe_subscription_id) return { error: "No active subscription." };
+      if (!["active", "trialing", "past_due"].includes(sub.status as string))
+        return { error: "Subscription isn't active." };
+      const currentPrice = sub.price_id as string;
+      if (!currentPrice?.startsWith("envoy"))
+        return { error: "You're not on Envoy." };
+
+      const targetLookup =
+        currentPrice === "envoy_annual" ? "compass_annual" : "compass_monthly";
+
+      const { createStripeClient } = await import("@/lib/stripe.server");
+      const stripe = createStripeClient(data.environment);
+      const prices = await stripe.prices.list({ lookup_keys: [targetLookup] });
+      if (!prices.data.length) return { error: "Compass price not configured" };
+      const newPrice = prices.data[0];
+
+      const current = await stripe.subscriptions.retrieve(
+        sub.stripe_subscription_id as string,
+      );
+      const itemId = current.items.data[0]?.id;
+      if (!itemId) return { error: "Subscription has no items" };
+
+      await stripe.subscriptions.update(sub.stripe_subscription_id as string, {
+        items: [{ id: itemId, price: newPrice.id }],
+        proration_behavior: "none",
+        billing_cycle_anchor: "unchanged",
+      } as any);
+
+      return { ok: true as const };
+    } catch (error) {
+      const { getStripeErrorMessage } = await import("@/lib/stripe.server");
+      return { error: getStripeErrorMessage(error) };
+    }
   });
 
 export const myPortalRoles = createServerFn({ method: "POST" })

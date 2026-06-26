@@ -63,6 +63,8 @@ import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lova
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as AuthenticatedEmployerCreditsReturnRouteImport } from './routes/_authenticated/employer.credits.return'
+import { Route as AuthenticatedEmployerCreditsCheckoutRouteImport } from './routes/_authenticated/employer.credits.checkout'
 
 const WaitlistRoute = WaitlistRouteImport.update({
   id: '/waitlist',
@@ -351,6 +353,18 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedEmployerCreditsReturnRoute =
+  AuthenticatedEmployerCreditsReturnRouteImport.update({
+    id: '/credits/return',
+    path: '/credits/return',
+    getParentRoute: () => AuthenticatedEmployerRoute,
+  } as any)
+const AuthenticatedEmployerCreditsCheckoutRoute =
+  AuthenticatedEmployerCreditsCheckoutRouteImport.update({
+    id: '/credits/checkout',
+    path: '/credits/checkout',
+    getParentRoute: () => AuthenticatedEmployerRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -402,6 +416,8 @@ export interface FileRoutesByFullPath {
   '/employer/': typeof AuthenticatedEmployerIndexRoute
   '/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
+  '/employer/credits/checkout': typeof AuthenticatedEmployerCreditsCheckoutRoute
+  '/employer/credits/return': typeof AuthenticatedEmployerCreditsReturnRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -453,6 +469,8 @@ export interface FileRoutesByTo {
   '/employer': typeof AuthenticatedEmployerIndexRoute
   '/resume-analyses': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review': typeof AuthenticatedResumeReviewIndexRoute
+  '/employer/credits/checkout': typeof AuthenticatedEmployerCreditsCheckoutRoute
+  '/employer/credits/return': typeof AuthenticatedEmployerCreditsReturnRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -510,6 +528,8 @@ export interface FileRoutesById {
   '/_authenticated/employer/': typeof AuthenticatedEmployerIndexRoute
   '/_authenticated/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/_authenticated/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
+  '/_authenticated/employer/credits/checkout': typeof AuthenticatedEmployerCreditsCheckoutRoute
+  '/_authenticated/employer/credits/return': typeof AuthenticatedEmployerCreditsReturnRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -567,6 +587,8 @@ export interface FileRouteTypes {
     | '/employer/'
     | '/resume-analyses/'
     | '/resume-review/'
+    | '/employer/credits/checkout'
+    | '/employer/credits/return'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -618,6 +640,8 @@ export interface FileRouteTypes {
     | '/employer'
     | '/resume-analyses'
     | '/resume-review'
+    | '/employer/credits/checkout'
+    | '/employer/credits/return'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -674,6 +698,8 @@ export interface FileRouteTypes {
     | '/_authenticated/employer/'
     | '/_authenticated/resume-analyses/'
     | '/_authenticated/resume-review/'
+    | '/_authenticated/employer/credits/checkout'
+    | '/_authenticated/employer/credits/return'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -1091,6 +1117,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/employer/credits/return': {
+      id: '/_authenticated/employer/credits/return'
+      path: '/credits/return'
+      fullPath: '/employer/credits/return'
+      preLoaderRoute: typeof AuthenticatedEmployerCreditsReturnRouteImport
+      parentRoute: typeof AuthenticatedEmployerRoute
+    }
+    '/_authenticated/employer/credits/checkout': {
+      id: '/_authenticated/employer/credits/checkout'
+      path: '/credits/checkout'
+      fullPath: '/employer/credits/checkout'
+      preLoaderRoute: typeof AuthenticatedEmployerCreditsCheckoutRouteImport
+      parentRoute: typeof AuthenticatedEmployerRoute
+    }
   }
 }
 
@@ -1129,11 +1169,17 @@ const AuthenticatedCoachRouteWithChildren =
 interface AuthenticatedEmployerRouteChildren {
   AuthenticatedEmployerResumesRoute: typeof AuthenticatedEmployerResumesRoute
   AuthenticatedEmployerIndexRoute: typeof AuthenticatedEmployerIndexRoute
+  AuthenticatedEmployerCreditsCheckoutRoute: typeof AuthenticatedEmployerCreditsCheckoutRoute
+  AuthenticatedEmployerCreditsReturnRoute: typeof AuthenticatedEmployerCreditsReturnRoute
 }
 
 const AuthenticatedEmployerRouteChildren: AuthenticatedEmployerRouteChildren = {
   AuthenticatedEmployerResumesRoute: AuthenticatedEmployerResumesRoute,
   AuthenticatedEmployerIndexRoute: AuthenticatedEmployerIndexRoute,
+  AuthenticatedEmployerCreditsCheckoutRoute:
+    AuthenticatedEmployerCreditsCheckoutRoute,
+  AuthenticatedEmployerCreditsReturnRoute:
+    AuthenticatedEmployerCreditsReturnRoute,
 }
 
 const AuthenticatedEmployerRouteWithChildren =
