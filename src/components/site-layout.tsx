@@ -30,7 +30,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <div className="hidden border-b border-border bg-navy-deep text-paper md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-xs lg:px-10">
           <span className="truncate text-paper/70">
-            Career coaching for globally minded professionals
+            Built for globally-minded students and early-career professionals.
           </span>
           <div className="flex shrink-0 items-center gap-5 text-paper/70">
             <a href="mailto:hello@discoverdiplomacy.org" className="hover:text-paper">
