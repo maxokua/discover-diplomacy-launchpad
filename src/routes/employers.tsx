@@ -44,17 +44,17 @@ function EmployersPage() {
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
-                to="/employers/resume-drop"
+                to="/employer/browse"
                 className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper hover:bg-navy"
               >
                 Browse Vetted Talent <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link
-                to="/pricing"
+              <a
+                href="/pricing?tab=employers"
                 className="inline-flex items-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3 text-sm font-medium text-navy-deep hover:border-navy-deep hover:bg-navy-deep/5"
               >
                 See Employer Pricing
-              </Link>
+              </a>
               <Link
                 to="/employers/apply"
                 className="text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
