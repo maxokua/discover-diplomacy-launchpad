@@ -7,7 +7,7 @@ export const BRAND = {
   oneLiner:
     "Discover the opportunities. Prepare the materials. Open the doors. Get hired.",
   positioning:
-    "The talent infrastructure layer for internationally-focused careers — combining a curated opportunity directory, instant expert-designed application help, vetted insider coaches, and direct access to employers.",
+    "Discover Diplomacy for global careers — a directory of opportunities, instant application help, vetted coaches, and direct access to verified employers.",
   email: "hello@discoverdiplomacy.org",
   location: "Washington, DC",
 } as const;

@@ -56,6 +56,7 @@ import { Route as AuthenticatedResumeAnalysesAnalysisIdRouteImport } from './rou
 import { Route as AuthenticatedMembershipReturnRouteImport } from './routes/_authenticated/membership.return'
 import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_authenticated/membership.checkout'
 import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_authenticated/employer.resumes'
+import { Route as AuthenticatedEmployerBrowseRouteImport } from './routes/_authenticated/employer.browse'
 import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminUniversitiesRouteImport } from './routes/_authenticated/admin.universities'
@@ -312,6 +313,12 @@ const AuthenticatedEmployerResumesRoute =
     path: '/resumes',
     getParentRoute: () => AuthenticatedEmployerRoute,
   } as any)
+const AuthenticatedEmployerBrowseRoute =
+  AuthenticatedEmployerBrowseRouteImport.update({
+    id: '/browse',
+    path: '/browse',
+    getParentRoute: () => AuthenticatedEmployerRoute,
+  } as any)
 const AuthenticatedCoachClientsRoute =
   AuthenticatedCoachClientsRouteImport.update({
     id: '/clients',
@@ -418,6 +425,7 @@ export interface FileRoutesByFullPath {
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
@@ -473,6 +481,7 @@ export interface FileRoutesByTo {
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/membership/return': typeof AuthenticatedMembershipReturnRoute
@@ -534,6 +543,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/_authenticated/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/_authenticated/membership/checkout': typeof AuthenticatedMembershipCheckoutRoute
   '/_authenticated/membership/return': typeof AuthenticatedMembershipReturnRoute
@@ -595,6 +605,7 @@ export interface FileRouteTypes {
     | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
+    | '/employer/browse'
     | '/employer/resumes'
     | '/membership/checkout'
     | '/membership/return'
@@ -650,6 +661,7 @@ export interface FileRouteTypes {
     | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
+    | '/employer/browse'
     | '/employer/resumes'
     | '/membership/checkout'
     | '/membership/return'
@@ -710,6 +722,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/universities'
     | '/_authenticated/admin/users'
     | '/_authenticated/coach/clients'
+    | '/_authenticated/employer/browse'
     | '/_authenticated/employer/resumes'
     | '/_authenticated/membership/checkout'
     | '/_authenticated/membership/return'
@@ -1093,6 +1106,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEmployerResumesRouteImport
       parentRoute: typeof AuthenticatedEmployerRoute
     }
+    '/_authenticated/employer/browse': {
+      id: '/_authenticated/employer/browse'
+      path: '/browse'
+      fullPath: '/employer/browse'
+      preLoaderRoute: typeof AuthenticatedEmployerBrowseRouteImport
+      parentRoute: typeof AuthenticatedEmployerRoute
+    }
     '/_authenticated/coach/clients': {
       id: '/_authenticated/coach/clients'
       path: '/clients'
@@ -1206,6 +1226,7 @@ const AuthenticatedCoachRouteWithChildren =
   AuthenticatedCoachRoute._addFileChildren(AuthenticatedCoachRouteChildren)
 
 interface AuthenticatedEmployerRouteChildren {
+  AuthenticatedEmployerBrowseRoute: typeof AuthenticatedEmployerBrowseRoute
   AuthenticatedEmployerResumesRoute: typeof AuthenticatedEmployerResumesRoute
   AuthenticatedEmployerIndexRoute: typeof AuthenticatedEmployerIndexRoute
   AuthenticatedEmployerCreditsCheckoutRoute: typeof AuthenticatedEmployerCreditsCheckoutRoute
@@ -1213,6 +1234,7 @@ interface AuthenticatedEmployerRouteChildren {
 }
 
 const AuthenticatedEmployerRouteChildren: AuthenticatedEmployerRouteChildren = {
+  AuthenticatedEmployerBrowseRoute: AuthenticatedEmployerBrowseRoute,
   AuthenticatedEmployerResumesRoute: AuthenticatedEmployerResumesRoute,
   AuthenticatedEmployerIndexRoute: AuthenticatedEmployerIndexRoute,
   AuthenticatedEmployerCreditsCheckoutRoute:
