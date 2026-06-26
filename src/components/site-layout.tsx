@@ -13,10 +13,11 @@ const GROUPS: NavGroup[] = [
   {
     label: "For Candidates",
     links: [
-      { to: "/pricing", label: "Compass — $20/mo" },
-      { to: "/pricing", label: "Envoy — $150/mo" },
-      { to: "/directory", label: "Coach Directory" },
-      { to: "/employers/resume-drop", label: "Resume Drop" },
+      { to: "/resume-drop", label: "Resume Drop" },
+      { to: "/profile", label: "Your Profile" },
+      { to: "/directory", label: "Opportunity Directory" },
+      { to: "/coaches", label: "Coach Directory" },
+      { to: "/pricing", label: "Membership Pricing" },
       { to: "/assessment", label: "Free Assessment" },
     ],
   },
@@ -30,8 +31,8 @@ const GROUPS: NavGroup[] = [
   {
     label: "For Employers",
     links: [
-      { to: "/employers", label: "Browse Candidates" },
-      { to: "/pricing", label: "Employer Pricing" },
+      { to: "/employer/browse", label: "Browse Talent" },
+      { to: "/pricing", search: { tab: "employers" }, label: "Employer Pricing" },
       { to: "/employers/apply", label: "Request Access" },
     ],
   },
@@ -39,7 +40,7 @@ const GROUPS: NavGroup[] = [
     label: "For Coaches",
     links: [
       { to: "/coaches/apply", label: "Apply to Coach" },
-      { to: "/directory", label: "Coach Directory" },
+      { to: "/coaches", label: "Coach Directory" },
     ],
   },
 ];
