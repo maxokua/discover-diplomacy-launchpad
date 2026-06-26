@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 
@@ -10,13 +10,13 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Two plans — Compass at $35/mo and Envoy at $150/mo — plus a one-time Expert Resume Review at $25. Month-to-month, cancel anytime.",
+          "Free Explorer account, Compass at $20/mo, and Envoy at $150/mo — plus a one-time Expert Resume Review at $25. Month-to-month, cancel anytime.",
       },
       { property: "og:title", content: "Plans & Services | Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "Compass $35/mo for self-directed job hunters. Envoy $150/mo for hands-on coaching. Expert Resume Review $25 one-time.",
+          "Free Explorer with Diplomat coach access. Compass $20/mo. Envoy $150/mo with 2 complimentary Diplomat sessions. Resume Review $25.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/services" },
     ],
@@ -31,16 +31,24 @@ export const Route = createFileRoute("/services")({
             {
               "@type": "Service",
               position: 1,
+              name: "Explorer (Free)",
+              description:
+                "Free account with access to book Diplomat-level coaches and a starter resource library.",
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+            },
+            {
+              "@type": "Service",
+              position: 2,
               name: "Compass Plan",
               description:
-                "Self-directed plan with weekly opportunities, resource library, and monthly resume review.",
+                "Self-directed plan with weekly opportunities, resource library, async resume review, plus Diplomat and Ambassador coach access.",
               offers: {
                 "@type": "Offer",
-                price: "35",
+                price: "20",
                 priceCurrency: "USD",
                 priceSpecification: {
                   "@type": "UnitPriceSpecification",
-                  price: "35",
+                  price: "20",
                   priceCurrency: "USD",
                   unitText: "MONTH",
                 },
@@ -48,10 +56,10 @@ export const Route = createFileRoute("/services")({
             },
             {
               "@type": "Service",
-              position: 2,
+              position: 3,
               name: "Envoy Plan",
               description:
-                "Hands-on plan with 5 tailored resumes per month, LinkedIn rewrite, company research, coach access, monthly 1:1 call, and interview prep.",
+                "Hands-on plan including 2 complimentary Diplomat coaching sessions per month, access to all coach levels, tailored resumes, LinkedIn rewrite, and interview prep.",
               offers: {
                 "@type": "Offer",
                 price: "150",
@@ -66,7 +74,7 @@ export const Route = createFileRoute("/services")({
             },
             {
               "@type": "Service",
-              position: 3,
+              position: 4,
               name: "Expert Resume Review",
               description:
                 "One-time line-by-line resume review tailored to your target role, returned in 3–5 days.",
@@ -80,18 +88,26 @@ export const Route = createFileRoute("/services")({
   component: ServicesPage,
 });
 
+const EXPLORER = [
+  "Free account — no card required",
+  "Book sessions with Diplomat-level coaches",
+  "Starter resource library and newsletter sample",
+  "Upload your resume and build a personal profile",
+];
+
 const COMPASS = [
-  "Access to Diplomat-level coaches",
+  "Everything in Explorer",
+  "Access to Diplomat and Ambassador coaches (Presidential not included)",
   "Weekly newsletter of 50 global opportunities from every region",
-  "Resource library: field-specific resume/CV templates (US federal, UN/multilateral, global private sector)",
+  "Full resource library: field-specific resume/CV templates (US federal, UN/multilateral, global private sector)",
   "Cover-letter examples and networking outreach scripts",
   "One async resume review per month, returned in 3–5 days",
-  "Document upload and personal profile",
 ];
 
 const ENVOY = [
   "Everything in Compass",
   "Access to all coach levels — Diplomat, Ambassador, and Presidential",
+  "2 complimentary Diplomat-level coaching sessions every month",
   "Resume tailored to up to 5 target roles per month",
   "Full LinkedIn profile rewrite plus ongoing optimization",
   "Company and role research on your target employers",
@@ -109,7 +125,7 @@ function ServicesPage() {
           <Reveal>
             <div className="eyebrow">Plans & Services</div>
             <h1 className="mt-5 max-w-4xl font-display text-4xl text-navy-deep lg:text-6xl">
-              Two plans, one standalone service. Pick what fits where you are.
+              Three plans, one standalone service. Start free, upgrade when it's useful.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
               Month-to-month, no annual contracts. Cancel the day it stops being useful.
@@ -120,16 +136,51 @@ function ServicesPage() {
 
       {/* Plans grid */}
       <section id="plans" className="border-b border-border bg-stone">
-        <div className="mx-auto grid max-w-7xl gap-8 px-6 py-20 lg:grid-cols-2 lg:px-10 lg:py-24">
-          {/* Compass */}
+        <div className="mx-auto grid max-w-7xl gap-8 px-6 py-20 lg:grid-cols-3 lg:px-10 lg:py-24">
+          {/* Explorer (Free) */}
           <Reveal>
             <div className="flex h-full flex-col border border-border bg-paper p-8 lg:p-10">
+              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-navy-deep/15 bg-navy-deep/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
+                <Sparkles className="h-3 w-3" /> Free forever
+              </div>
+              <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Explorer</h2>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="font-display text-4xl text-navy-deep">$0</span>
+                <span className="text-sm text-muted-foreground">/ month</span>
+              </div>
+              <p className="mt-4 text-sm text-muted-foreground">
+                Curious about the field? Create a free account and start booking Diplomat-level
+                coaches today.
+              </p>
+              <ul className="mt-6 space-y-3">
+                {EXPLORER.map((i) => (
+                  <li key={i} className="flex gap-3 text-sm text-navy-deep/85">
+                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
+                    <span>{i}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8">
+                <Link
+                  to="/auth"
+                  className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                >
+                  Create free account
+                </Link>
+                <p className="mt-3 text-xs text-muted-foreground">No card. No commitment.</p>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Compass */}
+          <Reveal delay={80}>
+            <div className="flex h-full flex-col border border-border bg-paper p-8 lg:p-10">
               <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-                Plan 01
+                Plan 02
               </div>
               <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Compass</h2>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="font-display text-4xl text-navy-deep">$35</span>
+                <span className="font-display text-4xl text-navy-deep">$20</span>
                 <span className="text-sm text-muted-foreground">/ month</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground">
@@ -158,7 +209,7 @@ function ServicesPage() {
           </Reveal>
 
           {/* Envoy */}
-          <Reveal delay={120}>
+          <Reveal delay={160}>
             <div className="flex h-full flex-col border-2 border-emerald bg-paper p-8 lg:p-10">
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald/30 bg-emerald/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">
                 <Star className="h-3 w-3" /> Most hands-on
@@ -169,7 +220,8 @@ function ServicesPage() {
                 <span className="text-sm text-muted-foreground">/ month</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground">
-                For people actively applying who want hands-on help with every step.
+                For people actively applying who want hands-on help with every step — including
+                two complimentary Diplomat coaching sessions every month.
               </p>
               <ul className="mt-6 space-y-3">
                 {ENVOY.map((i) => (
@@ -255,9 +307,9 @@ function ServicesPage() {
               Are the prices too high?
             </h2>
             <p className="mt-4 text-muted-foreground">
-              We want to help. If $25, $35, or $150 a month is out of reach right now, email us
-              and we'll work something out with you. No forms, no proof of income, no
-              awkwardness — just tell us where you are.
+              We want to help. Explorer is always free. If $20, $25, or $150 a month is still out
+              of reach right now, email us and we'll work something out with you. No forms, no
+              proof of income, no awkwardness — just tell us where you are.
             </p>
             <a
               href="mailto:hello@discoverdiplomacy.com"
