@@ -32,7 +32,7 @@ const GROUPS: NavGroup[] = [
     label: "For Employers",
     links: [
       { to: "/employer/browse", label: "Browse Talent" },
-      { to: "/pricing", search: { tab: "employers" }, label: "Employer Pricing" },
+      { to: "/pricing?tab=employers", label: "Employer Pricing" },
       { to: "/employers/apply", label: "Request Access" },
     ],
   },
