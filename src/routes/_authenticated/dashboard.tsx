@@ -329,8 +329,8 @@ function DashboardPage() {
                     Choose a plan to get started.
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Compass at $20/mo for self-directed job hunters. Envoy at $150/mo for
-                    hands-on coaching. Month-to-month, cancel anytime.
+                    Compass at $20/mo (or $192/yr) for self-directed job hunters. Envoy at
+                    $150/mo (or $1,440/yr) for hands-on coaching. Save 20% on annual. Cancel anytime.
                   </p>
                 </>
               )}
