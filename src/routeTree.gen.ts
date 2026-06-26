@@ -30,6 +30,8 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as GuideInternationalRelationsJobsRequirementsRouteImport } from './routes/guide.international-relations-jobs-requirements'
+import { Route as EmployersSampleProfilesRouteImport } from './routes/employers.sample-profiles'
+import { Route as EmployersResumeDropRouteImport } from './routes/employers.resume-drop'
 import { Route as EmployersApplyRouteImport } from './routes/employers.apply'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
@@ -52,6 +54,7 @@ import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_auth
 import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
+import { Route as AuthenticatedAdminOrganizationsRouteImport } from './routes/_authenticated/admin.organizations'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -162,6 +165,16 @@ const GuideInternationalRelationsJobsRequirementsRoute =
     path: '/guide/international-relations-jobs-requirements',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EmployersSampleProfilesRoute = EmployersSampleProfilesRouteImport.update({
+  id: '/sample-profiles',
+  path: '/sample-profiles',
+  getParentRoute: () => EmployersRoute,
+} as any)
+const EmployersResumeDropRoute = EmployersResumeDropRouteImport.update({
+  id: '/resume-drop',
+  path: '/resume-drop',
+  getParentRoute: () => EmployersRoute,
+} as any)
 const EmployersApplyRoute = EmployersApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
@@ -283,6 +296,12 @@ const AuthenticatedAdminReviewsRoute =
     path: '/reviews',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminOrganizationsRoute =
+  AuthenticatedAdminOrganizationsRouteImport.update({
+    id: '/organizations',
+    path: '/organizations',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
     id: '/lovable/email/transactional/send',
@@ -334,8 +353,11 @@ export interface FileRoutesByFullPath {
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
+  '/employers/resume-drop': typeof EmployersResumeDropRoute
+  '/employers/sample-profiles': typeof EmployersSampleProfilesRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -378,8 +400,11 @@ export interface FileRoutesByTo {
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
+  '/employers/resume-drop': typeof EmployersResumeDropRoute
+  '/employers/sample-profiles': typeof EmployersSampleProfilesRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/coaches': typeof CoachesIndexRoute
+  '/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -428,8 +453,11 @@ export interface FileRoutesById {
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
+  '/employers/resume-drop': typeof EmployersResumeDropRoute
+  '/employers/sample-profiles': typeof EmployersSampleProfilesRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/_authenticated/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
@@ -478,8 +506,11 @@ export interface FileRouteTypes {
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
+    | '/employers/resume-drop'
+    | '/employers/sample-profiles'
     | '/guide/international-relations-jobs-requirements'
     | '/coaches/'
+    | '/admin/organizations'
     | '/admin/reviews'
     | '/admin/users'
     | '/coach/clients'
@@ -522,8 +553,11 @@ export interface FileRouteTypes {
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
+    | '/employers/resume-drop'
+    | '/employers/sample-profiles'
     | '/guide/international-relations-jobs-requirements'
     | '/coaches'
+    | '/admin/organizations'
     | '/admin/reviews'
     | '/admin/users'
     | '/coach/clients'
@@ -571,8 +605,11 @@ export interface FileRouteTypes {
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
+    | '/employers/resume-drop'
+    | '/employers/sample-profiles'
     | '/guide/international-relations-jobs-requirements'
     | '/coaches/'
+    | '/_authenticated/admin/organizations'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/users'
     | '/_authenticated/coach/clients'
@@ -772,6 +809,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideInternationalRelationsJobsRequirementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/employers/sample-profiles': {
+      id: '/employers/sample-profiles'
+      path: '/sample-profiles'
+      fullPath: '/employers/sample-profiles'
+      preLoaderRoute: typeof EmployersSampleProfilesRouteImport
+      parentRoute: typeof EmployersRoute
+    }
+    '/employers/resume-drop': {
+      id: '/employers/resume-drop'
+      path: '/resume-drop'
+      fullPath: '/employers/resume-drop'
+      preLoaderRoute: typeof EmployersResumeDropRouteImport
+      parentRoute: typeof EmployersRoute
+    }
     '/employers/apply': {
       id: '/employers/apply'
       path: '/apply'
@@ -926,6 +977,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/organizations': {
+      id: '/_authenticated/admin/organizations'
+      path: '/organizations'
+      fullPath: '/admin/organizations'
+      preLoaderRoute: typeof AuthenticatedAdminOrganizationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
       path: '/lovable/email/transactional/send'
@@ -958,12 +1016,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminOrganizationsRoute: typeof AuthenticatedAdminOrganizationsRoute
   AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminOrganizationsRoute: AuthenticatedAdminOrganizationsRoute,
   AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
@@ -1048,10 +1108,14 @@ const CoachesRouteWithChildren =
 
 interface EmployersRouteChildren {
   EmployersApplyRoute: typeof EmployersApplyRoute
+  EmployersResumeDropRoute: typeof EmployersResumeDropRoute
+  EmployersSampleProfilesRoute: typeof EmployersSampleProfilesRoute
 }
 
 const EmployersRouteChildren: EmployersRouteChildren = {
   EmployersApplyRoute: EmployersApplyRoute,
+  EmployersResumeDropRoute: EmployersResumeDropRoute,
+  EmployersSampleProfilesRoute: EmployersSampleProfilesRoute,
 }
 
 const EmployersRouteWithChildren = EmployersRoute._addFileChildren(
