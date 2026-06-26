@@ -109,7 +109,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 Discover Diplomacy
               </div>
               <div className="hidden text-[10px] uppercase tracking-[0.22em] text-muted-foreground sm:block">
-                Talent Infrastructure for Global Careers
+                Discover Diplomacy for Global Careers
               </div>
             </div>
           </Link>
