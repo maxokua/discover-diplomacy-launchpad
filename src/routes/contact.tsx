@@ -175,12 +175,14 @@ function ContactPage() {
                     id="practice"
                     label="What are you interested in?"
                     options={[
+                      "Explorer (free account)",
                       "Compass plan ($20/mo)",
                       "Envoy plan ($150/mo)",
                       "Expert Resume Review ($25)",
-                      "Employer / candidate access",
-                      "Coaching with us",
-
+                      "Weekly opportunity digest",
+                      "Free career assessment",
+                      "Employer access to candidates",
+                      "Becoming a coach on the platform",
                       "Not yet sure",
                     ]}
                   />
