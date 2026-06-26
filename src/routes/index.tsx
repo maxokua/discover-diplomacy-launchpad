@@ -401,24 +401,30 @@ function CTA() {
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <Reveal className="grid gap-10 border-y border-border py-16 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
-            <div className="eyebrow">Begin an Engagement</div>
+            <div className="eyebrow">Start here</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-5xl">
-              Pick a plan and get to work.
+              Free to start. Built to get you the offer.
             </h2>
             <p className="mt-5 max-w-2xl text-muted-foreground">
-              Compass at $20/mo for self-directed job hunters. Envoy at $150/mo for hands-on
-              coaching. Or grab a one-time Expert Resume Review for $25. Month-to-month, cancel
-              anytime.
+              Explorer is free — create an account and book a Diplomat-level coach. Compass
+              at $20/mo adds the weekly digest, full resource library, and Ambassador
+              coaches. Envoy at $150/mo adds Presidential coaches and two complimentary
+              Diplomat sessions every month. Month-to-month, cancel anytime.
             </p>
           </div>
-          <div className="lg:col-span-4 lg:text-right">
+          <div className="flex flex-col items-stretch gap-3 lg:col-span-4 lg:items-end">
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-7 py-4 text-sm font-medium text-paper transition-colors hover:bg-navy"
+              className="inline-flex items-center justify-center gap-2 rounded-sm bg-navy-deep px-7 py-4 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
               See plans
-
               <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/assessment"
+              className="inline-flex items-center justify-center gap-2 rounded-sm border border-navy-deep/30 px-7 py-3 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
+            >
+              Take the free assessment
             </Link>
           </div>
         </Reveal>
