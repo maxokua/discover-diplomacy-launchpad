@@ -17,6 +17,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as EmployersRouteImport } from './routes/employers'
 import { Route as DirectoryRouteImport } from './routes/directory'
@@ -101,6 +102,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MembershipRoute = MembershipRouteImport.update({
@@ -358,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
   '/membership': typeof MembershipRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
@@ -411,6 +418,7 @@ export interface FileRoutesByTo {
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
   '/membership': typeof MembershipRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
@@ -464,6 +472,7 @@ export interface FileRoutesById {
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
   '/membership': typeof MembershipRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
@@ -520,6 +529,7 @@ export interface FileRouteTypes {
     | '/directory'
     | '/employers'
     | '/membership'
+    | '/pricing'
     | '/privacy'
     | '/reset-password'
     | '/services'
@@ -573,6 +583,7 @@ export interface FileRouteTypes {
     | '/directory'
     | '/employers'
     | '/membership'
+    | '/pricing'
     | '/privacy'
     | '/reset-password'
     | '/services'
@@ -625,6 +636,7 @@ export interface FileRouteTypes {
     | '/directory'
     | '/employers'
     | '/membership'
+    | '/pricing'
     | '/privacy'
     | '/reset-password'
     | '/services'
@@ -681,6 +693,7 @@ export interface RootRouteChildren {
   DirectoryRoute: typeof DirectoryRoute
   EmployersRoute: typeof EmployersRouteWithChildren
   MembershipRoute: typeof MembershipRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
@@ -754,6 +767,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/membership': {
@@ -1198,6 +1218,7 @@ const rootRouteChildren: RootRouteChildren = {
   DirectoryRoute: DirectoryRoute,
   EmployersRoute: EmployersRouteWithChildren,
   MembershipRoute: MembershipRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
