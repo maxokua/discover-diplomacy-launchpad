@@ -356,6 +356,69 @@ export type Database = {
         }
         Relationships: []
       }
+      employer_credit_ledger: {
+        Row: {
+          created_at: string
+          delta: number
+          environment: string
+          id: string
+          metadata: Json | null
+          reason: string
+          resume_id: string | null
+          stripe_session_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          delta: number
+          environment?: string
+          id?: string
+          metadata?: Json | null
+          reason: string
+          resume_id?: string | null
+          stripe_session_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          delta?: number
+          environment?: string
+          id?: string
+          metadata?: Json | null
+          reason?: string
+          resume_id?: string | null
+          stripe_session_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      employer_credits: {
+        Row: {
+          balance: number
+          created_at: string
+          granted_total: number
+          spent_total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          granted_total?: number
+          spent_total?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          granted_total?: number
+          spent_total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       employer_intros: {
         Row: {
           created_at: string
@@ -1066,6 +1129,19 @@ export type Database = {
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
+      }
+      employer_grant_purchase: {
+        Args: {
+          _credits: number
+          _env: string
+          _stripe_session_id: string
+          _user_id: string
+        }
+        Returns: number
+      }
+      employer_spend_credit: {
+        Args: { _env?: string; _resume_id: string; _user_id: string }
+        Returns: number
       }
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
