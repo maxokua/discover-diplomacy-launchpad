@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, Compass, Target, DoorOpen } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Compass, Target, DoorOpen, GraduationCap, Sparkles, Users } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 import { Parallax } from "@/components/scroll-effects";
@@ -9,25 +9,24 @@ import institution from "@/assets/institution.jpg";
 import ypfpLogo from "@/assets/ypfp-logo.jpg.asset.json";
 import americanUniversityLogo from "@/assets/american-university-logo.png.asset.json";
 
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Discover Diplomacy — Talent Infrastructure for Global Careers" },
+      { title: "Discover Diplomacy — The International Career Platform" },
       {
         name: "description",
         content:
-          "Discover the opportunities. Prepare the materials. Open the doors. Get hired. A curated directory, instant expert-designed application help, vetted insider coaches, and direct access to employers — built for international careers.",
+          "Discover the opportunities. Prepare the materials. Get hired. Fast. Choose Compass for self-directed tools or Envoy for unlimited coaching — built for international affairs and global business.",
       },
-      { property: "og:title", content: "Discover Diplomacy — Talent Infrastructure for Global Careers" },
+      { property: "og:title", content: "Discover Diplomacy — The International Career Platform" },
       {
         property: "og:description",
         content:
-          "Turn ambition into offers in diplomacy, multilaterals, global policy, and international business.",
+          "Choose Compass for self-directed tools, or Envoy for unlimited coaching. Universities — give your IR program a dedicated career layer.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/" },
-      { name: "twitter:title", content: "Discover Diplomacy — Talent Infrastructure for Global Careers" },
-      { name: "twitter:description", content: "Curated opportunities, expert-designed prep, vetted coaches, and direct employer access." },
+      { name: "twitter:title", content: "Discover Diplomacy — The International Career Platform" },
+      { name: "twitter:description", content: "Compass, Envoy, or our University Program. Three ways into international careers." },
     ],
     links: [
       { rel: "canonical", href: "https://discoverdiplomacy.org/" },
@@ -43,7 +42,7 @@ export const Route = createFileRoute("/")({
           description: BRAND.positioning,
           areaServed: "Worldwide",
           address: { "@type": "PostalAddress", addressLocality: "Washington", addressRegion: "DC", addressCountry: "US" },
-          serviceType: ["Opportunity directory", "Resume review", "Career coaching", "Interview preparation", "Employer access"],
+          serviceType: ["Opportunity directory", "Resume review", "Career coaching", "Interview preparation", "Employer access", "University program"],
         }),
       },
     ],
@@ -55,12 +54,12 @@ function HomePage() {
   return (
     <SiteLayout>
       <Hero />
+      <ThreePaths />
+      <Pillars />
       <Traction />
       <BackedBy />
-      <Pillars />
-      <Practice />
-      <Engagement />
       <ForEmployers />
+      <UniversityCallout />
       <CTA />
     </SiteLayout>
   );
@@ -72,39 +71,37 @@ function Hero() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-28">
         <div className="lg:col-span-7">
           <Reveal as="div" className="eyebrow">
-            Talent Infrastructure · International Affairs & Global Business
+            International Affairs · Global Business · Multilaterals
           </Reveal>
           <Reveal as="h1" delay={80} className="mt-6 font-display text-4xl leading-[1.05] text-navy-deep sm:text-5xl lg:text-[64px]">
             Discover the opportunities.<br />
             Prepare the materials.<br />
-            <span className="text-gilt">Open the doors.</span> Get hired.
+            <span className="text-gilt">Get hired. Fast.</span>
           </Reveal>
           <Reveal as="p" delay={160} className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Discover Diplomacy is the platform built for globally-minded students and
-            early-career professionals — combining a curated opportunity directory,
-            instant expert-designed application help, vetted insider coaches, and direct
-            access to employers. Fast, affordable, and built for this field.
+            For ambitious students and early-career professionals in international affairs.
+            Choose self-directed tools, hands-on coaching, or bring us in for your whole program.
           </Reveal>
           <Reveal delay={240} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
             <MagneticLink
-              to="/assessment"
+              to="/pricing"
               className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
-              Take the free assessment
+              Start with Compass
               <ArrowRight className="h-4 w-4" />
             </MagneticLink>
             <Link
-              to="/waitlist"
+              to="/pricing"
               className="inline-flex items-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3.5 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
             >
-              Get the weekly digest
+              See Envoy + Coaching
               <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
-              to="/services"
+              to="/universities"
               className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
             >
-              See plans
+              Are you a university? Learn more
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </Reveal>
@@ -125,34 +122,87 @@ function Hero() {
             </Parallax>
           </figure>
         </Reveal>
-
       </div>
     </section>
   );
 }
 
-function Traction() {
-  const stats = [
-    { v: TRACTION.peopleReached, l: "People reached through the directory and digest" },
-    { v: TRACTION.directoryViews, l: "Views on our curated opportunity directory" },
-    { v: TRACTION.weeklyOpportunities, l: "Global opportunities curated every week" },
+function ThreePaths() {
+  const paths = [
+    {
+      icon: Compass,
+      eyebrow: "Self-directed",
+      heading: "Self-directed? Start with Compass.",
+      body:
+        "Resume review, job board, members-only community, and weekly curated opportunities. Everything you need to apply yourself.",
+      price: "$20/mo",
+      cta: { label: "Start Compass", to: "/pricing" as const },
+      tone: "default" as const,
+    },
+    {
+      icon: Sparkles,
+      eyebrow: "Mentor included",
+      heading: "Want a mentor? Choose Envoy.",
+      body:
+        "Unlimited coaching, mock interviews, strategic guidance. A vetted insider walks you through every step.",
+      price: "$150/mo",
+      cta: { label: "Start Envoy", to: "/pricing" as const },
+      tone: "feature" as const,
+    },
+    {
+      icon: GraduationCap,
+      eyebrow: "For institutions",
+      heading: "Are you a university? We're your IR career layer.",
+      body:
+        "Give your international studies majors a dedicated career platform. Resume help, job board, coaching — in bulk.",
+      price: "$20/student/mo",
+      cta: { label: "Learn about our University Program", to: "/universities" as const },
+      tone: "default" as const,
+    },
   ];
   return (
-    <section className="border-b border-border bg-paper">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-14">
+    <section className="border-b border-border bg-stone">
+      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
         <Reveal>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-            What we've built so far
-          </div>
+          <div className="eyebrow">Three ways in</div>
+          <h2 className="mt-4 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
+            Three ways to get your next international role.
+          </h2>
         </Reveal>
-        <ul className="mt-6 grid gap-px border border-border bg-border md:grid-cols-3">
-          {stats.map((s, i) => (
-            <Reveal key={s.l} delay={i * 80} className="bg-paper p-8">
-              <div className="font-display text-4xl text-navy-deep lg:text-5xl">{s.v}</div>
-              <div className="mt-3 text-sm text-muted-foreground">{s.l}</div>
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {paths.map((p, i) => (
+            <Reveal key={p.heading} delay={i * 100}>
+              <div
+                className={
+                  "flex h-full flex-col border bg-paper p-8 " +
+                  (p.tone === "feature" ? "border-2 border-emerald" : "border-border")
+                }
+              >
+                <div className="flex items-center gap-3">
+                  <p.icon className={"h-6 w-6 " + (p.tone === "feature" ? "text-emerald" : "text-navy-deep")} />
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    {p.eyebrow}
+                  </div>
+                </div>
+                <h3 className="mt-4 font-display text-xl text-navy-deep">{p.heading}</h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+                <div className="mt-6 font-display text-2xl text-navy-deep">{p.price}</div>
+                <Link
+                  to={p.cta.to}
+                  className={
+                    "mt-6 inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-medium uppercase tracking-wider " +
+                    (p.tone === "feature"
+                      ? "bg-emerald text-navy-deep hover:bg-emerald/90"
+                      : "bg-navy-deep text-paper hover:bg-navy")
+                  }
+                >
+                  {p.cta.label}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
             </Reveal>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
@@ -164,14 +214,10 @@ function Pillars() {
     <section className="border-b border-border bg-paper">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
         <Reveal>
-          <div className="eyebrow">How the platform works</div>
+          <div className="eyebrow">Why Discover Diplomacy</div>
           <h2 className="mt-4 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
-            Three things every serious candidate needs. We do all three.
+            Built specifically for international careers.
           </h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">
-            Built on the principle that paid time is sold — coaching, review, expertise — but
-            genuine vouches are earned. We sell preparation and access to the venue; you earn the rest.
-          </p>
         </Reveal>
         <ul className="mt-12 grid gap-px border border-border bg-border lg:grid-cols-3">
           {PILLARS.map((p, i) => {
@@ -190,136 +236,29 @@ function Pillars() {
   );
 }
 
-
-const services = [
-  {
-    no: "01",
-    icon: Compass,
-    title: "Career Orientation",
-    headline: "Figure out what you actually want to do.",
-    desc: "The field is vast, foreign service, multilaterals, think tanks, international development, government affairs, global business. We help you cut through the noise and identify the roles, sectors, and trajectories that genuinely fit your interests, skills, and life.",
-    bullets: [
-      "Structured exploration of the field across diplomacy, policy, and international business",
-      "Self-assessment of strengths, values, and constraints",
-      "Sector and role mapping with realistic entry pathways",
-      "A written advisory memorandum outlining your direction",
-    ],
-  },
-  {
-    no: "02",
-    icon: Target,
-    title: "Placement Execution",
-    headline: "Land the role.",
-    desc: "Once direction is clear, we run a disciplined campaign to get you hired. Resume and narrative, network architecture, application strategy, interview preparation, and offer negotiation, the full arc from positioning to acceptance.",
-    bullets: [
-      "Resume, CV, and LinkedIn repositioning for the target sector",
-      "Network mapping and outreach strategy",
-      "Application drafting, review, and timing",
-      "Mock interviews with panel-style preparation tailored to each role",
-      "Offer evaluation and negotiation",
-    ],
-  },
-];
-
-function Practice() {
+function Traction() {
+  const stats = [
+    { v: TRACTION.peopleReached, l: "Professionals reached" },
+    { v: TRACTION.directoryViews, l: "Views to our opportunity directory" },
+    { v: "2,500+", l: "Vetted candidates" },
+    { v: "200+", l: "Coaches in our network" },
+    { v: "500+", l: "Employers accessing talent" },
+    { v: TRACTION.weeklyOpportunities, l: "Global opportunities curated weekly" },
+  ];
   return (
     <section className="border-b border-border bg-paper">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-12">
-          <Reveal as="header" className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
-            <div className="eyebrow">What We Do</div>
-            <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              Career orientation. Then placement.
-            </h2>
-            <p className="mt-5 text-muted-foreground">
-              We work with each client on two questions: what to do in the field,
-              and how to land it. Everything else is in service of those two answers.
-            </p>
-          </Reveal>
-
-          <div className="lg:col-span-8">
-            <ul className="divide-y divide-border border-y border-border">
-              {services.map((s, idx) => (
-                <li key={s.no}>
-                  <Reveal delay={idx * 100}>
-                    <div className="grid gap-8 py-10 md:grid-cols-[64px_1fr] md:items-start md:px-2">
-                      <div>
-                        <div className="font-display text-2xl text-emerald">{s.no}</div>
-                        <s.icon className="mt-4 h-6 w-6 text-navy-deep/60" />
-                      </div>
-                      <div>
-                        <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-                          {s.title}
-                        </div>
-                        <h3 className="mt-2 font-display text-2xl text-navy-deep">
-                          {s.headline}
-                        </h3>
-                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                          {s.desc}
-                        </p>
-                        <ul className="mt-5 space-y-2 text-sm text-navy-deep/85">
-                          {s.bullets.map((b) => (
-                            <li key={b} className="flex gap-3 border-l border-emerald/40 pl-3">
-                              <span>{b}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </Reveal>
-                </li>
-              ))}
-            </ul>
-            <Reveal delay={120} className="mt-8">
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
-              >
-                See the full engagement process <ArrowUpRight className="h-4 w-4" />
-              </Link>
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
+        <Reveal>
+          <div className="eyebrow">By the numbers</div>
+        </Reveal>
+        <ul className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+          {stats.map((s, i) => (
+            <Reveal key={s.l} delay={i * 60} className="bg-paper p-8">
+              <div className="font-display text-4xl text-navy-deep lg:text-5xl">{s.v}</div>
+              <div className="mt-3 text-sm text-muted-foreground">{s.l}</div>
             </Reveal>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const engagementSteps = [
-  { n: "01", t: "Make your account", d: "Sign up in under a minute." },
-  { n: "02", t: "Upload your documents", d: "Resume, CV, LinkedIn, whatever you've got. We work from what you give us." },
-  { n: "03", t: "Link the job postings", d: "Drop in the roles you actually want to apply to. That pings us." },
-  { n: "04", t: "We send it back", d: "Updated documents and clear advice, no hassle, no awkward email chains, no information overload." },
-];
-
-function Engagement() {
-  return (
-    <section className="border-b border-border bg-navy-deep text-paper">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-12">
-          <Reveal as="header" className="lg:col-span-5">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
-              Engagement Model
-            </div>
-            <h2 className="mt-5 font-display text-3xl text-paper lg:text-4xl">
-              Just clear insights into exactly what you should do.
-            </h2>
-            <p className="mt-5 max-w-md text-paper/70">
-              Make your account, upload your documents, and link the job postings you want to
-              apply to. That pings us, and we send you your updated documents and advice. No
-              hassle, no awkward email exchange, no information overload.
-            </p>
-          </Reveal>
-          <div className="grid gap-px bg-paper/10 lg:col-span-7 lg:grid-cols-2">
-            {engagementSteps.map((p, i) => (
-              <Reveal key={p.n} delay={i * 80} className="bg-navy-deep p-8">
-                <div className="font-display text-3xl text-emerald">{p.n}</div>
-                <h3 className="mt-4 font-display text-xl text-paper">{p.t}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-paper/70">{p.d}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -362,7 +301,6 @@ function BackedBy() {
   );
 }
 
-
 function ForEmployers() {
   return (
     <section className="border-b border-border bg-paper">
@@ -371,21 +309,27 @@ function ForEmployers() {
           <div className="lg:col-span-7">
             <div className="eyebrow">For Employers</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              Hiring? Access vetted candidates in international affairs.
+              Hiring? Unlock vetted international talent.
             </h2>
             <p className="mt-5 max-w-2xl text-muted-foreground">
-              Our clients are students and early-career professionals serious enough about the
-              field to invest in their own preparation. Browse their resumes and reach the ones
-              that fit your role.
+              Our members are pre-screened — students and early-career professionals serious
+              enough about the field to invest in their own preparation. Browse pre-screened
+              candidates and reach the ones that fit your role.
             </p>
           </div>
-          <div className="lg:col-span-5 lg:text-right">
+          <div className="flex flex-col items-stretch gap-3 lg:col-span-5 lg:items-end">
             <Link
               to="/employers"
-              className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
+              className="inline-flex items-center justify-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
-              Access candidate resumes
+              Browse Vetted Talent
               <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/pricing"
+              className="inline-flex items-center justify-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
+            >
+              See Employer Pricing
             </Link>
           </div>
         </Reveal>
@@ -394,6 +338,37 @@ function ForEmployers() {
   );
 }
 
+function UniversityCallout() {
+  return (
+    <section className="border-b border-border bg-navy-deep text-paper">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
+        <Reveal className="grid items-center gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
+              For Universities
+            </div>
+            <h2 className="mt-4 font-display text-2xl text-paper lg:text-3xl">
+              Already a university looking to support your students?
+            </h2>
+            <p className="mt-4 max-w-2xl text-paper/75">
+              Discover Diplomacy is the career layer your IR program needs. Bulk Compass
+              memberships at $20/student/mo, coach access, and quarterly outcomes reporting.
+            </p>
+          </div>
+          <div className="lg:col-span-4 lg:text-right">
+            <Link
+              to="/universities"
+              className="inline-flex items-center gap-2 bg-emerald px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-emerald/90"
+            >
+              <Users className="h-4 w-4" />
+              Learn about our University Program
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
 
 function CTA() {
   return (
@@ -403,18 +378,17 @@ function CTA() {
           <div className="lg:col-span-8">
             <div className="eyebrow">Start here</div>
             <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-5xl">
-              Free to start. Built to get you the offer.
+              Choose the path that fits you.
             </h2>
             <p className="mt-5 max-w-2xl text-muted-foreground">
-              Explorer is free — create an account and book a Diplomat-level coach. Compass
-              at $20/mo adds the weekly digest, full resource library, and Ambassador
-              coaches. Envoy at $150/mo adds Presidential coaches and two complimentary
-              Diplomat sessions every month. Month-to-month, cancel anytime.
+              Compass at $20/mo for self-directed tools, intel, and community. Envoy at $150/mo
+              when you want unlimited coaching and a mentor walking you through every step.
+              Switch anytime.
             </p>
           </div>
           <div className="flex flex-col items-stretch gap-3 lg:col-span-4 lg:items-end">
             <Link
-              to="/services"
+              to="/pricing"
               className="inline-flex items-center justify-center gap-2 rounded-sm bg-navy-deep px-7 py-4 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
               See plans

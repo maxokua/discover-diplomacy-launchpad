@@ -5,17 +5,17 @@ import { Reveal } from "@/components/reveal";
 export const Route = createFileRoute("/coaches/")({
   head: () => ({
     meta: [
-      { title: "Coach with Discover Diplomacy" },
+      { title: "Apply to coach with Discover Diplomacy" },
       {
         name: "description",
         content:
-          "Apply to coach with Discover Diplomacy. Market-leading pay per client, flexible scheduling, mission-driven work.",
+          "Coaches earn a share of every booking. Mission-driven mentorship for serious candidates only — no fluff. Apply to join our coaching network.",
       },
-      { property: "og:title", content: "Coach with Discover Diplomacy" },
+      { property: "og:title", content: "Apply to coach with Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "Apply to coach. Market-leading pay per client, flexible scheduling, mission-driven work.",
+          "Coaches earn a share of every booking. Real mentorship. Apply to join our coaching network.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/coaches" },
     ],
@@ -34,19 +34,24 @@ function CoachesIndexPage() {
           <Reveal>
             <div className="eyebrow">Coach With Us</div>
             <h1 className="mt-5 max-w-4xl font-display text-4xl text-navy-deep lg:text-6xl">
-              Help the next generation break into international affairs, and get paid at the top of the market.
+              Help the next generation break into international affairs. Get paid at the top of the market.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-              Discover Diplomacy pays coaches a market-leading rate per client. If you've built a
-              career in foreign policy, international business, or multilateral institutions, we
-              want to hear from you.
+              Coaches earn a share of every coaching booking. Serious candidates only. No fluff —
+              real mentorship from people who've walked the halls.
             </p>
-            <div className="mt-10">
+            <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 to="/coaches/apply"
                 className="inline-block bg-navy-deep px-8 py-4 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
               >
-                Apply here
+                Apply to Coach with Us
+              </Link>
+              <Link
+                to="/directory"
+                className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
+              >
+                See the coaching directory →
               </Link>
             </div>
           </Reveal>
@@ -61,9 +66,9 @@ function CoachesIndexPage() {
           </Reveal>
           <div className="mt-10 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
             {[
-              { t: "Top-of-market pay", d: "We pay coaches a market-leading rate per client. No platform fees skimmed off the top." },
-              { t: "Flexible", d: "Coach as many or as few clients as your schedule allows. Fully remote." },
-              { t: "Motivated clients", d: "Our clients self-select, they're serious, prepared, and globally minded." },
+              { t: "Top-of-market pay", d: "Coaches earn a share of every coaching booking. No platform fees skimmed off the top." },
+              { t: "Flexible", d: "Coach as many or as few candidates as your schedule allows. Fully remote." },
+              { t: "Pre-screened candidates", d: "Our paid members self-select — they're serious, prepared, and globally minded." },
               { t: "Mission-driven", d: "Open the field for people who couldn't otherwise navigate it on their own." },
             ].map((v, i) => (
               <Reveal key={v.t} delay={i * 60}>
@@ -98,7 +103,7 @@ function CoachesIndexPage() {
                 to="/coaches/apply"
                 className="inline-block bg-emerald px-16 py-6 font-display text-2xl text-navy-deep transition-transform hover:scale-105 lg:px-20 lg:py-7 lg:text-3xl"
               >
-                Apply here
+                Apply to Coach with Us
               </Link>
             </div>
             <p className="mt-6 text-sm text-paper/40">
