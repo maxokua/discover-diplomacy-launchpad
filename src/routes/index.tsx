@@ -72,30 +72,39 @@ function Hero() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-28">
         <div className="lg:col-span-7">
           <Reveal as="div" className="eyebrow">
-            Career Advisory · International Affairs & Global Business
+            Talent Infrastructure · International Affairs & Global Business
           </Reveal>
-          <Reveal as="h1" delay={80} className="mt-6 font-display text-4xl leading-[1.1] text-navy-deep sm:text-5xl lg:text-[64px]">
-            Discover what you want to do in the field, and how to land it.
+          <Reveal as="h1" delay={80} className="mt-6 font-display text-4xl leading-[1.05] text-navy-deep sm:text-5xl lg:text-[64px]">
+            Discover the opportunities.<br />
+            Prepare the materials.<br />
+            <span className="text-gilt">Open the doors.</span> Get hired.
           </Reveal>
           <Reveal as="p" delay={160} className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Discover Diplomacy advises students and early-career professionals pursuing
-            roles in diplomacy, international policy, multilateral institutions, and
-            international business. Our work begins with clarity about what you actually
-            want, and ends with the offer in hand.
+            Discover Diplomacy is the platform built for globally-minded students and
+            early-career professionals — combining a curated opportunity directory,
+            instant expert-designed application help, vetted insider coaches, and direct
+            access to employers. Fast, affordable, and built for this field.
           </Reveal>
-          <Reveal delay={240} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <Reveal delay={240} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
             <MagneticLink
-              to="/membership"
+              to="/assessment"
               className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
             >
-              Start a Membership
+              Take the free assessment
               <ArrowRight className="h-4 w-4" />
             </MagneticLink>
+            <Link
+              to="/waitlist"
+              className="inline-flex items-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3.5 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
+            >
+              Get the weekly digest
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
             <Link
               to="/services"
               className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
             >
-              How we work
+              See plans
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </Reveal>
@@ -117,6 +126,65 @@ function Hero() {
           </figure>
         </Reveal>
 
+      </div>
+    </section>
+  );
+}
+
+function Traction() {
+  const stats = [
+    { v: TRACTION.peopleReached, l: "People reached through the directory and digest" },
+    { v: TRACTION.directoryViews, l: "Views on our curated opportunity directory" },
+    { v: TRACTION.weeklyOpportunities, l: "Global opportunities curated every week" },
+  ];
+  return (
+    <section className="border-b border-border bg-paper">
+      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10 lg:py-14">
+        <Reveal>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+            What we've built so far
+          </div>
+        </Reveal>
+        <ul className="mt-6 grid gap-px border border-border bg-border md:grid-cols-3">
+          {stats.map((s, i) => (
+            <Reveal key={s.l} delay={i * 80} className="bg-paper p-8">
+              <div className="font-display text-4xl text-navy-deep lg:text-5xl">{s.v}</div>
+              <div className="mt-3 text-sm text-muted-foreground">{s.l}</div>
+            </Reveal>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function Pillars() {
+  const icons: Record<string, typeof Compass> = { clarity: Compass, preparation: Target, access: DoorOpen };
+  return (
+    <section className="border-b border-border bg-paper">
+      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+        <Reveal>
+          <div className="eyebrow">How the platform works</div>
+          <h2 className="mt-4 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
+            Three things every serious candidate needs. We do all three.
+          </h2>
+          <p className="mt-4 max-w-2xl text-muted-foreground">
+            Built on the principle that paid time is sold — coaching, review, expertise — but
+            genuine vouches are earned. We sell preparation and access to the venue; you earn the rest.
+          </p>
+        </Reveal>
+        <ul className="mt-12 grid gap-px border border-border bg-border lg:grid-cols-3">
+          {PILLARS.map((p, i) => {
+            const Icon = icons[p.key];
+            return (
+              <Reveal key={p.key} delay={i * 100} className="bg-paper p-8">
+                <Icon className="h-6 w-6 text-gilt" />
+                <h3 className="mt-5 font-display text-2xl text-navy-deep">{p.label}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.line}</p>
+              </Reveal>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );
