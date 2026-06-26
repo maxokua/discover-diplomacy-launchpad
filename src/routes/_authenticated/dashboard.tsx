@@ -12,6 +12,12 @@ import {
   updateProfile,
   getReviewedResumeUrl,
 } from "@/lib/payments.functions";
+import { getResumeDropStatus } from "@/lib/resume-drop.functions";
+import { ResumeDropCard } from "@/components/resume-drop/ResumeDropCard";
+import { ResumeDropIntroModal } from "@/components/resume-drop/ResumeDropIntroModal";
+import { NotificationsList } from "@/components/resume-drop/NotificationsBell";
+
+type ResumeDropStatus = Awaited<ReturnType<typeof getResumeDropStatus>>;
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard | Discover Diplomacy" }] }),
@@ -55,6 +61,18 @@ function DashboardPage() {
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [dropStatus, setDropStatus] = useState<ResumeDropStatus | null>(null);
+  const [introOpen, setIntroOpen] = useState(false);
+
+  async function loadDrop() {
+    try {
+      const s = await getResumeDropStatus({});
+      setDropStatus(s);
+      if (s.status === "opted_out" && !s.seenIntroAt) setIntroOpen(true);
+    } catch {
+      // ignore
+    }
+  }
 
   async function load() {
     const { data: userData } = await supabase.auth.getUser();
@@ -96,6 +114,7 @@ function DashboardPage() {
 
   useEffect(() => {
     load();
+    loadDrop();
   }, []);
 
   const isActiveMember = useMemo(() => {
