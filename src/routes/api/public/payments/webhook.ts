@@ -27,10 +27,9 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
 }
 
 async function syncTier(userId: string | null | undefined, env: StripeEnv) {
-  if (!userId || env !== "live" && env !== "sandbox") return;
-  // Only mirror live subscriptions onto the user's tier so sandbox testing
-  // doesn't grant production access. Adjust if you want sandbox to gate too.
-  if (env !== "live") return;
+  if (!userId || (env !== "live" && env !== "sandbox")) return;
+  // Mirror both sandbox and live subscriptions onto the user's tier so the
+  // preview/test environment fully exercises gated UX.
   try {
     await (getSupabase().rpc as any)("sync_user_service_tier", {
       _user_id: userId,
