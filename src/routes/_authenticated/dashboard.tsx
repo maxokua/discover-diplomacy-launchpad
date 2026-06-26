@@ -460,7 +460,7 @@ function DashboardPage() {
                   locked
                   title="Envoy-only features"
                   desc="5 tailored resumes/mo, LinkedIn rewrite, company research, coach messaging, monthly 1:1 call, and tailored interview prep."
-                  cta={{ label: "Upgrade to Envoy · $150/mo", to: "/services" }}
+                  cta={{ label: "Upgrade to Envoy · $150/mo", to: "/membership/checkout?tier=envoy&cadence=monthly" }}
                 />
               )}
             </div>
