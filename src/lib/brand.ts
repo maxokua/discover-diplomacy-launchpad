@@ -37,6 +37,7 @@ export const TRACTION = {
 } as const;
 
 // Pricing — DO NOT hardcode prices on individual pages.
+// Annual = ~20% off monthly (2.4 months free).
 export const PRICING = {
   explorer: {
     name: "Explorer",
@@ -51,6 +52,11 @@ export const PRICING = {
     price: 20,
     priceLabel: "$20",
     cadence: "/ month",
+    annualPrice: 192,
+    annualLabel: "$192",
+    annualCadence: "/ year",
+    annualEquivalent: "$16/mo billed annually",
+    annualSavings: "Save $48",
     tagline:
       "For students and early-career people getting oriented and job-hunting on their own.",
   },
@@ -59,6 +65,11 @@ export const PRICING = {
     price: 150,
     priceLabel: "$150",
     cadence: "/ month",
+    annualPrice: 1440,
+    annualLabel: "$1,440",
+    annualCadence: "/ year",
+    annualEquivalent: "$120/mo billed annually",
+    annualSavings: "Save $360",
     tagline:
       "For people actively applying who want hands-on help with every step — plus two complimentary Diplomat sessions every month.",
   },
@@ -71,6 +82,7 @@ export const PRICING = {
       "A coach reviews your resume line by line, tailored to the role you're targeting. Returned in 3–5 days.",
   },
 } as const;
+
 
 export const TRUST_WALL =
   "Paid time is sold (coaching, review, expertise). Genuine vouches and referrals are earned, never bought.";

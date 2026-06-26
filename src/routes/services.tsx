@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Star, Sparkles } from "lucide-react";
+import { useState } from "react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { PRICING } from "@/lib/brand";
+
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -10,16 +13,17 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Free Explorer account, Compass at $20/mo, and Envoy at $150/mo — plus a one-time Expert Resume Review at $25. Month-to-month, cancel anytime.",
+          "Free Explorer account, Compass at $20/mo ($192/yr — save 20%), Envoy at $150/mo ($1,440/yr — save 20%), plus one-time Expert Resume Review at $25.",
       },
       { property: "og:title", content: "Plans & Services | Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "Free Explorer with Diplomat coach access. Compass $20/mo. Envoy $150/mo with 2 complimentary Diplomat sessions. Resume Review $25.",
+          "Free Explorer with Diplomat coach access. Compass $20/mo or $192/yr. Envoy $150/mo or $1,440/yr with 2 complimentary Diplomat sessions. Resume Review $25.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/services" },
     ],
+
     links: [{ rel: "canonical", href: "https://discoverdiplomacy.org/services" }],
     scripts: [
       {
@@ -118,6 +122,14 @@ const ENVOY = [
 ];
 
 function ServicesPage() {
+  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
+  const isAnnual = billing === "annual";
+
+  const compassPrice = isAnnual ? PRICING.compass.annualLabel : PRICING.compass.priceLabel;
+  const compassCadence = isAnnual ? PRICING.compass.annualCadence : PRICING.compass.cadence;
+  const envoyPrice = isAnnual ? PRICING.envoy.annualLabel : PRICING.envoy.priceLabel;
+  const envoyCadence = isAnnual ? PRICING.envoy.annualCadence : PRICING.envoy.cadence;
+
   return (
     <SiteLayout>
       <section className="border-b border-border bg-paper">
@@ -128,8 +140,37 @@ function ServicesPage() {
               Three plans, one standalone service. Start free, upgrade when it's useful.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-              Month-to-month, no annual contracts. Cancel the day it stops being useful.
+              Pay monthly or save 20% with annual billing. Cancel the day it stops being useful.
             </p>
+
+            {/* Billing toggle */}
+            <div className="mt-8 inline-flex items-center gap-1 border border-border bg-paper p-1">
+              <button
+                type="button"
+                onClick={() => setBilling("monthly")}
+                className={`px-4 py-2 text-xs font-medium uppercase tracking-wider transition-colors ${
+                  !isAnnual ? "bg-navy-deep text-paper" : "text-navy-deep hover:bg-stone"
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                onClick={() => setBilling("annual")}
+                className={`inline-flex items-center gap-2 px-4 py-2 text-xs font-medium uppercase tracking-wider transition-colors ${
+                  isAnnual ? "bg-navy-deep text-paper" : "text-navy-deep hover:bg-stone"
+                }`}
+              >
+                Annual
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-[0.12em] ${
+                    isAnnual ? "bg-emerald text-navy-deep" : "bg-emerald/15 text-emerald"
+                  }`}
+                >
+                  −20%
+                </span>
+              </button>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -180,10 +221,13 @@ function ServicesPage() {
               </div>
               <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Compass</h2>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="font-display text-4xl text-navy-deep">$20</span>
-                <span className="text-sm text-muted-foreground">/ month</span>
+                <span className="font-display text-4xl text-navy-deep">{compassPrice}</span>
+                <span className="text-sm text-muted-foreground">{compassCadence}</span>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-1 text-xs text-emerald min-h-[1rem]">
+                {isAnnual ? `${PRICING.compass.annualEquivalent} · ${PRICING.compass.annualSavings}/yr` : ""}
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">
                 For students and early-career people getting oriented and job-hunting on their
                 own.
               </p>
@@ -198,7 +242,7 @@ function ServicesPage() {
               <div className="mt-8">
                 <Link
                   to="/waitlist"
-                  search={{ interest: "compass" }}
+                  search={{ interest: isAnnual ? "compass-annual" : "compass" }}
                   className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                 >
                   Join the waitlist
@@ -216,10 +260,13 @@ function ServicesPage() {
               </div>
               <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Envoy</h2>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="font-display text-4xl text-navy-deep">$150</span>
-                <span className="text-sm text-muted-foreground">/ month</span>
+                <span className="font-display text-4xl text-navy-deep">{envoyPrice}</span>
+                <span className="text-sm text-muted-foreground">{envoyCadence}</span>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-1 text-xs text-emerald min-h-[1rem]">
+                {isAnnual ? `${PRICING.envoy.annualEquivalent} · ${PRICING.envoy.annualSavings}/yr` : ""}
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">
                 For people actively applying who want hands-on help with every step — including
                 two complimentary Diplomat coaching sessions every month.
               </p>
@@ -234,7 +281,7 @@ function ServicesPage() {
               <div className="mt-8">
                 <Link
                   to="/waitlist"
-                  search={{ interest: "envoy" }}
+                  search={{ interest: isAnnual ? "envoy-annual" : "envoy" }}
                   className="inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                 >
                   Join the waitlist
@@ -248,6 +295,7 @@ function ServicesPage() {
 
       {/* Standalone resume review */}
       <section id="resume-review" className="border-b border-border bg-paper">
+
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
           <Reveal className="lg:col-span-5">
             <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
