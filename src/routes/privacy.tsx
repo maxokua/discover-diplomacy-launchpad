@@ -36,24 +36,112 @@ function PrivacyPage() {
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">Last updated June 2026</p>
 
+          {/* AI + Employer opt-in summary callouts */}
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            <div className="border-l-4 border-emerald bg-emerald/5 p-5">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald">
+                AI is part of this product
+              </div>
+              <p className="mt-2 text-sm text-navy-deep/90">
+                Discover Diplomacy uses artificial intelligence to power resume analysis, the
+                career assessment, drafting help, search, and matching. When you upload a
+                resume, take the assessment, or submit a form, your content is processed by
+                AI systems we operate or contract with. We do not sell your materials, and we
+                contractually require our AI vendors not to use your content to train their
+                public models.
+              </p>
+            </div>
+            <div className="border-l-4 border-navy-deep bg-navy-deep/5 p-5">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-navy-deep">
+                Employers see you only if you opt in
+              </div>
+              <p className="mt-2 text-sm text-navy-deep/90">
+                Your resume and profile are never visible to employers, recruiters, or hiring
+                partners by default. We share your materials with employers only after you
+                explicitly opt in inside your account settings, and you can opt out at any
+                time. Shares already delivered cannot be recalled from the recipient.
+              </p>
+            </div>
+          </div>
+
           <div className="prose prose-sm mt-10 max-w-none space-y-6 text-navy-deep/90">
             <p>
               This policy explains what Discover Diplomacy LLC ("we," "our," "us") collects, how
-              we use it, and the consent you give us when you create an account or buy a
-              service. Please read it carefully. By creating an account or using any part of the
+              we use it, the AI systems we rely on, and the consents you choose when you create
+              an account or buy a service. By creating an account or using any part of the
               site, you agree to everything below.
             </p>
 
             <h2 className="font-display text-xl text-navy-deep">No guarantee of employment</h2>
             <p>
-              We are a career coaching and resume practice. We do our best to help you land
-              interviews and offers, but we cannot and do not guarantee a job, an internship, a
-              fellowship, a placement, an interview, an introduction, or any specific outcome.
-              Hiring decisions belong to employers. Discover Diplomacy is not liable for any
-              hiring outcome, lost opportunity, lost wages, or other damages tied to your job
-              search, your application materials, or the advice you receive from us or any
-              coach working with us.
+              We are a career platform and coaching practice. We do our best to help you land
+              interviews and offers, but we cannot and do not guarantee a job, internship,
+              fellowship, placement, interview, introduction, or any specific outcome. Hiring
+              decisions belong to employers. Discover Diplomacy is not liable for any hiring
+              outcome, lost opportunity, lost wages, or other damages tied to your job search,
+              your application materials, or the advice you receive from us or any coach
+              working with us.
             </p>
+
+            <h2 className="font-display text-xl text-navy-deep">
+              Our use of artificial intelligence
+            </h2>
+            <p>
+              AI is integrated throughout the product. Specifically, we use AI to:
+            </p>
+            <ul className="list-disc space-y-2 pl-6">
+              <li>
+                Parse and analyze resumes you upload (extract text, score ATS-readiness,
+                identify keyword gaps, suggest rewording).
+              </li>
+              <li>
+                Generate your personalized output from the Career Assessment, including paths,
+                a 90-day plan, and a recommended membership tier.
+              </li>
+              <li>
+                Draft, edit, summarize, anonymize, and improve application materials when you
+                ask us to.
+              </li>
+              <li>
+                Match opportunities, coaches, and employers to your profile.
+              </li>
+              <li>
+                Operate spam, fraud, and abuse prevention.
+              </li>
+            </ul>
+            <p>
+              Your content may be processed by third-party AI providers (such as model
+              providers and inference gateways) under contracts that prohibit them from using
+              your content to train their public models. AI output is generated by software and
+              can be inaccurate, incomplete, or biased — review and verify before relying on
+              it. You can request that we delete AI-generated artifacts tied to your account by
+              emailing us. If you do not want your content processed by AI, do not upload
+              materials or use AI-powered features; most of the product depends on them.
+            </p>
+
+            <h2 className="font-display text-xl text-navy-deep">
+              Employer visibility is opt-in
+            </h2>
+            <p>
+              Employers, recruiters, fellowship programs, and hiring partners <strong>cannot
+              see your resume or profile unless you opt in</strong>. The opt-in lives in your
+              account settings and is off by default. When it is on:
+            </p>
+            <ul className="list-disc space-y-2 pl-6">
+              <li>
+                Vetted employers in our network can be shown your profile and resume for the
+                purpose of recruiting.
+              </li>
+              <li>
+                You can turn the toggle off at any time, which prevents future sharing.
+                Materials already shared with a specific employer cannot be recalled from
+                them.
+              </li>
+              <li>
+                We never sell your personal information, and we never share contact details
+                with employers without your consent.
+              </li>
+            </ul>
 
             <h2 className="font-display text-xl text-navy-deep">
               What you agree to when you sign up
@@ -66,35 +154,30 @@ function PrivacyPage() {
               </li>
               <li>
                 Edit, rewrite, restructure, reformat, and otherwise revise your resume and
-                application materials as we judge best for your candidacy. Final accuracy of
-                any submitted version is your responsibility.
+                application materials, including with AI assistance, as we judge best for
+                your candidacy. Final accuracy of any submitted version is your responsibility.
               </li>
               <li>
-                Use artificial intelligence and machine learning tools to help review, draft,
-                edit, anonymize, summarize, or improve your materials. Your content may be
-                processed by third-party AI providers we contract with. We do not sell your
-                materials to AI vendors for model training.
-              </li>
-              <li>
-                Share your resume and basic profile information with employers, recruiters,
-                fellowship programs, hiring partners, and other coaches in our network for the
-                purpose of helping you find work. You may opt out of employer sharing at any
-                time by emailing us; sharing already made cannot be recalled.
+                Process your content with AI systems as described in the "Our use of artificial
+                intelligence" section above.
               </li>
               <li>
                 Contact you by email about your account, your services, and opportunities we
-                think are relevant.
+                think are relevant. You can unsubscribe from non-essential email at any time.
               </li>
             </ul>
+            <p>
+              You do <strong>not</strong> agree, by signing up alone, to: (a) have your
+              materials shared with employers — that requires a separate opt-in; or (b) be
+              featured publicly. Both are explicit, granular choices inside your account.
+            </p>
 
             <h2 className="font-display text-xl text-navy-deep">Information we collect</h2>
             <ul className="list-disc space-y-2 pl-6">
-              <li>
-                Account information you give us: name, email, password, profile details.
-              </li>
+              <li>Account information you give us: name, email, password, profile details.</li>
               <li>
                 Documents and content you upload: resumes, cover letters, links, notes, target
-                roles.
+                roles, assessment responses.
               </li>
               <li>
                 Inquiry and application data: messages, forms, coach applications, employer
@@ -113,19 +196,31 @@ function PrivacyPage() {
             <h2 className="font-display text-xl text-navy-deep">How we use your information</h2>
             <p>
               To provide the services you bought, to coach and review your materials, to
-              connect you with employers and coaches in our network, to process payments, to
-              respond to inquiries, to send service-related and relevant opportunity emails,
-              to detect fraud and abuse, to comply with the law, and to operate and improve
-              the platform.
+              power AI features, to connect you with employers and coaches (subject to the
+              opt-ins above), to process payments, to respond to inquiries, to send
+              service-related and relevant opportunity emails, to detect fraud and abuse, to
+              comply with the law, and to operate and improve the platform.
             </p>
 
             <h2 className="font-display text-xl text-navy-deep">Sharing</h2>
             <p>
               We do not sell your personal information. We share data with: (a) vendors that
               run the service for us, including payment processing, email delivery, cloud
-              hosting, analytics, and AI providers; (b) coaches working with our practice;
-              (c) employers and recruiters you've consented to be visible to; (d) authorities
-              when required by law, court order, or to protect rights, property, or safety.
+              hosting, analytics, and AI providers; (b) coaches working with our practice
+              when you book or are matched with them; (c) employers and recruiters
+              <strong> only when you have opted in</strong>; (d) authorities when required by
+              law, court order, or to protect rights, property, or safety.
+            </p>
+
+            <h2 className="font-display text-xl text-navy-deep">Subscriptions and billing</h2>
+            <p>
+              Memberships are offered on a monthly or annual cadence. Annual plans are billed
+              once for twelve months at roughly a 20% discount versus paying monthly. Annual
+              plans renew once per year on the anniversary of purchase; monthly plans renew
+              every month. You can cancel future renewals at any time from your account.
+              Promotional codes and pricing accommodations are offered at our discretion.
+              Refund eligibility, if any, is described at the point of sale or in the service
+              confirmation; annual plans are generally non-refundable after the first 7 days.
             </p>
 
             <h2 className="font-display text-xl text-navy-deep">Coaching disclaimers</h2>
@@ -150,29 +245,25 @@ function PrivacyPage() {
               </li>
             </ul>
 
-            <h2 className="font-display text-xl text-navy-deep">Payments and refunds</h2>
-            <p>
-              Memberships and resume reviews are paid in advance through our payment
-              processor. Promotional codes and pricing accommodations are offered at our
-              discretion and may be limited in number or time. Refund eligibility, if any, is
-              described at the point of sale or in the service confirmation.
-            </p>
-
             <h2 className="font-display text-xl text-navy-deep">Your choices</h2>
             <p>
-              You may request access to, correction of, or deletion of your data by emailing{" "}
+              You may request access to, correction of, or deletion of your data — including
+              AI-generated artifacts and uploaded documents — by emailing{" "}
               <a className="underline" href="mailto:hello@discoverdiplomacy.org">
                 hello@discoverdiplomacy.org
               </a>
-              . You may unsubscribe from marketing emails at any time. Some records, such as
-              payment receipts, must be retained for legal and accounting purposes.
+              . You may toggle employer visibility on or off at any time. You may unsubscribe
+              from marketing emails at any time. Some records, such as payment receipts, must
+              be retained for legal and accounting purposes.
             </p>
 
             <h2 className="font-display text-xl text-navy-deep">Security</h2>
             <p>
               We use reasonable administrative and technical safeguards to protect your
-              information. No system is perfectly secure, and we cannot guarantee absolute
-              security. Use a strong, unique password and keep your login credentials private.
+              information, including row-level access controls on our database so that, by
+              default, only you can read your own documents and analyses. No system is
+              perfectly secure, and we cannot guarantee absolute security. Use a strong,
+              unique password and keep your login credentials private.
             </p>
 
             <h2 className="font-display text-xl text-navy-deep">Children</h2>
@@ -189,16 +280,15 @@ function PrivacyPage() {
               and other jurisdictions where our vendors operate.
             </p>
 
-            <h2 className="font-display text-xl text-navy-deep">
-              Limitation of liability
-            </h2>
+            <h2 className="font-display text-xl text-navy-deep">Limitation of liability</h2>
             <p>
               To the maximum extent permitted by law, Discover Diplomacy and its coaches,
               contractors, and partners are not liable for any indirect, incidental, special,
               consequential, or punitive damages, including lost employment, lost wages, lost
               opportunities, lost data, or reputational harm, arising from your use of the
-              service. Our total liability to you for any claim related to the service will
-              not exceed the amount you paid us in the twelve months before the claim arose.
+              service or from AI-generated output. Our total liability to you for any claim
+              related to the service will not exceed the amount you paid us in the twelve
+              months before the claim arose.
             </p>
 
             <h2 className="font-display text-xl text-navy-deep">Changes to this policy</h2>
@@ -222,3 +312,4 @@ function PrivacyPage() {
     </SiteLayout>
   );
 }
+
