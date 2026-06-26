@@ -101,7 +101,7 @@ function ContactPage() {
               <li className="flex gap-4">
                 <Mail className="h-5 w-5 flex-shrink-0 text-emerald" />
                 <div>
-                  <div className="font-medium text-navy-deep">Engagements</div>
+                  <div className="font-medium text-navy-deep">Coaches & Employers</div>
                   <a
                     href="mailto:hello@discoverdiplomacy.org"
                     className="text-muted-foreground hover:text-navy-deep"
