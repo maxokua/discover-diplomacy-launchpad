@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { ScrollProgress } from "@/components/scroll-effects";
 import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 
-type NavLink = { to: string; label: string; hash?: string; search?: Record<string, string> };
+type NavLink = { to: string; label: string; hash?: string };
 type NavGroup = { label: string; links: NavLink[] };
 
 const GROUPS: NavGroup[] = [
