@@ -12,6 +12,12 @@ import {
   updateProfile,
   getReviewedResumeUrl,
 } from "@/lib/payments.functions";
+import { getResumeDropStatus } from "@/lib/resume-drop.functions";
+import { ResumeDropCard } from "@/components/resume-drop/ResumeDropCard";
+import { ResumeDropIntroModal } from "@/components/resume-drop/ResumeDropIntroModal";
+import { NotificationsList } from "@/components/resume-drop/NotificationsBell";
+
+type ResumeDropStatus = Awaited<ReturnType<typeof getResumeDropStatus>>;
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard | Discover Diplomacy" }] }),
@@ -55,6 +61,18 @@ function DashboardPage() {
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [dropStatus, setDropStatus] = useState<ResumeDropStatus | null>(null);
+  const [introOpen, setIntroOpen] = useState(false);
+
+  async function loadDrop() {
+    try {
+      const s = await getResumeDropStatus({});
+      setDropStatus(s);
+      if (s.status === "opted_out" && !s.seenIntroAt) setIntroOpen(true);
+    } catch {
+      // ignore
+    }
+  }
 
   async function load() {
     const { data: userData } = await supabase.auth.getUser();
@@ -96,6 +114,7 @@ function DashboardPage() {
 
   useEffect(() => {
     load();
+    loadDrop();
   }, []);
 
   const isActiveMember = useMemo(() => {
@@ -439,6 +458,26 @@ function DashboardPage() {
         </section>
       )}
 
+      {/* Resume Drop (Member Pool) */}
+      <section className="border-b border-border bg-paper">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10 lg:py-12">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              {dropStatus ? (
+                <ResumeDropCard status={dropStatus} onChanged={loadDrop} />
+              ) : (
+                <div className="border border-border bg-paper p-8 text-sm text-muted-foreground">
+                  Loading Resume Drop status…
+                </div>
+              )}
+            </div>
+            <div>
+              <NotificationsList />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Resume reviews (always available) */}
       <section className="bg-stone">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
@@ -510,6 +549,12 @@ function DashboardPage() {
           </div>
         </div>
       </section>
+
+      <ResumeDropIntroModal
+        open={introOpen}
+        onClose={() => setIntroOpen(false)}
+        onSaved={loadDrop}
+      />
     </SiteLayout>
   );
 }
