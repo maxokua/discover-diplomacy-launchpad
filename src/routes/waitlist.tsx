@@ -1,4 +1,4 @@
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,7 +34,7 @@ const COPY = {
 } as const;
 
 function WaitlistPage() {
-  const { interest } = useSearch({ from: "/waitlist" });
+  const { interest } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
