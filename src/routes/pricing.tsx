@@ -228,7 +228,7 @@ function IndividualsTab() {
               <div className="mt-8 pt-2">
                 <Link
                   to="/waitlist"
-                  search={{ interest: isAnnual ? "compass-annual" : "compass" }}
+                  search={{ interest: "compass" }}
                   className="inline-flex w-full items-center justify-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
                 >
                   Start with Compass
@@ -282,7 +282,7 @@ function IndividualsTab() {
               <div className="mt-8 pt-2">
                 <Link
                   to="/waitlist"
-                  search={{ interest: isAnnual ? "envoy-annual" : "envoy" }}
+                  search={{ interest: "envoy" }}
                   className="inline-flex w-full items-center justify-center bg-emerald px-6 py-3 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-emerald/90"
                 >
                   Start Envoy
