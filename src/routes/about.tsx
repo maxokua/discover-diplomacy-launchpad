@@ -45,6 +45,25 @@ function AboutPage() {
               development, human rights, international business — are fragmented and gated by
               who-you-know. Discover Diplomacy is the platform that turns ambition into offers.
             </p>
+            <p className="mt-5 max-w-3xl text-base leading-relaxed text-navy-deep/85">
+              We're building the talent infrastructure layer for international careers. Four
+              audiences, one mission: get serious people into roles they love — candidates,
+              universities, employers, and the coaches who mentor them.
+            </p>
+          </Reveal>
+
+          <Reveal delay={140} className="mt-12 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
+            {[
+              { t: "Candidates", d: "Compass or Envoy — self-directed tools or unlimited coaching.", to: "/pricing" as const },
+              { t: "Universities", d: "Bulk Compass at $20/student/mo for IR programs.", to: "/universities" as const },
+              { t: "Employers", d: "Browse pre-screened candidates. Free + paid tiers.", to: "/employers" as const },
+              { t: "Coaches", d: "Apply to coach. Earn at the top of the market.", to: "/coaches/apply" as const },
+            ].map((a) => (
+              <Link key={a.t} to={a.to} className="group bg-paper p-6 transition-colors hover:bg-stone">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">For {a.t}</div>
+                <div className="mt-2 font-display text-lg text-navy-deep group-hover:underline">{a.d}</div>
+              </Link>
+            ))}
           </Reveal>
         </div>
       </section>

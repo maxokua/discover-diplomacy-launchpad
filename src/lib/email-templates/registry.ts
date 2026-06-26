@@ -1,5 +1,9 @@
 import type { ComponentType } from 'react'
 import { template as assessmentPlanTemplate } from './assessment-plan'
+import { template as compassWelcomeTemplate } from './compass-welcome'
+import { template as envoyUpsellTemplate } from './envoy-upsell'
+import { template as universityMonthlyTemplate } from './university-monthly'
+import { template as employerUnlockTemplate } from './employer-unlock'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -15,4 +19,8 @@ export interface TemplateEntry {
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'assessment-plan': assessmentPlanTemplate,
+  'compass-welcome': compassWelcomeTemplate,
+  'envoy-upsell': envoyUpsellTemplate,
+  'university-monthly': universityMonthlyTemplate,
+  'employer-unlock': employerUnlockTemplate,
 }

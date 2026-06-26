@@ -1,22 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, ShieldCheck, Inbox } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 
 export const Route = createFileRoute("/employers")({
   head: () => ({
     meta: [
-      { title: "For Employers — Candidate Resumes | Discover Diplomacy" },
+      { title: "For Employers — Unlock Vetted International Talent | Discover Diplomacy" },
       {
         name: "description",
         content:
-          "Hiring in international affairs, policy, or global business? Apply for verified employer access to Discover Diplomacy's candidate directory.",
+          "Hiring in international affairs, policy, or global business? Browse pre-screened candidates. Free to browse public profiles. Starter and Professional unlock the Member Pool.",
       },
       { property: "og:title", content: "For Employers | Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "Verified employers only. Apply for access to vetted candidates pursuing roles in diplomacy, policy, multilaterals, and international business.",
+          "Browse pre-screened candidates pursuing roles in diplomacy, policy, multilaterals, and international business.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/employers" },
     ],
@@ -35,19 +35,25 @@ function EmployersPage() {
           <Reveal>
             <div className="eyebrow">For Employers</div>
             <h1 className="mt-5 max-w-4xl font-display text-4xl text-navy-deep lg:text-6xl">
-              Vetted candidates, behind a verified-employer wall.
+              Unlock vetted international talent.
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-              Our members trust us with their materials and identities. Every employer is
-              individually verified before getting near the directory — no self-serve sign-ups,
-              no scraping, no recruiter spam.
+              Browse pre-screened candidates serious enough about international affairs to invest
+              in their own preparation. Free to browse public profiles. Starter and Professional
+              unlock the Member Pool.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 to="/employers/resume-drop"
                 className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper hover:bg-navy"
               >
-                Explore the Member Resume Drop <ArrowRight className="h-4 w-4" />
+                Browse Vetted Talent <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/pricing"
+                className="inline-flex items-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3 text-sm font-medium text-navy-deep hover:border-navy-deep hover:bg-navy-deep/5"
+              >
+                See Employer Pricing
               </Link>
               <Link
                 to="/employers/apply"
@@ -55,12 +61,6 @@ function EmployersPage() {
               >
                 Apply for employer access →
               </Link>
-              <a
-                href="mailto:hello@discoverdiplomacy.org"
-                className="text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
-              >
-                hello@discoverdiplomacy.org
-              </a>
             </div>
           </Reveal>
         </div>
@@ -75,7 +75,7 @@ function EmployersPage() {
             </h2>
             <p className="mt-5 text-muted-foreground">
               Every candidate has been through our coaching process. You see polished resumes
-              and the target roles they're actually pursuing.
+              and the target roles they're actively pursuing.
             </p>
           </Reveal>
           <Reveal className="lg:col-span-7" delay={120}>
@@ -84,7 +84,7 @@ function EmployersPage() {
                 "Searchable directory of active candidates and their resumes",
                 "Filter by target sector, region, language, and graduation year",
                 "Resumes already tailored and ATS-optimized by our coaches",
-                "Direct contact through Discover Diplomacy, no bidding, no spam",
+                "Direct contact through Discover Diplomacy — no bidding, no spam",
                 "Members opt in to be visible to employers — every candidate consents",
               ].map((i) => (
                 <li key={i} className="flex gap-3 text-sm text-navy-deep/90">
@@ -93,6 +93,48 @@ function EmployersPage() {
                 </li>
               ))}
             </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Resume Drop section */}
+      <section className="border-b border-border bg-paper">
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-24">
+          <Reveal className="lg:col-span-5">
+            <Inbox className="h-7 w-7 text-emerald" />
+            <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
+              The Resume Drop (Member Pool)
+            </h2>
+            <p className="mt-5 text-muted-foreground">
+              The Member Pool is our opt-in pipeline of paid members — Compass and Envoy
+              candidates who've consented to be discovered by verified employers. Starter and
+              Professional tiers unlock monthly candidate credits to reach them directly.
+            </p>
+            <Link
+              to="/employers/resume-drop"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
+            >
+              Learn more about Resume Drop <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Reveal>
+          <Reveal className="lg:col-span-7" delay={120}>
+            <div className="grid gap-px border border-border bg-border sm:grid-cols-2">
+              {[
+                { t: "Free", d: "Browse public candidate profiles. Apply for verification." },
+                { t: "Starter — $30/mo", d: "Unlock 3 Member Pool candidates per month." },
+                { t: "Professional — $100/mo", d: "Unlock 12 candidates per month + advanced filters." },
+                { t: "À la carte — $18 / unlock", d: "Pay per candidate. Credits never expire." },
+              ].map((tier) => (
+                <div key={tier.t} className="bg-paper p-6">
+                  <div className="font-display text-base text-navy-deep">{tier.t}</div>
+                  <p className="mt-2 text-sm text-muted-foreground">{tier.d}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">
+              All tiers require employer verification. Placement fee applies when candidates are
+              hired — see <Link to="/pricing" className="underline-offset-4 hover:underline">pricing</Link>.
+            </p>
           </Reveal>
         </div>
       </section>

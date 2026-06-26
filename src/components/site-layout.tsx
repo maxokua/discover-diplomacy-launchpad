@@ -1,21 +1,53 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { type ReactNode, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import logoAsset from "@/assets/compass-logo.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 import { ScrollProgress } from "@/components/scroll-effects";
 import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 
-const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/assessment", label: "Assessment" },
-  { to: "/services", label: "Services" },
-  { to: "/directory", label: "Directory" },
+type NavLink = { to: string; label: string; hash?: string };
+type NavGroup = { label: string; links: NavLink[] };
+
+const GROUPS: NavGroup[] = [
+  {
+    label: "For Candidates",
+    links: [
+      { to: "/pricing", label: "Compass — $20/mo" },
+      { to: "/pricing", label: "Envoy — $150/mo" },
+      { to: "/directory", label: "Coach Directory" },
+      { to: "/employers/resume-drop", label: "Resume Drop" },
+      { to: "/assessment", label: "Free Assessment" },
+    ],
+  },
+  {
+    label: "For Universities",
+    links: [
+      { to: "/universities", label: "University Program" },
+      { to: "/universities", label: "Request a Demo" },
+    ],
+  },
+  {
+    label: "For Employers",
+    links: [
+      { to: "/employers", label: "Browse Candidates" },
+      { to: "/pricing", label: "Employer Pricing" },
+      { to: "/employers/apply", label: "Request Access" },
+    ],
+  },
+  {
+    label: "For Coaches",
+    links: [
+      { to: "/coaches/apply", label: "Apply to Coach" },
+      { to: "/directory", label: "Coach Directory" },
+    ],
+  },
+];
+
+const FLAT_LINKS: NavLink[] = [
   { to: "/about", label: "About" },
-  { to: "/coaches", label: "Coaches" },
-  { to: "/employers", label: "Employers" },
   { to: "/contact", label: "Contact" },
-] as const;
+];
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -30,7 +62,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <div className="hidden border-b border-border bg-navy-deep text-paper md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-xs lg:px-10">
           <span className="truncate text-paper/70">
-            Built for globally-minded students and early-career professionals.
+            The international career platform — for candidates, universities, and employers.
           </span>
           <div className="flex shrink-0 items-center gap-5 text-paper/70">
             <a href="mailto:hello@discoverdiplomacy.org" className="hover:text-paper">
@@ -60,7 +92,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-border bg-paper/95 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:h-20 lg:gap-6 lg:px-10">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:h-20 lg:gap-2 lg:px-10">
           <Link
             to="/"
             className="flex min-w-0 shrink-0 items-center gap-3 pr-2"
@@ -83,16 +115,19 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
           <nav
             aria-label="Primary navigation"
-            className="ml-auto hidden shrink-0 items-center gap-5 lg:flex xl:gap-7"
+            className="ml-auto hidden shrink-0 items-center gap-1 lg:flex"
           >
-            {NAV.map((n) => {
-              const active = pathname === n.to || (n.to !== "/" && pathname.startsWith(n.to));
+            {GROUPS.map((g) => (
+              <NavDropdown key={g.label} group={g} />
+            ))}
+            {FLAT_LINKS.map((n) => {
+              const active = pathname === n.to;
               return (
                 <Link
                   key={n.to}
                   to={n.to}
                   className={
-                    "whitespace-nowrap text-sm transition-colors " +
+                    "whitespace-nowrap px-3 py-2 text-sm transition-colors " +
                     (active
                       ? "text-navy-deep font-medium"
                       : "text-muted-foreground hover:text-navy-deep")
@@ -104,7 +139,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             })}
             <Link
               to={user ? "/dashboard" : "/auth"}
-              className="ml-1 inline-flex items-center whitespace-nowrap rounded-sm bg-navy-deep px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
+              className="ml-2 inline-flex items-center whitespace-nowrap rounded-sm bg-navy-deep px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
             >
               {user ? "Dashboard" : "Sign in"}
             </Link>
@@ -126,8 +161,29 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             aria-label="Mobile navigation"
             className="border-t border-border bg-paper lg:hidden"
           >
-            <div className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6">
-              {NAV.map((n) => (
+            <div className="mx-auto flex max-w-7xl flex-col px-4 py-2 sm:px-6">
+              {GROUPS.map((g) => (
+                <details key={g.label} className="group border-b border-border">
+                  <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium text-navy-deep">
+                    {g.label}
+                    <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                  </summary>
+                  <ul className="pb-3">
+                    {g.links.map((l, i) => (
+                      <li key={`${l.to}-${i}`}>
+                        <Link
+                          to={l.to}
+                          onClick={() => setOpen(false)}
+                          className="block py-2 pl-3 text-sm text-muted-foreground hover:text-navy-deep"
+                        >
+                          {l.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+              {FLAT_LINKS.map((n) => (
                 <Link
                   key={n.to}
                   to={n.to}
@@ -158,12 +214,61 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   );
 }
 
+function NavDropdown({ group }: { group: NavGroup }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onDoc(e: MouseEvent) {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1 whitespace-nowrap px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-navy-deep"
+      >
+        {group.label}
+        <ChevronDown className="h-3.5 w-3.5" />
+      </button>
+      {open && (
+        <div className="absolute left-0 top-full z-50 min-w-[240px] border border-border bg-paper shadow-md">
+          <ul className="py-2">
+            {group.links.map((l, i) => (
+              <li key={`${l.to}-${i}`}>
+                <Link
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className="block px-4 py-2 text-sm text-navy-deep hover:bg-stone"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SiteFooter() {
   const year = new Date().getFullYear();
   return (
     <footer className="border-t border-border bg-navy-deep text-paper">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-12 lg:px-10">
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-4">
           <div className="flex items-center gap-3">
             <img src={logoAsset.url} alt="Discover Diplomacy" className="h-10 w-10" />
             <div>
@@ -174,10 +279,9 @@ function SiteFooter() {
             </div>
           </div>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-paper/70">
-            The talent infrastructure layer for internationally-focused careers.
-            Discover opportunities, prepare your materials, and reach vetted insider
-            coaches and verified employers — built for diplomacy, multilaterals,
-            global policy, and international business.
+            The international career platform — curated opportunities, expert-designed
+            preparation, vetted insider coaches, and verified employer access. Built for
+            diplomacy, multilaterals, global policy, and international business.
           </p>
           <p className="mt-4 text-sm text-paper/70">
             <a
@@ -189,45 +293,50 @@ function SiteFooter() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-8 lg:col-span-7 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-8 lg:col-span-8 lg:grid-cols-5">
           <FooterCol
-            title="Plans"
+            title="Candidates"
             links={[
-              { to: "/services", label: "Compass · $20/mo" },
-              { to: "/services", label: "Envoy · $150/mo" },
-              { to: "/services", label: "Resume Review · $25" },
+              { to: "/pricing", label: "Compass" },
+              { to: "/pricing", label: "Envoy" },
+              { to: "/directory", label: "Coach Directory" },
+              { to: "/employers/resume-drop", label: "Resume Drop" },
+              { to: "/assessment", label: "Free Assessment" },
+              { to: "/auth", label: "Sign In" },
             ]}
           />
           <FooterCol
-            title="Engage"
+            title="Universities"
             links={[
-              { to: "/assessment", label: "Free assessment" },
-              { to: "/waitlist", label: "Weekly digest" },
-              { to: "/directory", label: "Opportunity directory" },
+              { to: "/universities", label: "University Program" },
+              { to: "/universities", label: "Request a Demo" },
+            ]}
+          />
+          <FooterCol
+            title="Employers"
+            links={[
+              { to: "/employers", label: "Browse Candidates" },
+              { to: "/pricing", label: "Pricing" },
+              { to: "/employers/apply", label: "How it Works" },
+            ]}
+          />
+          <FooterCol
+            title="Coaches"
+            links={[
+              { to: "/coaches/apply", label: "Apply to Coach" },
+              { to: "/coaches", label: "Coaching Guidelines" },
+            ]}
+          />
+          <FooterCol
+            title="Company"
+            links={[
               { to: "/about", label: "About" },
               { to: "/contact", label: "Contact" },
+              { to: "/brand-guide", label: "Brand & Voice" },
+              { to: "/privacy", label: "Privacy" },
+              { to: "/terms", label: "Terms" },
             ]}
           />
-          <FooterCol
-            title="Network"
-            links={[
-              { to: "/coaches", label: "Become a coach" },
-              { to: "/employers", label: "For employers" },
-              { to: "/universities", label: "For universities" },
-              { to: "/brand-guide", label: "Brand & voice" },
-            ]}
-          />
-          <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-paper/60">
-              Location
-            </div>
-            <ul className="mt-4 space-y-3 text-sm text-paper/80">
-              <li>
-                <div className="font-medium text-paper">Washington, DC</div>
-                <div className="text-paper/60">United States</div>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
       <div className="border-t border-paper/10">
