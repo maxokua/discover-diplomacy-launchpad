@@ -329,8 +329,8 @@ function DashboardPage() {
                     Choose a plan to get started.
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Compass at $20/mo for self-directed job hunters. Envoy at $150/mo for
-                    hands-on coaching. Month-to-month, cancel anytime.
+                    Compass at $20/mo (or $192/yr) for self-directed job hunters. Envoy at
+                    $150/mo (or $1,440/yr) for hands-on coaching. Save 20% on annual. Cancel anytime.
                   </p>
                 </>
               )}
@@ -375,7 +375,8 @@ function DashboardPage() {
               )}
               {tier === "compass" && (
                 <Link
-                  to="/services"
+                  to="/membership/checkout"
+                  search={{ tier: "envoy", cadence: "monthly" }}
                   className="border border-emerald/40 bg-emerald/5 px-4 py-2 font-medium uppercase tracking-wider text-emerald hover:bg-emerald/10"
                 >
                   Upgrade to Envoy
@@ -383,7 +384,8 @@ function DashboardPage() {
               )}
               {tier === "envoy" && (
                 <Link
-                  to="/services"
+                  to="/membership/checkout"
+                  search={{ tier: "compass", cadence: "monthly" }}
                   className="border border-border bg-paper px-4 py-2 font-medium uppercase tracking-wider text-navy-deep hover:bg-stone"
                 >
                   Switch to Compass
@@ -458,7 +460,7 @@ function DashboardPage() {
                   locked
                   title="Envoy-only features"
                   desc="5 tailored resumes/mo, LinkedIn rewrite, company research, coach messaging, monthly 1:1 call, and tailored interview prep."
-                  cta={{ label: "Upgrade to Envoy · $150/mo", to: "/services" }}
+                  cta={{ label: "Upgrade to Envoy · $150/mo", to: "/membership/checkout?tier=envoy&cadence=monthly" }}
                 />
               )}
             </div>

@@ -72,6 +72,12 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
       if (!prices.data.length) throw new Error("Price not configured");
       const stripePrice = prices.data[0];
 
+      const productId =
+        typeof stripePrice.product === "string"
+          ? stripePrice.product
+          : stripePrice.product?.id;
+      if (productId) await ensureProductTaxCode(stripe, productId, "txcd_10000000");
+
       const email = (context.claims as { email?: string } | undefined)?.email;
       const customerId = await resolveOrCreateCustomer(stripe, {
         email,
@@ -86,8 +92,8 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
         customer: customerId,
         payment_intent_data: { description: "Expert Resume Review" },
         metadata: { userId: context.userId, reviewId: data.reviewId },
-        automatic_tax: { enabled: true },
-      });
+        managed_payments: { enabled: true },
+      } as any);
 
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await supabaseAdmin
@@ -102,17 +108,43 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
     }
   });
 
+// Idempotently set tax codes on managed products. Stripe Tax + managed_payments
+// requires every product to have a tax_code. Safe to call on every checkout
+// (Stripe will no-op if the value is unchanged).
+async function ensureProductTaxCode(
+  stripe: any,
+  productId: string,
+  taxCode: string,
+) {
+  try {
+    const product = await stripe.products.retrieve(productId);
+    if (product?.tax_code !== taxCode) {
+      await stripe.products.update(productId, { tax_code: taxCode });
+    }
+  } catch (e) {
+    console.error("[tax] failed to set tax code", productId, e);
+  }
+}
+
 export const createSubscriptionCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(
-    (data: { tier: "compass" | "envoy"; returnUrl: string; environment: StripeEnv }) => {
+    (data: {
+      tier: "compass" | "envoy";
+      cadence?: "monthly" | "annual";
+      returnUrl: string;
+      environment: StripeEnv;
+    }) => {
       if (data.tier !== "compass" && data.tier !== "envoy")
         throw new Error("Invalid tier");
+      const cadence = data.cadence ?? "monthly";
+      if (cadence !== "monthly" && cadence !== "annual")
+        throw new Error("Invalid cadence");
       if (!data.returnUrl || typeof data.returnUrl !== "string")
         throw new Error("Invalid returnUrl");
       if (data.environment !== "sandbox" && data.environment !== "live")
         throw new Error("Invalid environment");
-      return data;
+      return { ...data, cadence };
     },
   )
   .handler(async ({ data, context }): Promise<CheckoutResult> => {
@@ -140,10 +172,25 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
 
       const stripe = createStripeClient(data.environment);
 
-      const lookupKey = data.tier === "envoy" ? "envoy_monthly" : "compass_monthly";
+      const lookupKey =
+        data.tier === "envoy"
+          ? data.cadence === "annual"
+            ? "envoy_annual"
+            : "envoy_monthly"
+          : data.cadence === "annual"
+            ? "compass_annual"
+            : "compass_monthly";
       const prices = await stripe.prices.list({ lookup_keys: [lookupKey] });
       if (!prices.data.length) throw new Error("Price not configured");
       const stripePrice = prices.data[0];
+
+      // Ensure tax code on the underlying product so managed_payments / Stripe
+      // Tax can classify it (general digital services).
+      const productId =
+        typeof stripePrice.product === "string"
+          ? stripePrice.product
+          : stripePrice.product?.id;
+      if (productId) await ensureProductTaxCode(stripe, productId, "txcd_10000000");
 
       // Ensure promo codes exist once (IHEARTMAX = 100% off, IBELIEVE11 = 50% off).
       const ensurePromo = async (opts: {
@@ -213,9 +260,20 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         allow_promotion_codes: true,
-        metadata: { userId: context.userId, tier: data.tier },
-        subscription_data: { metadata: { userId: context.userId, tier: data.tier } },
-      });
+        metadata: {
+          userId: context.userId,
+          tier: data.tier,
+          cadence: data.cadence,
+        },
+        subscription_data: {
+          metadata: {
+            userId: context.userId,
+            tier: data.tier,
+            cadence: data.cadence,
+          },
+        },
+        managed_payments: { enabled: true },
+      } as any);
 
       return { clientSecret: session.client_secret ?? "" };
     } catch (error) {

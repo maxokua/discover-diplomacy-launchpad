@@ -234,7 +234,7 @@ function IndividualsTab() {
                   Start with Compass
                 </Link>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. Month-to-month.
+                  Cancel anytime. Choose monthly or annual (save 20%).
                 </p>
               </div>
             </div>

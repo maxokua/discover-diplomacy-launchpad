@@ -34,9 +34,10 @@ function TermsPage() {
             <h2 className="font-display text-xl text-navy-deep">Services</h2>
             <p>
               We offer career advisory services, including a one-time $25 Expert Resume Review,
-              the Compass plan at $20/month, and the Envoy plan at $150/month (both
-              month-to-month, cancel anytime). Service descriptions are good-faith summaries and may
-
+              the Compass plan ($20/month or $192/year — save 20%), and the Envoy plan
+              ($150/month or $1,440/year — save 20%). All subscriptions can be canceled at
+              any time from your dashboard; cancellations take effect at the end of the
+              current billing period. Service descriptions are good-faith summaries and may
               evolve over time.
             </p>
             <h2 className="font-display text-xl text-navy-deep">Payments and refunds</h2>
