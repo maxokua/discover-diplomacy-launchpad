@@ -11,6 +11,7 @@ import {
   resumeMembership,
   updateProfile,
   getReviewedResumeUrl,
+  downgradeToCompass,
 } from "@/lib/payments.functions";
 import { getResumeDropStatus } from "@/lib/resume-drop.functions";
 import { ResumeDropCard } from "@/components/resume-drop/ResumeDropCard";
