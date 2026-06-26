@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/membership/checkout")({
 });
 
 const COPY = {
-  compass: { name: "Compass", price: "$35/month" },
+  compass: { name: "Compass", price: "$20/month" },
   envoy: { name: "Envoy", price: "$150/month" },
 } as const;
 

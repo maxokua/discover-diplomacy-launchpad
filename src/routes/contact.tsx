@@ -101,7 +101,7 @@ function ContactPage() {
               <li className="flex gap-4">
                 <Mail className="h-5 w-5 flex-shrink-0 text-emerald" />
                 <div>
-                  <div className="font-medium text-navy-deep">Engagements</div>
+                  <div className="font-medium text-navy-deep">Coaches & Employers</div>
                   <a
                     href="mailto:hello@discoverdiplomacy.org"
                     className="text-muted-foreground hover:text-navy-deep"
@@ -137,8 +137,9 @@ function ContactPage() {
                   Inquiry received.
                 </h2>
                 <p className="mt-4 max-w-lg text-muted-foreground">
-                  Thank you. A senior advisor will review your submission and follow up by
-                  email. If your inquiry is time-sensitive, please also write directly to{" "}
+                  Thank you. Someone from the Discover Diplomacy team will review
+                  your submission and follow up by email. If it's time-sensitive,
+                  also write to{" "}
                   <a
                     href="mailto:hello@discoverdiplomacy.org"
                     className="text-navy-deep underline underline-offset-4"
@@ -175,12 +176,14 @@ function ContactPage() {
                     id="practice"
                     label="What are you interested in?"
                     options={[
-                      "Compass plan ($35/mo)",
+                      "Explorer (free account)",
+                      "Compass plan ($20/mo)",
                       "Envoy plan ($150/mo)",
                       "Expert Resume Review ($25)",
-                      "Employer / candidate access",
-                      "Coaching with us",
-
+                      "Weekly opportunity digest",
+                      "Free career assessment",
+                      "Employer access to candidates",
+                      "Becoming a coach on the platform",
                       "Not yet sure",
                     ]}
                   />
@@ -219,9 +222,9 @@ function ContactPage() {
                     className="mt-0.5 h-4 w-4 border-border text-navy-deep"
                   />
                   <span>
-                    I acknowledge that submission of this form does not constitute
-                    an advisory engagement and I consent to the practice contacting
-                    me regarding my inquiry.
+                    I acknowledge that submitting this form does not constitute a
+                    paid engagement, and I consent to the Discover Diplomacy team
+                    contacting me about my inquiry.
                   </span>
                 </label>
 

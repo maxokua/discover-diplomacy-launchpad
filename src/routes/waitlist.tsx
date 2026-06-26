@@ -25,7 +25,7 @@ export const Route = createFileRoute("/waitlist")({
 });
 
 const COPY = {
-  compass: { name: "Compass", blurb: "Self-directed plan — $35/mo at launch." },
+  compass: { name: "Compass", blurb: "Self-directed plan — $20/mo at launch." },
   envoy: { name: "Envoy", blurb: "Hands-on coaching plan — $150/mo at launch." },
   "resume-review": {
     name: "Expert Resume Review",

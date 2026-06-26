@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 import { Parallax } from "@/components/scroll-effects";
+import { TRACTION, PILLARS, TRUST_WALL } from "@/lib/brand";
 import institution from "@/assets/institution.jpg";
-
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -12,13 +13,13 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Discover Diplomacy was founded in 2024 by four DC students who couldn't find a roadmap into international affairs. So they built one.",
+          "Discover Diplomacy is the talent infrastructure layer for internationally-focused careers — combining a curated opportunity directory, instant expert-designed application help, vetted insider coaches, and direct access to employers.",
       },
       { property: "og:title", content: "About | Discover Diplomacy" },
       {
         property: "og:description",
         content:
-          "Founded in 2024 by four students who lived the broken path into international affairs.",
+          "Built for globally-minded students and early-career professionals. Tech-enabled preparation, vetted human coaches, real employer access.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/about" },
     ],
@@ -35,10 +36,15 @@ function AboutPage() {
       <section className="border-b border-border bg-paper">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
           <Reveal>
-            <div className="eyebrow">About the Practice</div>
+            <div className="eyebrow">About the Platform</div>
             <h1 className="mt-5 max-w-4xl font-display text-4xl text-navy-deep lg:text-6xl">
-              Built by people who lived the broken path in.
+              The talent infrastructure layer for internationally-focused careers.
             </h1>
+            <p className="mt-7 max-w-3xl text-lg leading-relaxed text-muted-foreground">
+              International careers — diplomacy, multilaterals, global policy, international
+              development, human rights, international business — are fragmented and gated by
+              who-you-know. Discover Diplomacy is the platform that turns ambition into offers.
+            </p>
           </Reveal>
         </div>
       </section>
@@ -64,41 +70,111 @@ function AboutPage() {
           </Reveal>
 
           <Reveal className="lg:col-span-7" delay={120}>
-            <div className="eyebrow">Origin</div>
+            <div className="eyebrow">Why we exist</div>
             <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-              Founded in 2024 by four students who couldn't find the door.
+              Career services hand you a job board. We hand you the playbook.
             </h2>
             <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
               <p>
-                We were four undergraduates in Washington, DC trying to break into international
-                relations. Capitol Hill was a few blocks away. Foggy Bottom was a Metro ride. The
-                think tanks ran panels we could walk into. By every conventional measure, we were
-                already inside.
+                Generic job boards don't vet anything. Boutique consultants are slow and
+                exclusive. Career centers point at the same fellowships everyone already
+                knows. None of that adds up to a path into the Foreign Service, the UN
+                system, the major NGOs, or international business.
               </p>
               <p>
-                And yet none of it added up to a path. Career services pointed us at job boards.
-                The job boards required experience we couldn't get without already having it. Every
-                briefing told us to "network." Every networking event told us to "be strategic."
-                Nobody told us what that actually meant.
+                We built the platform we wished existed when we were starting out: a curated
+                directory of the real opportunities, instant expert-designed help on the
+                materials, vetted insider coaches when you need a human, and a direct
+                pipeline to employers actively hiring early-career global talent.
               </p>
               <p>
-                So we built our own playbook, the hard way. Cold emails sent in batches of fifty.
-                Coffee chats that turned into mentors. Application cycles we started over from
-                scratch after the third rejection. We compared notes late at night about which
-                fellowships were worth the time and which were a tax on the unconnected. Slowly,
-                things started to land, on the Hill, at State, at multilaterals, in
-                international business.
-              </p>
-              <p>
-                Discover Diplomacy exists because we wished it had. Our practice draws on direct,
-                lived experience, what worked, what wasted months, and what nobody tells you until
-                you're already in the room.
+                Anything that can be automated runs on expert-designed systems — fast,
+                consistent, affordable. Humans are reserved for judgment, strategy, and
+                real mentorship from people who've actually worked in the field.
               </p>
             </div>
           </Reveal>
         </div>
       </section>
 
+      <section className="border-b border-border bg-paper">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+          <Reveal>
+            <div className="eyebrow">How we think about it</div>
+            <h2 className="mt-4 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
+              Clarity. Preparation. Access.
+            </h2>
+          </Reveal>
+          <ul className="mt-12 grid gap-px border border-border bg-border lg:grid-cols-3">
+            {PILLARS.map((p, i) => (
+              <Reveal key={p.key} delay={i * 100} className="bg-paper p-8">
+                <div className="font-display text-3xl text-gilt">0{i + 1}</div>
+                <h3 className="mt-4 font-display text-2xl text-navy-deep">{p.label}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.line}</p>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="border-b border-border bg-navy-deep text-paper">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+          <Reveal className="grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gilt">
+                The Trust Wall
+              </div>
+              <h2 className="mt-5 font-display text-3xl text-paper lg:text-4xl">
+                What we sell — and what we don't.
+              </h2>
+            </div>
+            <p className="text-base leading-relaxed text-paper/80 lg:col-span-7">
+              {TRUST_WALL} We sell preparation and access to the venue. We never sell a vouch,
+              a referral, or a recommendation. Coaches mentor; they don't slide a résumé in
+              for anyone who pays. That line is the whole reason this works.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-paper">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+          <Reveal>
+            <div className="eyebrow">Traction</div>
+            <h2 className="mt-4 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
+              Built on a real audience, not a deck.
+            </h2>
+          </Reveal>
+          <ul className="mt-10 grid gap-px border border-border bg-border md:grid-cols-3">
+            {[
+              { v: TRACTION.peopleReached, l: "People reached through the directory and digest" },
+              { v: TRACTION.directoryViews, l: "Views on our curated opportunity directory" },
+              { v: TRACTION.weeklyOpportunities, l: "Global opportunities curated every week" },
+            ].map((s, i) => (
+              <Reveal key={s.l} delay={i * 80} className="bg-paper p-8">
+                <div className="font-display text-4xl text-navy-deep lg:text-5xl">{s.v}</div>
+                <div className="mt-3 text-sm text-muted-foreground">{s.l}</div>
+              </Reveal>
+            ))}
+          </ul>
+
+          <Reveal className="mt-12 flex flex-wrap gap-4">
+            <Link
+              to="/assessment"
+              className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
+            >
+              Take the free assessment
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/waitlist"
+              className="inline-flex items-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3.5 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
+            >
+              Get the weekly digest
+            </Link>
+          </Reveal>
+        </div>
+      </section>
     </SiteLayout>
   );
 }

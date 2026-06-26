@@ -30,7 +30,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <div className="hidden border-b border-border bg-navy-deep text-paper md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2 text-xs lg:px-10">
           <span className="truncate text-paper/70">
-            Career coaching for globally minded professionals
+            Built for globally-minded students and early-career professionals.
           </span>
           <div className="flex shrink-0 items-center gap-5 text-paper/70">
             <a href="mailto:hello@discoverdiplomacy.org" className="hover:text-paper">
@@ -76,7 +76,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 Discover Diplomacy
               </div>
               <div className="hidden text-[10px] uppercase tracking-[0.22em] text-muted-foreground sm:block">
-                Global Career Advisory
+                Talent Infrastructure for Global Careers
               </div>
             </div>
           </Link>
@@ -169,13 +169,15 @@ function SiteFooter() {
             <div>
               <div className="font-display text-lg">Discover Diplomacy</div>
               <div className="text-[10px] uppercase tracking-[0.22em] text-paper/60">
-                Global Career Advisory
+                Talent Infrastructure for Global Careers
               </div>
             </div>
           </div>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-paper/70">
-            A career advisory practice for students and early-career professionals pursuing roles
-            in diplomacy, international policy, multilateral institutions, and global affairs.
+            The talent infrastructure layer for internationally-focused careers.
+            Discover opportunities, prepare your materials, and reach vetted insider
+            coaches and verified employers — built for diplomacy, multilaterals,
+            global policy, and international business.
           </p>
           <p className="mt-4 text-sm text-paper/70">
             <a
@@ -189,21 +191,30 @@ function SiteFooter() {
 
         <div className="grid grid-cols-2 gap-8 lg:col-span-7 lg:grid-cols-3">
           <FooterCol
-            title="Services"
+            title="Plans"
             links={[
-              { to: "/services", label: "Compass · $35/mo" },
+              { to: "/services", label: "Explorer · Free" },
+              { to: "/services", label: "Compass · $20/mo" },
               { to: "/services", label: "Envoy · $150/mo" },
               { to: "/services", label: "Resume Review · $25" },
-              { to: "/assessment", label: "Free career assessment" },
             ]}
           />
           <FooterCol
             title="Engage"
             links={[
+              { to: "/assessment", label: "Free assessment" },
+              { to: "/waitlist", label: "Weekly digest" },
+              { to: "/directory", label: "Opportunity directory" },
               { to: "/about", label: "About" },
               { to: "/contact", label: "Contact" },
+            ]}
+          />
+          <FooterCol
+            title="Network"
+            links={[
               { to: "/coaches", label: "Become a coach" },
               { to: "/employers", label: "For employers" },
+              { to: "/brand-guide", label: "Brand & voice" },
             ]}
           />
           <div>

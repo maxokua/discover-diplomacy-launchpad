@@ -294,7 +294,7 @@ function DashboardPage() {
               ) : tier ? (
                 <>
                   <h2 className="mt-3 font-display text-2xl text-navy-deep">
-                    {tierLabel(tier)} · {tier === "envoy" ? "$150/month" : "$35/month"}
+                    {tierLabel(tier)} · {tier === "envoy" ? "$150/month" : "$20/month"}
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
                     {showCanceledBanner
@@ -310,7 +310,7 @@ function DashboardPage() {
                     Choose a plan to get started.
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Compass at $35/mo for self-directed job hunters. Envoy at $150/mo for
+                    Compass at $20/mo for self-directed job hunters. Envoy at $150/mo for
                     hands-on coaching. Month-to-month, cancel anytime.
                   </p>
                 </>

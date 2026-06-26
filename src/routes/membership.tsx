@@ -9,7 +9,7 @@ export const Route = createFileRoute("/membership")({
       {
         name: "description",
         content:
-          "Two plans — Compass at $35/mo and Envoy at $150/mo — plus a one-time $25 Expert Resume Review. Month-to-month, cancel anytime.",
+          "Two plans — Compass at $20/mo and Envoy at $150/mo — plus a one-time $25 Expert Resume Review. Month-to-month, cancel anytime.",
       },
     ],
     links: [{ rel: "canonical", href: "https://discoverdiplomacy.org/services" }],
