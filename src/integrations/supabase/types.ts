@@ -110,6 +110,7 @@ export type Database = {
           language_proficiencies: Json
           languages: Json
           management_experience: string | null
+          notify_email_on_unlock: boolean
           org_types: string[]
           primary_theme: string | null
           profile_completion_percent: number
@@ -122,6 +123,7 @@ export type Database = {
           secondary_themes: string[]
           sectors: string[]
           security_clearance: string | null
+          share_email_on_unlock: boolean
           skills: string[]
           target_roles: string[]
           target_sectors: string[]
@@ -155,6 +157,7 @@ export type Database = {
           language_proficiencies?: Json
           languages?: Json
           management_experience?: string | null
+          notify_email_on_unlock?: boolean
           org_types?: string[]
           primary_theme?: string | null
           profile_completion_percent?: number
@@ -167,6 +170,7 @@ export type Database = {
           secondary_themes?: string[]
           sectors?: string[]
           security_clearance?: string | null
+          share_email_on_unlock?: boolean
           skills?: string[]
           target_roles?: string[]
           target_sectors?: string[]
@@ -200,6 +204,7 @@ export type Database = {
           language_proficiencies?: Json
           languages?: Json
           management_experience?: string | null
+          notify_email_on_unlock?: boolean
           org_types?: string[]
           primary_theme?: string | null
           profile_completion_percent?: number
@@ -212,6 +217,7 @@ export type Database = {
           secondary_themes?: string[]
           sectors?: string[]
           security_clearance?: string | null
+          share_email_on_unlock?: boolean
           skills?: string[]
           target_roles?: string[]
           target_sectors?: string[]
@@ -603,6 +609,8 @@ export type Database = {
           id: string
           member_id: string
           message: string | null
+          reason: string | null
+          responded_at: string | null
           status: string
           unlock_id: string | null
         }
@@ -612,6 +620,8 @@ export type Database = {
           id?: string
           member_id: string
           message?: string | null
+          reason?: string | null
+          responded_at?: string | null
           status?: string
           unlock_id?: string | null
         }
@@ -621,6 +631,8 @@ export type Database = {
           id?: string
           member_id?: string
           message?: string | null
+          reason?: string | null
+          responded_at?: string | null
           status?: string
           unlock_id?: string | null
         }
@@ -1418,6 +1430,10 @@ export type Database = {
           resumes_uploaded: number
           total_members: number
         }[]
+      }
+      unlock_candidate: {
+        Args: { _candidate_id: string; _env?: string }
+        Returns: Json
       }
     }
     Enums: {

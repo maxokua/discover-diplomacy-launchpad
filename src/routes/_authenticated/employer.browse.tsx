@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { SiteLayout } from "@/components/site-layout";
@@ -12,6 +12,7 @@ import {
   myPortalRoles,
   getEmployerCreditBalance,
 } from "@/lib/payments.functions";
+import { unlockCandidate } from "@/lib/unlock-flow.functions";
 import { ChevronDown, Lock, Star, X, SlidersHorizontal } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/employer/browse")({
@@ -116,6 +117,7 @@ type Row = Record<string, unknown> & {
 };
 
 function BrowsePage() {
+  const navigate = useNavigate();
   const [allowed, setAllowed] = useState<null | boolean>(null);
   const [verification, setVerification] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -125,6 +127,8 @@ function BrowsePage() {
   const [stats, setStats] = useState<{ shortlistCount: number; unlockedThisMonth: number } | null>(null);
   const [tier, setTier] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [unlockTarget, setUnlockTarget] = useState<Row | null>(null);
+  const [unlocking, setUnlocking] = useState(false);
 
   // Access gate
   useEffect(() => {
@@ -200,6 +204,49 @@ function BrowsePage() {
     if ("error" in r) toast.error(r.error);
     else toast.success("Note saved");
   }, []);
+
+  const onUnlockClick = useCallback(
+    (row: Row) => {
+      const isPaid = tier !== null && tier !== "free";
+      if (row.pile === "paid" && !isPaid) {
+        toast.error("Member Pool candidates require a paid employer plan.");
+        navigate({ to: "/employer/credits/checkout" });
+        return;
+      }
+      if ((balance ?? 0) <= 0) {
+        toast.error("You're out of credits.");
+        navigate({ to: "/employer/credits/checkout" });
+        return;
+      }
+      setUnlockTarget(row);
+    },
+    [tier, balance, navigate],
+  );
+
+  const confirmUnlock = useCallback(async () => {
+    if (!unlockTarget) return;
+    setUnlocking(true);
+    try {
+      const r = await unlockCandidate({ data: { candidate_id: unlockTarget.user_id } });
+      if (!r.ok) {
+        if (r.error === "no_credits" || r.error === "upgrade_required") {
+          toast.error(("message" in r ? r.message : null) ?? "Couldn't unlock");
+          setUnlockTarget(null);
+          navigate({ to: "/employer/credits/checkout" });
+          return;
+        }
+        toast.error(r.error ?? "Couldn't unlock");
+        return;
+      }
+      if (typeof r.balance === "number") setBalance(r.balance);
+      toast.success(r.already_unlocked ? "Already unlocked — opening profile." : "Unlocked.");
+      const id = unlockTarget.user_id;
+      setUnlockTarget(null);
+      navigate({ to: "/employer/unlocked/$candidateId", params: { candidateId: id } });
+    } finally {
+      setUnlocking(false);
+    }
+  }, [unlockTarget, navigate]);
 
   if (allowed === null) {
     return (
@@ -364,7 +411,9 @@ function BrowsePage() {
                       <PreviewCard
                         key={r.user_id}
                         row={r}
-                        canUnlock={isPaidEmployerTier || (balance ?? 0) > 0}
+                        canUnlock={isPaidEmployerTier && (balance ?? 0) > 0}
+                        upgradeNeeded={!isPaidEmployerTier}
+                        onUnlock={onUnlockClick}
                         onToggleShortlist={onToggleShortlist}
                         onSaveNote={saveNote}
                       />
@@ -382,6 +431,8 @@ function BrowsePage() {
                         key={r.user_id}
                         row={r}
                         canUnlock={(balance ?? 0) > 0}
+                        upgradeNeeded={false}
+                        onUnlock={onUnlockClick}
                         onToggleShortlist={onToggleShortlist}
                         onSaveNote={saveNote}
                       />
@@ -417,6 +468,44 @@ function BrowsePage() {
             >
               See results
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Unlock confirmation modal */}
+      {unlockTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/50 p-4">
+          <div className="w-full max-w-md border border-border bg-paper p-6">
+            <div className="eyebrow">Confirm unlock</div>
+            <h3 className="mt-2 font-display text-xl text-navy-deep">
+              Unlock {unlockTarget.anon_label}?
+            </h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              This uses <strong className="text-navy-deep">1 credit</strong>. You&apos;ll be
+              able to view their full profile and request a warm intro. Re-opening is free.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              You have <strong className="text-navy-deep">{balance ?? 0}</strong> credit
+              {balance === 1 ? "" : "s"} remaining.
+            </p>
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                disabled={unlocking}
+                onClick={() => setUnlockTarget(null)}
+                className="border border-border bg-paper px-4 py-2 text-xs font-medium uppercase tracking-wider text-navy-deep disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={unlocking}
+                onClick={confirmUnlock}
+                className="bg-navy-deep px-4 py-2 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
+              >
+                {unlocking ? "Unlocking…" : "Unlock"}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -457,11 +546,15 @@ function PileHeader({
 function PreviewCard({
   row,
   canUnlock,
+  upgradeNeeded,
+  onUnlock,
   onToggleShortlist,
   onSaveNote,
 }: {
   row: Row;
   canUnlock: boolean;
+  upgradeNeeded: boolean;
+  onUnlock: (r: Row) => void;
   onToggleShortlist: (r: Row) => void;
   onSaveNote: (r: Row, note: string) => void;
 }) {
@@ -491,15 +584,20 @@ function PreviewCard({
       <ProfileCard p={row as never} locked />
       <div className="mt-2 flex items-center justify-between gap-2 border border-t-0 border-border bg-paper px-4 py-3 text-xs">
         {canUnlock ? (
-          <Link
-            to="/employer/resumes"
+          <button
+            type="button"
+            onClick={() => onUnlock(row)}
             className="inline-flex items-center gap-1 font-semibold text-navy-deep underline"
           >
             <Lock className="h-3 w-3" /> Unlock — 1 credit
+          </button>
+        ) : upgradeNeeded ? (
+          <Link to="/employer/credits/checkout" className="font-semibold text-navy-deep underline">
+            Upgrade to unlock
           </Link>
         ) : (
           <Link to="/employer/credits/checkout" className="font-semibold text-navy-deep underline">
-            Upgrade to unlock
+            Buy credits
           </Link>
         )}
         {row.shortlisted && (
