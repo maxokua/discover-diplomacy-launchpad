@@ -76,20 +76,20 @@ export const marketplaceBrowse = createServerFn({ method: "POST" })
       .eq("visibility", "public")
       .limit(300);
 
-    q = applyIn(q as anyChainT, "career_stage", data.career_stage);
-    q = applyIn(q as anyChainT, "years_experience", data.years_experience);
-    q = applyIn(q as anyChainT, "years_intl", data.years_intl);
-    q = applyIn(q as anyChainT, "highest_degree", data.highest_degree);
-    q = applyIn(q as anyChainT, "management_experience", data.management_experience);
-    q = applyIn(q as anyChainT, "budget_responsibility", data.budget_responsibility);
-    q = applyIn(q as anyChainT, "primary_theme", data.primary_theme);
-    q = applyIn(q as anyChainT, "current_base", data.current_base);
-    q = applyIn(q as anyChainT, "relocation", data.relocation);
-    q = applyIn(q as anyChainT, "work_mode", data.work_mode);
-    q = applyIn(q as anyChainT, "availability", data.availability);
-    q = applyIn(q as anyChainT, "salary_expectation", data.salary_expectation);
-    q = applyIn(q as anyChainT, "security_clearance", data.security_clearance);
-    q = applyIn(q as anyChainT, "fellowship_category", data.fellowship_category);
+    q = applyIn(q as QB, "career_stage", data.career_stage);
+    q = applyIn(q as QB, "years_experience", data.years_experience);
+    q = applyIn(q as QB, "years_intl", data.years_intl);
+    q = applyIn(q as QB, "highest_degree", data.highest_degree);
+    q = applyIn(q as QB, "management_experience", data.management_experience);
+    q = applyIn(q as QB, "budget_responsibility", data.budget_responsibility);
+    q = applyIn(q as QB, "primary_theme", data.primary_theme);
+    q = applyIn(q as QB, "current_base", data.current_base);
+    q = applyIn(q as QB, "relocation", data.relocation);
+    q = applyIn(q as QB, "work_mode", data.work_mode);
+    q = applyIn(q as QB, "availability", data.availability);
+    q = applyIn(q as QB, "salary_expectation", data.salary_expectation);
+    q = applyIn(q as QB, "security_clearance", data.security_clearance);
+    q = applyIn(q as QB, "fellowship_category", data.fellowship_category);
 
     // Array-contains-any
     const arrayFilters: Array<[string, string[]]> = [
