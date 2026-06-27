@@ -6,6 +6,11 @@ import {
   getMyCandidateProfile,
   patchCandidateProfile,
 } from "@/lib/profile.functions";
+import {
+  generateProfileFollowup,
+  saveProfileFollowupAnswer,
+  updateAiCoreSignature,
+} from "@/lib/ai-followup.functions";
 import { ProfileCard } from "@/components/profile-card";
 
 export const Route = createFileRoute("/_authenticated/profile")({
