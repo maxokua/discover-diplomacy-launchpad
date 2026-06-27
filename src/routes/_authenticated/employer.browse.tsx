@@ -117,6 +117,7 @@ type Row = Record<string, unknown> & {
 };
 
 function BrowsePage() {
+  const navigate = useNavigate();
   const [allowed, setAllowed] = useState<null | boolean>(null);
   const [verification, setVerification] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -126,6 +127,8 @@ function BrowsePage() {
   const [stats, setStats] = useState<{ shortlistCount: number; unlockedThisMonth: number } | null>(null);
   const [tier, setTier] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [unlockTarget, setUnlockTarget] = useState<Row | null>(null);
+  const [unlocking, setUnlocking] = useState(false);
 
   // Access gate
   useEffect(() => {
