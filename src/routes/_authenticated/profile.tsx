@@ -138,6 +138,15 @@ function ProfileBuilderPage() {
   const [state, setState] = useState<ProfileState>(EMPTY);
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState<"card" | "builder">("builder");
+  const [followup, setFollowup] = useState<{
+    question: string;
+    options: string[];
+    surface: "after_screen_2" | "after_screen_5";
+    nextAction: "advance" | "finish";
+  } | null>(null);
+  const [aiCallsMade, setAiCallsMade] = useState(0);
+  const [aiLoading, setAiLoading] = useState(false);
+  const lastCoreSigRef = useRef<string | null>(null);
 
   useEffect(() => {
     (async () => {
