@@ -38,7 +38,7 @@ const PlanSchema = z.object({
   }),
   networkingStrategy: z.array(z.string()).min(3).max(6),
   resumeUpdates: z.array(z.string()).min(3).max(6),
-  recommendedTier: z.enum(["Free Resources", "Resume Review", "Career Membership", "CEO Coaching"]),
+  recommendedTier: z.enum(["Free Resources", "Resume Review", "Career Membership"]),
   tierRationale: z.string().describe("One sentence justifying the recommended tier."),
 });
 
@@ -93,7 +93,7 @@ Required output:
 - "ninetyDayPlan": object with "days0to30", "days30to60", "days60to90" — each an array of 3–5 concrete actions.
 - "networkingStrategy": 3–5 specific moves tailored to their stage + network.
 - "resumeUpdates": 3–5 specific edits.
-- "recommendedTier": one of "Free Resources" (still exploring), "Resume Review" (resume is the blocker), "Career Membership" (need ongoing structure + community), "CEO Coaching" (senior transition / high stakes).
+- "recommendedTier": one of "Free Resources" (still exploring), "Resume Review" (resume is the blocker), or "Career Membership" (need ongoing structure + community).
 - "tierRationale": 1 sentence.`;
 
     let plan: AssessmentPlan;
