@@ -500,7 +500,8 @@ function ProfileBuilderPage() {
             {step < totalSteps ? (
               <button
                 type="button"
-                onClick={() => {
+                disabled={aiLoading}
+                onClick={async () => {
                   // Required check per-screen
                   if (step === 1 && (!state.career_stage || !state.years_experience)) {
                     toast.error("Career stage and years of experience are required");
@@ -514,13 +515,26 @@ function ProfileBuilderPage() {
                     toast.error("Current base and work eligibility are required");
                     return;
                   }
+                  if (step === 2) {
+                    const shown = await tryFollowup("after_screen_2", "advance");
+                    if (shown) return;
+                  }
                   setStep(step + 1);
                 }}
-                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
               >
-                Continue →
+                {aiLoading ? "Thinking…" : "Continue →"}
               </button>
             ) : (
+              <button
+                type="button"
+                disabled={aiLoading}
+                onClick={finish}
+                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
+              >
+                {aiLoading ? "Thinking…" : "Finish"}
+              </button>
+            )}
               <button
                 type="button"
                 onClick={finish}
