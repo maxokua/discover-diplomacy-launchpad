@@ -46,13 +46,13 @@ const filterSchema = z
 
 const paidTiers = new Set(["compass", "envoy", "envoy_annual", "compass_annual"]);
 
-function applyIn<T extends string>(q: ReturnType<typeof anyChain>, col: string, vals: T[]) {
-  return vals.length ? q.in(col, vals as string[]) : q;
+// Loose builder type so chained `.in()` calls remain inferrable.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type QB = any;
+function applyIn(q: QB, col: string, vals: string[]): QB {
+  return vals.length ? q.in(col, vals) : q;
 }
-type anyChainT = ReturnType<typeof anyChain>;
-function anyChain<T>(x: T): T {
-  return x;
-}
+
 
 export const marketplaceBrowse = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
