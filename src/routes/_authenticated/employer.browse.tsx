@@ -508,11 +508,15 @@ function PileHeader({
 function PreviewCard({
   row,
   canUnlock,
+  upgradeNeeded,
+  onUnlock,
   onToggleShortlist,
   onSaveNote,
 }: {
   row: Row;
   canUnlock: boolean;
+  upgradeNeeded: boolean;
+  onUnlock: (r: Row) => void;
   onToggleShortlist: (r: Row) => void;
   onSaveNote: (r: Row, note: string) => void;
 }) {
@@ -542,15 +546,20 @@ function PreviewCard({
       <ProfileCard p={row as never} locked />
       <div className="mt-2 flex items-center justify-between gap-2 border border-t-0 border-border bg-paper px-4 py-3 text-xs">
         {canUnlock ? (
-          <Link
-            to="/employer/resumes"
+          <button
+            type="button"
+            onClick={() => onUnlock(row)}
             className="inline-flex items-center gap-1 font-semibold text-navy-deep underline"
           >
             <Lock className="h-3 w-3" /> Unlock — 1 credit
+          </button>
+        ) : upgradeNeeded ? (
+          <Link to="/employer/credits/checkout" className="font-semibold text-navy-deep underline">
+            Upgrade to unlock
           </Link>
         ) : (
           <Link to="/employer/credits/checkout" className="font-semibold text-navy-deep underline">
-            Upgrade to unlock
+            Buy credits
           </Link>
         )}
         {row.shortlisted && (
