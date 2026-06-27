@@ -538,6 +538,43 @@ function ProfileBuilderPage() {
           </div>
         </div>
       </section>
+
+      {followup && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-navy-deep/40 p-4 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="w-full max-w-md border border-border bg-paper p-6 shadow-xl">
+            <div className="eyebrow text-gilt">One more thing…</div>
+            <h3 className="mt-2 font-display text-xl text-navy-deep">{followup.question}</h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              AI suggested this based on your selections. Tap one to add it to your profile.
+            </p>
+            <div className="mt-4 space-y-2">
+              {followup.options.map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => chooseFollowup(opt)}
+                  className="w-full border border-border bg-paper px-4 py-3 text-left text-sm text-navy-deep transition-colors hover:border-navy-deep hover:bg-stone/40"
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={() => chooseFollowup(null)}
+                className="text-sm text-muted-foreground underline"
+              >
+                Skip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </SiteLayout>
   );
 }
