@@ -471,6 +471,44 @@ function BrowsePage() {
           </div>
         </div>
       )}
+
+      {/* Unlock confirmation modal */}
+      {unlockTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/50 p-4">
+          <div className="w-full max-w-md border border-border bg-paper p-6">
+            <div className="eyebrow">Confirm unlock</div>
+            <h3 className="mt-2 font-display text-xl text-navy-deep">
+              Unlock {unlockTarget.anon_label}?
+            </h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              This uses <strong className="text-navy-deep">1 credit</strong>. You&apos;ll be
+              able to view their full profile and request a warm intro. Re-opening is free.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              You have <strong className="text-navy-deep">{balance ?? 0}</strong> credit
+              {balance === 1 ? "" : "s"} remaining.
+            </p>
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                disabled={unlocking}
+                onClick={() => setUnlockTarget(null)}
+                className="border border-border bg-paper px-4 py-2 text-xs font-medium uppercase tracking-wider text-navy-deep disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={unlocking}
+                onClick={confirmUnlock}
+                className="bg-navy-deep px-4 py-2 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
+              >
+                {unlocking ? "Unlocking…" : "Unlock"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </SiteLayout>
   );
 }
