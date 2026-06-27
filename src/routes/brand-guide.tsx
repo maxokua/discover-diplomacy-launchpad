@@ -34,7 +34,7 @@ const DONT = [
   "AI-powered (as a gimmick)", "revolutionary", "game-changing",
   "unlock your potential", "synergy", "leverage", "empower",
   "fake scarcity", "implying a referral can be purchased",
-  "email the CEO / call with the CEO",
+  
 ];
 
 export default function BrandGuide() {
@@ -117,7 +117,7 @@ export default function BrandGuide() {
             <tbody className="divide-y divide-border">
               <Row a="We empower you to unlock your global career potential." b="We help you figure out what you want in this field — and get the offer." />
               <Row a="Our AI reviews your resume." b="Get your resume rebuilt for the role in minutes, using the same playbook insiders use." />
-              <Row a="Schedule a call with the CEO." b="Book a vetted coach who's worked in the field you're targeting." />
+              <Row a="One generic call with a founder." b="Book a vetted coach who's worked in the field you're targeting." />
             </tbody>
           </table>
         </div>

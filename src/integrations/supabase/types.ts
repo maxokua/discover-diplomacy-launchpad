@@ -52,49 +52,133 @@ export type Database = {
       }
       candidate_profiles: {
         Row: {
+          availability: string | null
           bio: string | null
+          budget_responsibility: string | null
+          career_stage: string | null
           created_at: string
+          current_base: string | null
           education: Json
           experience_level: string | null
+          fellowship_category: string | null
+          functional_skills: string[]
           headline: string | null
+          highest_degree: string | null
+          include_in_resume_drop: boolean
+          internship_count: string | null
+          language_proficiencies: Json
           languages: Json
+          management_experience: string | null
+          org_types: string[]
+          primary_theme: string | null
+          profile_completion_percent: number
+          profile_status: string
           regions: string[]
+          relocation: string | null
+          relocation_regions: string[]
+          roles_seeking: string[]
+          salary_expectation: string | null
+          secondary_themes: string[]
           sectors: string[]
+          security_clearance: string | null
           skills: string[]
           target_roles: string[]
+          target_sectors: string[]
+          technical_skills: string[]
           updated_at: string
           user_id: string
           visibility: string
+          work_eligibility: string[]
+          work_mode: string | null
+          work_type: string[]
+          years_experience: string | null
+          years_intl: string | null
         }
         Insert: {
+          availability?: string | null
           bio?: string | null
+          budget_responsibility?: string | null
+          career_stage?: string | null
           created_at?: string
+          current_base?: string | null
           education?: Json
           experience_level?: string | null
+          fellowship_category?: string | null
+          functional_skills?: string[]
           headline?: string | null
+          highest_degree?: string | null
+          include_in_resume_drop?: boolean
+          internship_count?: string | null
+          language_proficiencies?: Json
           languages?: Json
+          management_experience?: string | null
+          org_types?: string[]
+          primary_theme?: string | null
+          profile_completion_percent?: number
+          profile_status?: string
           regions?: string[]
+          relocation?: string | null
+          relocation_regions?: string[]
+          roles_seeking?: string[]
+          salary_expectation?: string | null
+          secondary_themes?: string[]
           sectors?: string[]
+          security_clearance?: string | null
           skills?: string[]
           target_roles?: string[]
+          target_sectors?: string[]
+          technical_skills?: string[]
           updated_at?: string
           user_id: string
           visibility?: string
+          work_eligibility?: string[]
+          work_mode?: string | null
+          work_type?: string[]
+          years_experience?: string | null
+          years_intl?: string | null
         }
         Update: {
+          availability?: string | null
           bio?: string | null
+          budget_responsibility?: string | null
+          career_stage?: string | null
           created_at?: string
+          current_base?: string | null
           education?: Json
           experience_level?: string | null
+          fellowship_category?: string | null
+          functional_skills?: string[]
           headline?: string | null
+          highest_degree?: string | null
+          include_in_resume_drop?: boolean
+          internship_count?: string | null
+          language_proficiencies?: Json
           languages?: Json
+          management_experience?: string | null
+          org_types?: string[]
+          primary_theme?: string | null
+          profile_completion_percent?: number
+          profile_status?: string
           regions?: string[]
+          relocation?: string | null
+          relocation_regions?: string[]
+          roles_seeking?: string[]
+          salary_expectation?: string | null
+          secondary_themes?: string[]
           sectors?: string[]
+          security_clearance?: string | null
           skills?: string[]
           target_roles?: string[]
+          target_sectors?: string[]
+          technical_skills?: string[]
           updated_at?: string
           user_id?: string
           visibility?: string
+          work_eligibility?: string[]
+          work_mode?: string | null
+          work_type?: string[]
+          years_experience?: string | null
+          years_intl?: string | null
         }
         Relationships: []
       }
