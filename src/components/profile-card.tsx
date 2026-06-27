@@ -25,6 +25,8 @@ type CardProfile = {
   salary_expectation?: string | null;
   fellowship_category?: string | null;
   internship_count?: string | null;
+  ai_followups?: Array<{ question?: string; answer?: string }> | null;
+  anon_label?: string | null;
 };
 
 function Line({ label, value }: { label: string; value: React.ReactNode }) {
@@ -48,6 +50,9 @@ export function ProfileCard({ p, locked = true }: { p: CardProfile; locked?: boo
   ]
     .filter(Boolean)
     .join(" • ");
+  const specializations = Array.isArray(p.ai_followups)
+    ? p.ai_followups.map((t) => t?.answer).filter((a): a is string => !!a)
+    : [];
 
   const langs =
     p.language_proficiencies && p.language_proficiencies.length
