@@ -232,7 +232,62 @@ function ProfileBuilderPage() {
 
   const pct = useMemo(() => completionPercent(state), [state]);
 
-  async function finish() {
+  // AI follow-up: trigger after screens 2 and 5, capped at 2 total.
+  async function tryFollowup(
+    surface: "after_screen_2" | "after_screen_5",
+    nextAction: "advance" | "finish",
+  ): Promise<boolean> {
+    if (aiCallsMade >= 2) return false;
+    const coreSig = [
+      state.primary_theme ?? "",
+      [...state.functional_skills].sort().join("|"),
+      state.career_stage ?? "",
+      [...state.roles_seeking].sort().join("|"),
+      [...state.target_sectors].sort().join("|"),
+    ].join("::");
+    if (lastCoreSigRef.current === coreSig) return false; // no relevant change since last AI run
+
+    setAiLoading(true);
+    try {
+      const askedQs = Array.isArray(state) ? [] : [];
+      const r = await generateProfileFollowup({
+        data: {
+          surface,
+          selections: {
+            career_stage: state.career_stage,
+            years_experience: state.years_experience,
+            primary_theme: state.primary_theme,
+            secondary_themes: state.secondary_themes,
+            functional_skills: state.functional_skills,
+            org_types: state.org_types,
+            roles_seeking: state.roles_seeking,
+            target_sectors: state.target_sectors,
+            current_base: state.current_base,
+          },
+          asked_questions: askedQs,
+        },
+      });
+      setAiCallsMade((n) => n + 1);
+      lastCoreSigRef.current = coreSig;
+      await updateAiCoreSignature({ data: { signature: coreSig } });
+      if (r && r.question && r.options.length >= 3) {
+        setFollowup({
+          question: r.question,
+          options: r.options,
+          surface,
+          nextAction,
+        });
+        return true;
+      }
+    } catch {
+      // silent fallback
+    } finally {
+      setAiLoading(false);
+    }
+    return false;
+  }
+
+  async function finishProfile() {
     const status: ProfileState["profile_status"] = "complete";
     setState((s) => ({ ...s, profile_status: status }));
     await patchCandidateProfile({
@@ -240,6 +295,31 @@ function ProfileBuilderPage() {
     });
     toast.success("Profile saved");
     setMode("card");
+  }
+
+  async function finish() {
+    const shown = await tryFollowup("after_screen_5", "finish");
+    if (!shown) await finishProfile();
+  }
+
+  async function chooseFollowup(answer: string | null) {
+    const f = followup;
+    if (!f) return;
+    setFollowup(null);
+    if (answer) {
+      try {
+        await saveProfileFollowupAnswer({
+          data: { question: f.question, answer, surface: f.surface },
+        });
+      } catch {
+        // ignore
+      }
+    }
+    if (f.nextAction === "advance") {
+      setStep((s) => s + 1);
+    } else {
+      await finishProfile();
+    }
   }
 
   if (loading) {
