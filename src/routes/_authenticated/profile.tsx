@@ -161,6 +161,7 @@ function ProfileBuilderPage() {
           }
         }
         setState(merged);
+        lastCoreSigRef.current = (p.ai_core_signature as string | null) ?? null;
         if ((p.profile_status as string) === "complete" || (p.profile_status as string) === "published") {
           setMode("card");
         }
