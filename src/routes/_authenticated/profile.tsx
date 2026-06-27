@@ -535,14 +535,6 @@ function ProfileBuilderPage() {
                 {aiLoading ? "Thinking…" : "Finish"}
               </button>
             )}
-              <button
-                type="button"
-                onClick={finish}
-                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy"
-              >
-                Finish
-              </button>
-            )}
           </div>
         </div>
       </section>
