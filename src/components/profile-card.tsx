@@ -67,7 +67,25 @@ export function ProfileCard({ p, locked = true }: { p: CardProfile; locked?: boo
 
   return (
     <article className="border border-border bg-paper p-6 lg:p-8">
+      {p.anon_label && (
+        <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          {p.anon_label}
+        </div>
+      )}
       <div className="font-display text-xl text-navy-deep">{header || "Candidate"}</div>
+      {specializations.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {specializations.map((s) => (
+            <span
+              key={s}
+              className="inline-flex items-center rounded-full bg-gilt/15 px-2.5 py-0.5 text-[11px] font-medium text-navy-deep"
+              title="AI-generated specialization"
+            >
+              ✦ {s}
+            </span>
+          ))}
+        </div>
+      )}
       {p.primary_theme && (
         <div className="mt-1 text-sm text-muted-foreground">
           Primary: <span className="text-navy-deep">{p.primary_theme}</span>
