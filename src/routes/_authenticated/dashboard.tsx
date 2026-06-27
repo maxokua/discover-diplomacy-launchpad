@@ -17,6 +17,7 @@ import { getResumeDropStatus } from "@/lib/resume-drop.functions";
 import { ResumeDropCard } from "@/components/resume-drop/ResumeDropCard";
 import { ResumeDropIntroModal } from "@/components/resume-drop/ResumeDropIntroModal";
 import { NotificationsList } from "@/components/resume-drop/NotificationsBell";
+import { IntrosInbox } from "@/components/resume-drop/IntrosInbox";
 
 type ResumeDropStatus = Awaited<ReturnType<typeof getResumeDropStatus>>;
 
@@ -495,7 +496,7 @@ function DashboardPage() {
       <section className="border-b border-border bg-paper">
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10 lg:py-12">
           <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-6">
               {dropStatus ? (
                 <ResumeDropCard status={dropStatus} onChanged={loadDrop} />
               ) : (
@@ -503,6 +504,7 @@ function DashboardPage() {
                   Loading Resume Drop status…
                 </div>
               )}
+              <IntrosInbox />
             </div>
             <div>
               <NotificationsList />

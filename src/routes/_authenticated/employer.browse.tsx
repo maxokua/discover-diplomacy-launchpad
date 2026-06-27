@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { SiteLayout } from "@/components/site-layout";
@@ -12,6 +12,7 @@ import {
   myPortalRoles,
   getEmployerCreditBalance,
 } from "@/lib/payments.functions";
+import { unlockCandidate } from "@/lib/unlock-flow.functions";
 import { ChevronDown, Lock, Star, X, SlidersHorizontal } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/employer/browse")({
