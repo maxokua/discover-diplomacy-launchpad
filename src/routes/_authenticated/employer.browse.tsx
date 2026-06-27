@@ -205,6 +205,49 @@ function BrowsePage() {
     else toast.success("Note saved");
   }, []);
 
+  const onUnlockClick = useCallback(
+    (row: Row) => {
+      const isPaid = tier !== null && tier !== "free";
+      if (row.pile === "paid" && !isPaid) {
+        toast.error("Member Pool candidates require a paid employer plan.");
+        navigate({ to: "/employer/credits/checkout" });
+        return;
+      }
+      if ((balance ?? 0) <= 0) {
+        toast.error("You're out of credits.");
+        navigate({ to: "/employer/credits/checkout" });
+        return;
+      }
+      setUnlockTarget(row);
+    },
+    [tier, balance, navigate],
+  );
+
+  const confirmUnlock = useCallback(async () => {
+    if (!unlockTarget) return;
+    setUnlocking(true);
+    try {
+      const r = await unlockCandidate({ data: { candidate_id: unlockTarget.user_id } });
+      if (!r.ok) {
+        if (r.error === "no_credits" || r.error === "upgrade_required") {
+          toast.error(("message" in r ? r.message : null) ?? "Couldn't unlock");
+          setUnlockTarget(null);
+          navigate({ to: "/employer/credits/checkout" });
+          return;
+        }
+        toast.error(r.error ?? "Couldn't unlock");
+        return;
+      }
+      if (typeof r.balance === "number") setBalance(r.balance);
+      toast.success(r.already_unlocked ? "Already unlocked — opening profile." : "Unlocked.");
+      const id = unlockTarget.user_id;
+      setUnlockTarget(null);
+      navigate({ to: "/employer/unlocked/$candidateId", params: { candidateId: id } });
+    } finally {
+      setUnlocking(false);
+    }
+  }, [unlockTarget, navigate]);
+
   if (allowed === null) {
     return (
       <SiteLayout>
