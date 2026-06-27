@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_logs: {
+        Row: {
+          created_at: string
+          duration_ms: number | null
+          error: string | null
+          id: string
+          input_summary: Json
+          model: string | null
+          ok: boolean
+          output: Json | null
+          surface: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          input_summary?: Json
+          model?: string | null
+          ok?: boolean
+          output?: Json | null
+          surface: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          input_summary?: Json
+          model?: string | null
+          ok?: boolean
+          output?: Json | null
+          surface?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       assessment_leads: {
         Row: {
           answers: Json
@@ -52,6 +91,8 @@ export type Database = {
       }
       candidate_profiles: {
         Row: {
+          ai_core_signature: string | null
+          ai_followups: Json
           availability: string | null
           bio: string | null
           budget_responsibility: string | null
@@ -95,6 +136,8 @@ export type Database = {
           years_intl: string | null
         }
         Insert: {
+          ai_core_signature?: string | null
+          ai_followups?: Json
           availability?: string | null
           bio?: string | null
           budget_responsibility?: string | null
@@ -138,6 +181,8 @@ export type Database = {
           years_intl?: string | null
         }
         Update: {
+          ai_core_signature?: string | null
+          ai_followups?: Json
           availability?: string | null
           bio?: string | null
           budget_responsibility?: string | null
@@ -588,6 +633,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      employer_shortlists: {
+        Row: {
+          candidate_id: string
+          created_at: string
+          employer_id: string
+          id: string
+          note: string | null
+          updated_at: string
+        }
+        Insert: {
+          candidate_id: string
+          created_at?: string
+          employer_id: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+        }
+        Update: {
+          candidate_id?: string
+          created_at?: string
+          employer_id?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      filter_usage_log: {
+        Row: {
+          created_at: string
+          employer_id: string | null
+          filters: Json
+          id: string
+          result_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          employer_id?: string | null
+          filters?: Json
+          id?: string
+          result_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          employer_id?: string | null
+          filters?: Json
+          id?: string
+          result_count?: number | null
+        }
+        Relationships: []
       }
       member_resume_drop: {
         Row: {

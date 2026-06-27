@@ -6,6 +6,11 @@ import {
   getMyCandidateProfile,
   patchCandidateProfile,
 } from "@/lib/profile.functions";
+import {
+  generateProfileFollowup,
+  saveProfileFollowupAnswer,
+  updateAiCoreSignature,
+} from "@/lib/ai-followup.functions";
 import { ProfileCard } from "@/components/profile-card";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -133,6 +138,15 @@ function ProfileBuilderPage() {
   const [state, setState] = useState<ProfileState>(EMPTY);
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState<"card" | "builder">("builder");
+  const [followup, setFollowup] = useState<{
+    question: string;
+    options: string[];
+    surface: "after_screen_2" | "after_screen_5";
+    nextAction: "advance" | "finish";
+  } | null>(null);
+  const [aiCallsMade, setAiCallsMade] = useState(0);
+  const [aiLoading, setAiLoading] = useState(false);
+  const lastCoreSigRef = useRef<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -147,6 +161,7 @@ function ProfileBuilderPage() {
           }
         }
         setState(merged);
+        lastCoreSigRef.current = (p.ai_core_signature as string | null) ?? null;
         if ((p.profile_status as string) === "complete" || (p.profile_status as string) === "published") {
           setMode("card");
         }
@@ -217,7 +232,62 @@ function ProfileBuilderPage() {
 
   const pct = useMemo(() => completionPercent(state), [state]);
 
-  async function finish() {
+  // AI follow-up: trigger after screens 2 and 5, capped at 2 total.
+  async function tryFollowup(
+    surface: "after_screen_2" | "after_screen_5",
+    nextAction: "advance" | "finish",
+  ): Promise<boolean> {
+    if (aiCallsMade >= 2) return false;
+    const coreSig = [
+      state.primary_theme ?? "",
+      [...state.functional_skills].sort().join("|"),
+      state.career_stage ?? "",
+      [...state.roles_seeking].sort().join("|"),
+      [...state.target_sectors].sort().join("|"),
+    ].join("::");
+    if (lastCoreSigRef.current === coreSig) return false; // no relevant change since last AI run
+
+    setAiLoading(true);
+    try {
+      const askedQs = Array.isArray(state) ? [] : [];
+      const r = await generateProfileFollowup({
+        data: {
+          surface,
+          selections: {
+            career_stage: state.career_stage,
+            years_experience: state.years_experience,
+            primary_theme: state.primary_theme,
+            secondary_themes: state.secondary_themes,
+            functional_skills: state.functional_skills,
+            org_types: state.org_types,
+            roles_seeking: state.roles_seeking,
+            target_sectors: state.target_sectors,
+            current_base: state.current_base,
+          },
+          asked_questions: askedQs,
+        },
+      });
+      setAiCallsMade((n) => n + 1);
+      lastCoreSigRef.current = coreSig;
+      await updateAiCoreSignature({ data: { signature: coreSig } });
+      if (r && r.question && r.options.length >= 3) {
+        setFollowup({
+          question: r.question,
+          options: r.options,
+          surface,
+          nextAction,
+        });
+        return true;
+      }
+    } catch {
+      // silent fallback
+    } finally {
+      setAiLoading(false);
+    }
+    return false;
+  }
+
+  async function finishProfile() {
     const status: ProfileState["profile_status"] = "complete";
     setState((s) => ({ ...s, profile_status: status }));
     await patchCandidateProfile({
@@ -225,6 +295,31 @@ function ProfileBuilderPage() {
     });
     toast.success("Profile saved");
     setMode("card");
+  }
+
+  async function finish() {
+    const shown = await tryFollowup("after_screen_5", "finish");
+    if (!shown) await finishProfile();
+  }
+
+  async function chooseFollowup(answer: string | null) {
+    const f = followup;
+    if (!f) return;
+    setFollowup(null);
+    if (answer) {
+      try {
+        await saveProfileFollowupAnswer({
+          data: { question: f.question, answer, surface: f.surface },
+        });
+      } catch {
+        // ignore
+      }
+    }
+    if (f.nextAction === "advance") {
+      setStep((s) => s + 1);
+    } else {
+      await finishProfile();
+    }
   }
 
   if (loading) {
@@ -405,7 +500,8 @@ function ProfileBuilderPage() {
             {step < totalSteps ? (
               <button
                 type="button"
-                onClick={() => {
+                disabled={aiLoading}
+                onClick={async () => {
                   // Required check per-screen
                   if (step === 1 && (!state.career_stage || !state.years_experience)) {
                     toast.error("Career stage and years of experience are required");
@@ -419,24 +515,66 @@ function ProfileBuilderPage() {
                     toast.error("Current base and work eligibility are required");
                     return;
                   }
+                  if (step === 2) {
+                    const shown = await tryFollowup("after_screen_2", "advance");
+                    if (shown) return;
+                  }
                   setStep(step + 1);
                 }}
-                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
               >
-                Continue →
+                {aiLoading ? "Thinking…" : "Continue →"}
               </button>
             ) : (
               <button
                 type="button"
+                disabled={aiLoading}
                 onClick={finish}
-                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-medium uppercase tracking-wider text-paper hover:bg-navy disabled:opacity-60"
               >
-                Finish
+                {aiLoading ? "Thinking…" : "Finish"}
               </button>
             )}
           </div>
         </div>
       </section>
+
+      {followup && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-navy-deep/40 p-4 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="w-full max-w-md border border-border bg-paper p-6 shadow-xl">
+            <div className="eyebrow text-gilt">One more thing…</div>
+            <h3 className="mt-2 font-display text-xl text-navy-deep">{followup.question}</h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              AI suggested this based on your selections. Tap one to add it to your profile.
+            </p>
+            <div className="mt-4 space-y-2">
+              {followup.options.map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => chooseFollowup(opt)}
+                  className="w-full border border-border bg-paper px-4 py-3 text-left text-sm text-navy-deep transition-colors hover:border-navy-deep hover:bg-stone/40"
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={() => chooseFollowup(null)}
+                className="text-sm text-muted-foreground underline"
+              >
+                Skip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </SiteLayout>
   );
 }
