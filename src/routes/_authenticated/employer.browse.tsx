@@ -411,7 +411,9 @@ function BrowsePage() {
                       <PreviewCard
                         key={r.user_id}
                         row={r}
-                        canUnlock={isPaidEmployerTier || (balance ?? 0) > 0}
+                        canUnlock={isPaidEmployerTier && (balance ?? 0) > 0}
+                        upgradeNeeded={!isPaidEmployerTier}
+                        onUnlock={onUnlockClick}
                         onToggleShortlist={onToggleShortlist}
                         onSaveNote={saveNote}
                       />
@@ -429,6 +431,8 @@ function BrowsePage() {
                         key={r.user_id}
                         row={r}
                         canUnlock={(balance ?? 0) > 0}
+                        upgradeNeeded={false}
+                        onUnlock={onUnlockClick}
                         onToggleShortlist={onToggleShortlist}
                         onSaveNote={saveNote}
                       />
