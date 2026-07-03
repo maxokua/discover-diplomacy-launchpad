@@ -6,48 +6,13 @@ import { useAuth } from "@/hooks/use-auth";
 import { ScrollProgress } from "@/components/scroll-effects";
 import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 
-type NavLink = { to: string; label: string; hash?: string };
-type NavGroup = { label: string; links: NavLink[] };
+type NavLink = { to: string; label: string };
 
-const GROUPS: NavGroup[] = [
-  {
-    label: "For Candidates",
-    links: [
-      { to: "/resume-drop", label: "Resume Drop" },
-      { to: "/profile", label: "Your Profile" },
-      { to: "/directory", label: "Opportunity Directory" },
-      { to: "/coaches", label: "Coach Directory" },
-      { to: "/pricing", label: "Membership Pricing" },
-      { to: "/assessment", label: "Free Assessment" },
-    ],
-  },
-  {
-    label: "For Universities",
-    links: [
-      { to: "/universities", label: "University Program" },
-      { to: "/universities", label: "Request a Demo" },
-    ],
-  },
-  {
-    label: "For Employers",
-    links: [
-      { to: "/employer/browse", label: "Browse Talent" },
-      { to: "/pricing?tab=employers", label: "Employer Pricing" },
-      { to: "/employers/apply", label: "Request Access" },
-    ],
-  },
-  {
-    label: "For Coaches",
-    links: [
-      { to: "/coaches/apply", label: "Apply to Coach" },
-      { to: "/coaches", label: "Coach Directory" },
-    ],
-  },
-];
-
-const FLAT_LINKS: NavLink[] = [
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+const NAV_LINKS: NavLink[] = [
+  { to: "/", label: "Home" },
+  { to: "/directory", label: "Directory" },
+  { to: "/pricing", label: "Pricing" },
+  { to: "/employers", label: "For Employers" },
 ];
 
 export function SiteLayout({ children }: { children: ReactNode }) {
