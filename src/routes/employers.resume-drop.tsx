@@ -148,7 +148,7 @@ function ResumeDropPage() {
                 "50 credits / month",
                 "Unlimited shortlists",
                 "Monthly market intel",
-                "Lowest placement fee",
+                "Priority support",
               ]}
               ctaLabel="Choose Professional"
               ctaHref="#request-access"
