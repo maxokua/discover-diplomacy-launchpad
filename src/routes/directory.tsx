@@ -17,6 +17,7 @@ type Entry = {
 const ALL_ENTRIES = (directoryData as Entry[]).filter((e) => e.category !== "Other");
 
 const CATEGORY_ORDER = [
+  "Employers",
   "NGO/IGO/Think Tank",
   "Government",
   "Graduate Programs",
