@@ -341,15 +341,6 @@ function PricingCard({
   );
 }
 
-function FeeRow({ plan, credits, fee }: { plan: string; credits: number; fee: number }) {
-  return (
-    <tr>
-      <td className="px-4 py-3 font-medium">{plan}</td>
-      <td className="px-4 py-3">{credits}</td>
-      <td className="px-4 py-3">${(fee / 100).toLocaleString()}</td>
-    </tr>
-  );
-}
 
 function Benefit({ title, body }: { title: string; body: string }) {
   return (
