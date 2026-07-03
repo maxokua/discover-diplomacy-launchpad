@@ -70,7 +70,7 @@ const FAQ = [
   },
   {
     q: "Can we bundle this with other Discover Diplomacy offerings?",
-    a: "Yes. Universities can also offer Envoy (unlimited coaching) to graduate students or specialized tracks. We can set up discounted add-ons.",
+    a: "Yes. Universities can also offer Envoy (recurring 1:1 coaching) to graduate students or specialized tracks. We can set up discounted add-ons.",
   },
   {
     q: "What if a student drops out or graduates?",
