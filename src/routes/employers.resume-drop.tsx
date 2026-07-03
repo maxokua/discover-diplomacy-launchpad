@@ -255,20 +255,12 @@ function ResumeDropPage() {
               a="All intros are automated through our platform to protect candidate privacy and ensure accountability. You communicate through DD's system."
             />
             <Faq
-              q="How is the placement fee calculated?"
-              a="When a candidate you unlocked is hired, you receive credits back and DD takes a placement fee tiered by your subscription. À la carte: $1,200 / 3 credits back. Starter: $700 / 4 credits. Professional: $500 / 5 credits."
-            />
-            <Faq
               q="What counts as a 'hire'?"
-              a="Any offer accepted by a candidate you unlocked through the platform. We work with you to verify and issue the credit bonus."
+              a="Any offer accepted by a candidate you unlocked through the platform."
             />
             <Faq
               q="Can we buy credits and not use them?"
               a="Yes. Credits roll over month to month and never expire. Buy what you need, use them when you're recruiting."
-            />
-            <Faq
-              q="Why do Professional subscribers pay a lower placement fee?"
-              a="You're committed to $100/mo with us — that partnership and predictable revenue means we can offer lower placement fees. It rewards loyalty and makes the economics work better for both sides."
             />
           </div>
         </div>
