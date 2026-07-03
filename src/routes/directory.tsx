@@ -26,7 +26,20 @@ const CATEGORY_ORDER = [
   "High School Programs",
 ];
 
+type DirectorySearch = {
+  category?: string;
+  subsection?: string;
+  location?: string;
+  interest?: string;
+};
+
 export const Route = createFileRoute("/directory")({
+  validateSearch: (search: Record<string, unknown>): DirectorySearch => ({
+    category: typeof search.category === "string" ? search.category : undefined,
+    subsection: typeof search.subsection === "string" ? search.subsection : undefined,
+    location: typeof search.location === "string" ? search.location : undefined,
+    interest: typeof search.interest === "string" ? search.interest : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Opportunities Directory | Discover Diplomacy" },
@@ -53,11 +66,14 @@ function uniqSorted(arr: string[]) {
 }
 
 function DirectoryPage() {
+  const search = Route.useSearch();
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>("All program types");
-  const [location, setLocation] = useState<string>("All locations");
-  const [interest, setInterest] = useState<string>("All regional focuses");
-  const [subsection, setSubsection] = useState<string>("All interest areas");
+  const [category, setCategory] = useState<string>(search.category ?? "All program types");
+  const [location, setLocation] = useState<string>(search.location ?? "All locations");
+  const [interest, setInterest] = useState<string>(search.interest ?? "All regional focuses");
+  const [subsection, setSubsection] = useState<string>(
+    search.subsection ?? "All interest areas",
+  );
 
   const locations = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.location)), []);
   const interests = useMemo(() => uniqSorted(ALL_ENTRIES.map((e) => e.interest)), []);
