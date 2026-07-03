@@ -280,23 +280,16 @@ function Avatar() {
 }
 
 const QUESTIONS: Record<StepKey, string> = {
-  intro:
-    "Hi — I'm here to help you figure out your path in global affairs. We'll go through 6 quick questions (about 2 minutes), then I'll put together a real plan for you.\n\nFirst — what should I call you?",
-  interests: "Which areas pull you the most? Pick any that apply.",
+  interests: "Which area of global affairs pulls you the most?",
   stage: "Where are you right now in your career?",
-  blocker: "What's the real thing in your way today? Be honest.",
-  nonNegotiables: "Any non-negotiables I should know about? Pick what's true.",
-  strengths:
-    "Tell me about your background — degrees, languages, internships, work, or anything you're known for. A sentence or two is plenty.",
+  blocker: "What's the real thing in your way today?",
+  nonNegotiables: "Any non-negotiables I should know about?",
   network: "How's your network in this space?",
-  contact:
-    "All set. Drop your email and I'll generate your personalized career plan right now — and send you a copy you can keep.",
+  email: "Drop your email and I'll generate your personalized plan.",
 };
 
 function summarize(step: StepKey, a: Answers, email: string): string | null {
   switch (step) {
-    case "intro":
-      return a.name ? a.name : null;
     case "interests":
       return a.interests.length ? a.interests.join(" · ") : null;
     case "stage":
@@ -305,11 +298,9 @@ function summarize(step: StepKey, a: Answers, email: string): string | null {
       return a.blocker || null;
     case "nonNegotiables":
       return a.nonNegotiables.length ? a.nonNegotiables.join(" · ") : "None";
-    case "strengths":
-      return a.strengths ? (a.strengths.length > 120 ? a.strengths.slice(0, 117) + "…" : a.strengths) : null;
     case "network":
       return a.network || null;
-    case "contact":
+    case "email":
       return email || null;
   }
 }
