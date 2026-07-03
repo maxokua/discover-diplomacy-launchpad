@@ -63,7 +63,7 @@ function CoachingIndex() {
       )}
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
-        {coaches.map((c) => (
+        {coaches.map((c: Coach) => (
           <CoachCard key={c.id} coach={c} isEnvoy={isEnvoy} />
         ))}
       </div>
