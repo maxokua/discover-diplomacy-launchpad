@@ -60,6 +60,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          ip_hash: string | null
           name: string | null
           plan: Json
           recommended_tier: string | null
@@ -71,6 +72,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          ip_hash?: string | null
           name?: string | null
           plan: Json
           recommended_tier?: string | null
@@ -82,6 +84,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          ip_hash?: string | null
           name?: string | null
           plan?: Json
           recommended_tier?: string | null
