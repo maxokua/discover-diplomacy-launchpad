@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { ScrollCompass } from "@/components/scroll-compass";
 
 const URL_PATH = "/guide/international-relations-jobs-requirements";
 const CANONICAL = `https://discoverdiplomacy.org${URL_PATH}`;
