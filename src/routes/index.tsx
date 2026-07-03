@@ -1,13 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, Compass, Target, DoorOpen, GraduationCap, Sparkles, Users } from "lucide-react";
+import { ArrowRight, Search, MapPin, Building2, Compass as CompassIcon, CheckCircle2, Target, DoorOpen } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
-import { Parallax } from "@/components/scroll-effects";
-import { MagneticLink } from "@/components/magnetic";
-import { BRAND, PILLARS, TRACTION } from "@/lib/brand";
-import institution from "@/assets/institution.jpg";
-import ypfpLogo from "@/assets/ypfp-logo.jpg.asset.json";
-import americanUniversityLogo from "@/assets/american-university-logo.png.asset.json";
+import { BRAND, TRACTION } from "@/lib/brand";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,21 +11,19 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Discover the opportunities. Prepare the materials. Get hired. Fast. Choose Compass for self-directed tools or Envoy for unlimited coaching — built for international affairs and global business.",
+          "Find your path in international affairs. A directory of opportunities, expert-designed preparation, and a free 3-minute career assessment.",
       },
       { property: "og:title", content: "Discover Diplomacy — The International Career Platform" },
       {
         property: "og:description",
         content:
-          "Choose Compass for self-directed tools, or Envoy for unlimited coaching. Universities — give your IR program a dedicated career layer.",
+          "Find your path in international affairs. Take the free 3-minute career assessment.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/" },
-      { name: "twitter:title", content: "Discover Diplomacy — The International Career Platform" },
-      { name: "twitter:description", content: "Compass, Envoy, or our University Program. Three ways into international careers." },
+      { name: "twitter:title", content: "Discover Diplomacy" },
+      { name: "twitter:description", content: "Find your path in international affairs. Take the free 3-minute career assessment." },
     ],
-    links: [
-      { rel: "canonical", href: "https://discoverdiplomacy.org/" },
-    ],
+    links: [{ rel: "canonical", href: "https://discoverdiplomacy.org/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -42,7 +35,6 @@ export const Route = createFileRoute("/")({
           description: BRAND.positioning,
           areaServed: "Worldwide",
           address: { "@type": "PostalAddress", addressLocality: "Washington", addressRegion: "DC", addressCountry: "US" },
-          serviceType: ["Opportunity directory", "Resume review", "Career coaching", "Interview preparation", "Employer access", "University program"],
         }),
       },
     ],
@@ -54,206 +46,178 @@ function HomePage() {
   return (
     <SiteLayout>
       <Hero />
-      <ThreePaths />
-      <Pillars />
-      <Traction />
-      <BackedBy />
-      <ForEmployers />
-      <UniversityCallout />
-      <CTA />
+      <ProductPreview />
+      <Stats />
+      <Founder />
+      <SecondaryCTA />
     </SiteLayout>
   );
 }
 
 function Hero() {
   return (
-    <section className="relative border-b border-border bg-paper">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:py-28">
-        <div className="lg:col-span-7">
-          <Reveal as="div" className="eyebrow">
-            International Affairs · Global Business · Multilaterals
-          </Reveal>
-          <Reveal as="h1" delay={80} className="mt-6 font-display text-4xl leading-[1.05] text-navy-deep sm:text-5xl lg:text-[64px]">
-            Discover the opportunities.<br />
-            Prepare the materials.<br />
-            <span className="text-gilt">Get hired. Fast.</span>
-          </Reveal>
-          <Reveal as="p" delay={160} className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            For ambitious students and early-career professionals in international affairs.
-            Choose self-directed tools, hands-on coaching, or bring us in for your whole program.
-          </Reveal>
-          <Reveal delay={240} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <MagneticLink
-              to="/pricing"
-              className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
-            >
-              Start with Compass
-              <ArrowRight className="h-4 w-4" />
-            </MagneticLink>
-            <Link
-              to="/pricing"
-              className="inline-flex items-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3.5 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
-            >
-              See Envoy + Coaching
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/universities"
-              className="inline-flex items-center gap-2 text-sm font-medium text-navy-deep underline-offset-4 hover:underline"
-            >
-              Are you a university? Learn more
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-        </div>
-
-        <Reveal as="aside" delay={200} y={36} className="lg:col-span-5">
-          <figure className="overflow-hidden border border-border">
-            <Parallax speed={-0.15}>
-              <img
-                src={institution}
-                alt="Classical institutional architecture at dusk"
-                width={1920}
-                height={1280}
-                fetchPriority="high"
-                decoding="async"
-                className="h-[460px] w-full scale-110 object-cover lg:h-[560px]"
-              />
-            </Parallax>
-          </figure>
+    <section className="border-b border-border bg-paper">
+      <div className="mx-auto max-w-5xl px-6 pt-24 pb-28 text-center lg:px-10 lg:pt-32 lg:pb-36">
+        <Reveal as="div" className="eyebrow">
+          International Affairs · Global Business · Multilaterals
+        </Reveal>
+        <Reveal as="h1" delay={80} className="mt-8 font-display text-navy-deep">
+          Find your path in international affairs.
+        </Reveal>
+        <Reveal as="p" delay={160} className="mx-auto mt-8 max-w-2xl text-lg text-muted-foreground">
+          Discover Diplomacy helps globally-minded students and early-career professionals
+          find the roles, preparation, and access that turn ambition into a career.
+        </Reveal>
+        <Reveal delay={240} className="mt-12">
+          <Link
+            to="/assessment"
+            className="inline-flex items-center gap-3 rounded-lg bg-gilt px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-gilt/90"
+          >
+            Find your career path — free 3-minute assessment
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </Reveal>
       </div>
     </section>
   );
 }
 
-function ThreePaths() {
-  const paths = [
-    {
-      icon: Compass,
-      eyebrow: "Self-directed",
-      heading: "Self-directed? Start with Compass.",
-      body:
-        "Resume review, job board, members-only community, and weekly curated opportunities. Everything you need to apply yourself.",
-      price: "$20/mo",
-      cta: { label: "Start Compass", to: "/pricing" as const },
-      tone: "default" as const,
-    },
-    {
-      icon: Sparkles,
-      eyebrow: "Mentor included",
-      heading: "Want a mentor? Choose Envoy.",
-      body:
-        "Unlimited coaching, mock interviews, strategic guidance. A vetted insider walks you through every step.",
-      price: "$150/mo",
-      cta: { label: "Start Envoy", to: "/pricing" as const },
-      tone: "feature" as const,
-    },
-    {
-      icon: GraduationCap,
-      eyebrow: "For institutions",
-      heading: "Are you a university? We're your IR career layer.",
-      body:
-        "Give your international studies majors a dedicated career platform. Resume help, job board, coaching — in bulk.",
-      price: "$20/student/mo",
-      cta: { label: "Learn about our University Program", to: "/universities" as const },
-      tone: "default" as const,
-    },
-  ];
+/* Real UI preview: composed from the actual directory + assessment components,
+   in a browser chrome frame, no stock imagery. */
+function ProductPreview() {
   return (
     <section className="border-b border-border bg-stone">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-        <Reveal>
-          <div className="eyebrow">Three ways in</div>
-          <h2 className="mt-4 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
-            Three ways to get your next international role.
+      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <div className="eyebrow">Inside the platform</div>
+          <h2 className="mt-6 font-display text-navy-deep">
+            A working directory and a real assessment — not a demo.
           </h2>
+          <p className="mt-6 text-muted-foreground">
+            Browse curated global opportunities, then take a short assessment
+            that produces a specific plan for your background.
+          </p>
         </Reveal>
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {paths.map((p, i) => (
-            <Reveal key={p.heading} delay={i * 100}>
-              <div
-                className={
-                  "flex h-full flex-col border bg-paper p-8 " +
-                  (p.tone === "feature" ? "border-2 border-emerald" : "border-border")
-                }
-              >
-                <div className="flex items-center gap-3">
-                  <p.icon className={"h-6 w-6 " + (p.tone === "feature" ? "text-emerald" : "text-navy-deep")} />
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    {p.eyebrow}
-                  </div>
-                </div>
-                <h3 className="mt-4 font-display text-xl text-navy-deep">{p.heading}</h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
-                <div className="mt-6 font-display text-2xl text-navy-deep">{p.price}</div>
-                <Link
-                  to={p.cta.to}
-                  className={
-                    "mt-6 inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-medium uppercase tracking-wider " +
-                    (p.tone === "feature"
-                      ? "bg-emerald text-navy-deep hover:bg-emerald/90"
-                      : "bg-navy-deep text-paper hover:bg-navy")
-                  }
-                >
-                  {p.cta.label}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </Reveal>
-          ))}
+
+        <div className="mt-16 grid gap-8 lg:grid-cols-2">
+          <Reveal>
+            <BrowserFrame label="discoverdiplomacy.org/directory">
+              <DirectoryMock />
+            </BrowserFrame>
+          </Reveal>
+          <Reveal delay={100}>
+            <BrowserFrame label="discoverdiplomacy.org/assessment">
+              <AssessmentMock />
+            </BrowserFrame>
+          </Reveal>
         </div>
       </div>
     </section>
   );
 }
 
-function Pillars() {
-  const icons: Record<string, typeof Compass> = { clarity: Compass, preparation: Target, access: DoorOpen };
+function BrowserFrame({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="border-b border-border bg-paper">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-        <Reveal>
-          <div className="eyebrow">Why Discover Diplomacy</div>
-          <h2 className="mt-4 max-w-3xl font-display text-3xl text-navy-deep lg:text-4xl">
-            Built specifically for international careers.
-          </h2>
-        </Reveal>
-        <ul className="mt-12 grid gap-px border border-border bg-border lg:grid-cols-3">
-          {PILLARS.map((p, i) => {
-            const Icon = icons[p.key];
-            return (
-              <Reveal key={p.key} delay={i * 100} className="bg-paper p-8">
-                <Icon className="h-6 w-6 text-gilt" />
-                <h3 className="mt-5 font-display text-2xl text-navy-deep">{p.label}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.line}</p>
-              </Reveal>
-            );
-          })}
-        </ul>
+    <div className="overflow-hidden rounded-lg border border-border bg-paper">
+      <div className="flex items-center gap-2 border-b border-border bg-stone px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-hairline" />
+        <span className="h-2.5 w-2.5 rounded-full bg-hairline" />
+        <span className="h-2.5 w-2.5 rounded-full bg-hairline" />
+        <div className="ml-4 truncate text-xs text-muted-foreground">{label}</div>
       </div>
-    </section>
+      <div className="p-6">{children}</div>
+    </div>
   );
 }
 
-function Traction() {
+function DirectoryMock() {
+  const rows = [
+    { org: "United Nations Development Programme", role: "Policy Analyst, Governance", loc: "New York, NY", tag: "Multilateral" },
+    { org: "International Crisis Group", role: "Research Fellow, Sahel", loc: "Brussels, BE", tag: "Think Tank" },
+    { org: "U.S. Department of State", role: "Foreign Affairs Officer", loc: "Washington, DC", tag: "Government" },
+    { org: "Open Society Foundations", role: "Program Officer, MENA", loc: "London, UK", tag: "NGO" },
+  ];
+  return (
+    <div>
+      <div className="flex items-center gap-3 rounded-lg border border-border bg-stone px-4 py-3">
+        <Search className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">Search 500+ global opportunities…</span>
+      </div>
+      <ul className="mt-6 divide-y divide-border">
+        {rows.map((r) => (
+          <li key={r.role} className="py-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <div className="truncate font-display text-[17px] text-navy-deep">{r.role}</div>
+                <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1"><Building2 className="h-3 w-3" />{r.org}</span>
+                  <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{r.loc}</span>
+                </div>
+              </div>
+              <span className="shrink-0 rounded-lg border border-border px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                {r.tag}
+              </span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function AssessmentMock() {
+  const paths = [
+    { icon: CompassIcon, title: "Path 1 · Multilateral Policy", body: "Target UNDP, World Bank YPP, and OECD associate roles within 12 months." },
+    { icon: Target, title: "Path 2 · Foreign Service", body: "Sit the FSOT this cycle; strengthen consular and public-diplomacy narratives." },
+    { icon: DoorOpen, title: "Path 3 · Think Tank Research", body: "Pitch two Sahel-focused briefs; apply for Crisis Group and Brookings fellowships." },
+  ];
+  return (
+    <div>
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-gilt" />Your results</span>
+        <span>3 recommended paths</span>
+      </div>
+      <div className="mt-4 rounded-lg border border-border p-5">
+        <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          Personalized 90-day plan
+        </div>
+        <ul className="mt-4 space-y-4">
+          {paths.map((p) => (
+            <li key={p.title} className="flex gap-3">
+              <p.icon className="mt-0.5 h-4 w-4 shrink-0 text-navy-deep" />
+              <div>
+                <div className="font-display text-[15px] text-navy-deep">{p.title}</div>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{p.body}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function Stats() {
   const stats = [
+    { v: TRACTION.directoryViews, l: "Directory views" },
     { v: TRACTION.peopleReached, l: "Professionals reached" },
-    { v: TRACTION.directoryViews, l: "Views to our opportunity directory" },
-    { v: TRACTION.weeklyOpportunities, l: "Global opportunities curated weekly" },
+    { v: TRACTION.weeklyOpportunities, l: "Opportunities curated weekly" },
     { v: "75+", l: "Countries reached" },
   ];
   return (
     <section className="border-b border-border bg-paper">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-        <Reveal>
+      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-28">
+        <Reveal className="mx-auto max-w-2xl text-center">
           <div className="eyebrow">By the numbers</div>
+          <h2 className="mt-6 font-display text-navy-deep">
+            Trusted by internationally-minded professionals worldwide.
+          </h2>
         </Reveal>
-        <ul className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s, i) => (
-            <Reveal key={s.l} delay={i * 60} className="bg-paper p-8">
-              <div className="font-display text-4xl text-navy-deep lg:text-5xl">{s.v}</div>
-              <div className="mt-3 text-sm text-muted-foreground">{s.l}</div>
+            <Reveal key={s.l} delay={i * 60} className="text-center">
+              <div className="font-display text-5xl text-navy-deep lg:text-6xl">{s.v}</div>
+              <div className="mt-4 text-sm uppercase tracking-[0.14em] text-muted-foreground">{s.l}</div>
             </Reveal>
           ))}
         </ul>
@@ -262,105 +226,32 @@ function Traction() {
   );
 }
 
-function BackedBy() {
+function Founder() {
   return (
-    <section className="border-b border-border bg-paper">
-      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10 lg:py-16">
-        <Reveal className="flex flex-col items-center gap-8 text-center">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
-            Backed by
-          </div>
-          <ul className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
-            <li>
-              <img
-                src={ypfpLogo.url}
-                alt="Young Professionals in Foreign Policy"
-                width={160}
-                height={160}
-                loading="lazy"
-                className="h-20 w-20 object-contain opacity-80 grayscale transition-all duration-500 hover:scale-105 hover:opacity-100 hover:grayscale-0 lg:h-24 lg:w-24"
-              />
-            </li>
-            <li className="hidden h-10 w-px bg-border md:block" aria-hidden />
-            <li>
-              <img
-                src={americanUniversityLogo.url}
-                alt="American University — Veloric Center for Entrepreneurship"
-                width={160}
-                height={160}
-                loading="lazy"
-                className="h-16 w-16 object-contain opacity-80 grayscale transition-all duration-500 hover:scale-105 hover:opacity-100 hover:grayscale-0 lg:h-20 lg:w-20"
-              />
-            </li>
-          </ul>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function ForEmployers() {
-  return (
-    <section className="border-b border-border bg-paper">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
-        <Reveal className="grid gap-10 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <div className="eyebrow">For Employers</div>
-            <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-4xl">
-              Hiring? Unlock vetted international talent.
-            </h2>
-            <p className="mt-5 max-w-2xl text-muted-foreground">
-              Our members are pre-screened — students and early-career professionals serious
-              enough about the field to invest in their own preparation. Browse pre-screened
-              candidates and reach the ones that fit your role.
-            </p>
-          </div>
-          <div className="flex flex-col items-stretch gap-3 lg:col-span-5 lg:items-end">
-            <Link
-              to="/employers"
-              className="inline-flex items-center justify-center gap-2 rounded-sm bg-navy-deep px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-navy"
+    <section className="border-b border-border bg-stone">
+      <div className="mx-auto max-w-5xl px-6 py-24 lg:px-10 lg:py-32">
+        <Reveal className="grid gap-12 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-4">
+            <div
+              aria-hidden
+              className="mx-auto flex h-48 w-48 items-center justify-center rounded-lg border border-border bg-paper font-display text-6xl text-navy-deep lg:mx-0"
             >
-              Browse Vetted Talent
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/pricing"
-              className="inline-flex items-center justify-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
-            >
-              See Employer Pricing
-            </Link>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function UniversityCallout() {
-  return (
-    <section className="border-b border-border bg-navy-deep text-paper">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
-        <Reveal className="grid items-center gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-8">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald">
-              For Universities
+              M
             </div>
-            <h2 className="mt-4 font-display text-2xl text-paper lg:text-3xl">
-              Already a university looking to support your students?
-            </h2>
-            <p className="mt-4 max-w-2xl text-paper/75">
-              Discover Diplomacy is the career layer your IR program needs. Bulk Compass
-              memberships at $20/student/mo, coach access, and quarterly outcomes reporting.
-            </p>
           </div>
-          <div className="lg:col-span-4 lg:text-right">
-            <Link
-              to="/universities"
-              className="inline-flex items-center gap-2 bg-emerald px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-emerald/90"
-            >
-              <Users className="h-4 w-4" />
-              Learn about our University Program
-            </Link>
+          <div className="lg:col-span-8">
+            <div className="eyebrow">Why we built this</div>
+            <p className="mt-6 font-display text-2xl leading-snug text-navy-deep lg:text-[28px]">
+              "Talented people were losing the international careers they wanted
+              because no one told them how the doors actually open."
+            </p>
+            <p className="mt-6 text-muted-foreground">
+              Discover Diplomacy is the platform I wish I'd had — a real directory,
+              honest preparation, and access to people who've walked the path.
+            </p>
+            <div className="mt-6 text-sm font-medium text-navy-deep">
+              Max Brannon · Founder, Discover Diplomacy
+            </div>
           </div>
         </Reveal>
       </div>
@@ -368,35 +259,24 @@ function UniversityCallout() {
   );
 }
 
-function CTA() {
+function SecondaryCTA() {
   return (
     <section className="bg-paper">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-        <Reveal className="grid gap-10 border-y border-border py-16 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-8">
-            <div className="eyebrow">Start here</div>
-            <h2 className="mt-5 font-display text-3xl text-navy-deep lg:text-5xl">
-              Choose the path that fits you.
-            </h2>
-            <p className="mt-5 max-w-2xl text-muted-foreground">
-              Compass at $20/mo for self-directed tools, intel, and community. Envoy at $150/mo
-              when you want unlimited coaching and a mentor walking you through every step.
-              Switch anytime.
-            </p>
-          </div>
-          <div className="flex flex-col items-stretch gap-3 lg:col-span-4 lg:items-end">
-            <Link
-              to="/pricing"
-              className="inline-flex items-center justify-center gap-2 rounded-sm bg-navy-deep px-7 py-4 text-sm font-medium text-paper transition-colors hover:bg-navy"
-            >
-              See plans
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+      <div className="mx-auto max-w-3xl px-6 py-24 text-center lg:px-10 lg:py-32">
+        <Reveal>
+          <h2 className="font-display text-navy-deep">
+            Not sure where you fit? Start with the assessment.
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl text-muted-foreground">
+            Three minutes, no signup required. You'll get three concrete paths and a 90-day plan.
+          </p>
+          <div className="mt-10">
             <Link
               to="/assessment"
-              className="inline-flex items-center justify-center gap-2 rounded-sm border border-navy-deep/30 px-7 py-3 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
+              className="inline-flex items-center gap-3 rounded-lg bg-gilt px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-gilt/90"
             >
-              Take the free assessment
+              Find your career path — free 3-minute assessment
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </Reveal>
