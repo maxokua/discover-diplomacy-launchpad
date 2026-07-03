@@ -132,8 +132,7 @@ function EmployersPage() {
               ))}
             </div>
             <p className="mt-4 text-xs text-muted-foreground">
-              All tiers require employer verification. Placement fee applies when candidates are
-              hired — see <a href="/pricing?tab=employers" className="underline-offset-4 hover:underline">pricing</a>.
+              All tiers require employer verification. See <a href="/pricing?tab=employers" className="underline-offset-4 hover:underline">pricing</a>.
             </p>
           </Reveal>
         </div>

@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
-import { getPlacementFees, requestEmployerAccess } from "@/lib/resume-drop.functions";
+import { requestEmployerAccess } from "@/lib/resume-drop.functions";
 
 export const Route = createFileRoute("/employers/resume-drop")({
   head: () => ({
@@ -28,14 +28,7 @@ export const Route = createFileRoute("/employers/resume-drop")({
   component: ResumeDropPage,
 });
 
-type Fees = Awaited<ReturnType<typeof getPlacementFees>>["fees"];
-
 function ResumeDropPage() {
-  const [fees, setFees] = useState<Fees | null>(null);
-
-  useEffect(() => {
-    getPlacementFees().then((r) => setFees(r.fees));
-  }, []);
 
   return (
     <SiteLayout>
@@ -148,7 +141,7 @@ function ResumeDropPage() {
                 "50 credits / month",
                 "Unlimited shortlists",
                 "Monthly market intel",
-                "Lowest placement fee",
+                "Priority support",
               ]}
               ctaLabel="Choose Professional"
               ctaHref="#request-access"
@@ -174,60 +167,6 @@ function ResumeDropPage() {
         </div>
       </section>
 
-      {/* PLACEMENT FEES */}
-      <section className="border-b border-border bg-stone/40">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <div className="eyebrow">Placement fees & credits back</div>
-          <h2 className="mt-3 font-display text-3xl text-navy-deep lg:text-4xl">
-            How it works when you hire.
-          </h2>
-          <p className="mt-4 max-w-3xl text-sm text-muted-foreground">
-            When a candidate you unlocked through the Member Pool is hired, two things happen: you
-            get credits back (to use on future unlocks), and Discover Diplomacy takes a small
-            placement fee to sustain the platform and continue vetting talent.
-          </p>
-          <div className="mt-8 overflow-x-auto border border-border bg-paper">
-            <table className="w-full text-sm">
-              <thead className="bg-navy-deep text-paper">
-                <tr>
-                  <th className="px-4 py-3 text-left text-[11px] uppercase tracking-wider">
-                    Plan
-                  </th>
-                  <th className="px-4 py-3 text-left text-[11px] uppercase tracking-wider">
-                    Credits back per hire
-                  </th>
-                  <th className="px-4 py-3 text-left text-[11px] uppercase tracking-wider">
-                    DD placement fee
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border text-navy-deep">
-                <FeeRow
-                  plan="À la carte"
-                  credits={fees?.alacarte_credits_back ?? 3}
-                  fee={fees?.alacarte_fee_cents ?? 120000}
-                />
-                <FeeRow
-                  plan="Starter ($30/mo)"
-                  credits={fees?.starter_credits_back ?? 4}
-                  fee={fees?.starter_fee_cents ?? 70000}
-                />
-                <FeeRow
-                  plan="Professional ($100/mo)"
-                  credits={fees?.professional_credits_back ?? 5}
-                  fee={fees?.professional_fee_cents ?? 50000}
-                />
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-4 max-w-3xl text-xs text-muted-foreground">
-            We charge more on à la carte because you're not committed to the platform and we take
-            on more risk. Starter and Professional subscribers get lower fees because you're
-            investing with us monthly — it's a partnership. Either way, you get credits back to
-            reinvest.
-          </p>
-        </div>
-      </section>
 
       {/* WHY MEMBER POOL */}
       <section className="border-b border-border bg-paper">
@@ -309,20 +248,12 @@ function ResumeDropPage() {
               a="All intros are automated through our platform to protect candidate privacy and ensure accountability. You communicate through DD's system."
             />
             <Faq
-              q="How is the placement fee calculated?"
-              a="When a candidate you unlocked is hired, you receive credits back and DD takes a placement fee tiered by your subscription. À la carte: $1,200 / 3 credits back. Starter: $700 / 4 credits. Professional: $500 / 5 credits."
-            />
-            <Faq
               q="What counts as a 'hire'?"
-              a="Any offer accepted by a candidate you unlocked through the platform. We work with you to verify and issue the credit bonus."
+              a="Any offer accepted by a candidate you unlocked through the platform."
             />
             <Faq
               q="Can we buy credits and not use them?"
               a="Yes. Credits roll over month to month and never expire. Buy what you need, use them when you're recruiting."
-            />
-            <Faq
-              q="Why do Professional subscribers pay a lower placement fee?"
-              a="You're committed to $100/mo with us — that partnership and predictable revenue means we can offer lower placement fees. It rewards loyalty and makes the economics work better for both sides."
             />
           </div>
         </div>
@@ -410,15 +341,6 @@ function PricingCard({
   );
 }
 
-function FeeRow({ plan, credits, fee }: { plan: string; credits: number; fee: number }) {
-  return (
-    <tr>
-      <td className="px-4 py-3 font-medium">{plan}</td>
-      <td className="px-4 py-3">{credits}</td>
-      <td className="px-4 py-3">${(fee / 100).toLocaleString()}</td>
-    </tr>
-  );
-}
 
 function Benefit({ title, body }: { title: string; body: string }) {
   return (
