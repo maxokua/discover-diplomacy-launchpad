@@ -111,40 +111,33 @@ function TabButton({
 // ─── Individuals ────────────────────────────────────────────────────────────
 
 const COMPASS_FEATURES = [
-  "Resume & LinkedIn review",
-  "Application drafting & tailoring",
-  "Industry & company research briefs",
-  "Weekly opportunity digest (50+ global roles)",
-  "Resume Drop opt-in (employers discover you)",
-  "Members-only community",
-  "Job board with smart alerts by sector, region, role",
-  "Coach profile directory",
-  "Unlimited questions via email",
+  "Weekly opportunity digest curated for your goals",
+  "Full job board with smart alerts",
+  "Instant AI resume score & feedback (unlimited)",
+  "Resume Drop eligibility — get discovered by vetted employers",
+  "Members-only community with priority Q&A",
 ];
 
 const ENVOY_FEATURES = [
   "Everything in Compass, plus:",
-  "Unlimited 1:1 coaching with vetted coaches",
-  "Priority coach matching — we source your mentor",
-  "Mock interviews & tailored interview prep",
-  "Priority placement in Resume Drop",
-  "Monthly group workshops & cohorts with senior coaches",
-  "Exclusive hiring intel — see who's actively hiring",
-  "Dedicated support — faster, higher-priority replies",
+  "2 one-on-one sessions/month with vetted coaches (use for coaching, mock interviews, or reviews; extra sessions at member rate)",
+  "Priority Resume Drop placement & employer matching",
+  "Monthly live group workshops",
+  "Exclusive hiring intel briefings",
 ];
 
 const FAQ: { q: string; a: string }[] = [
   {
     q: "I'm not sure which tier is right for me.",
-    a: "Compass if you're self-directed and want the tools, intel, and members-only community to run your own search. Envoy if you want a mentor walking you through strategy, applications, and interviews. Most members start with Compass and upgrade to Envoy once they want hands-on guidance — you can switch anytime.",
+    a: "Compass if you're self-directed and want the tools, intel, and members-only community to run your own search. Envoy if you want vetted coaches walking you through strategy, applications, and interviews. Most members start with Compass and upgrade to Envoy once they want hands-on guidance — you can switch anytime.",
   },
   {
     q: "Can I switch between tiers?",
     a: "Yes. Upgrade or downgrade anytime from your dashboard. If you upgrade mid-cycle, we prorate the difference.",
   },
   {
-    q: "What if I want to try coaching before committing to Envoy?",
-    a: "Book a single 30-minute intro session with a coach for $25 — available to Compass members. See if the chemistry's there, then decide whether Envoy makes sense.",
+    q: "Can I try coaching without Envoy?",
+    a: "Yes — single sessions are available through the coach directory at standard rates. Envoy just makes it recurring and priced for people who want ongoing support.",
   },
   {
     q: "Can I get a discount if I prepay annually?",
