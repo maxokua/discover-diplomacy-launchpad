@@ -2,7 +2,19 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Search, MapPin, Building2, Compass as CompassIcon, CheckCircle2, Target, DoorOpen } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { HeroCompass } from "@/components/hero-compass";
+import { CountUp } from "@/components/scroll-effects";
 import { BRAND, TRACTION } from "@/lib/brand";
+
+/** Parse strings like "125,000+", "25,000+", "~50", "75+" into { to, prefix, suffix }. */
+function parseStat(v: string): { to: number; prefix: string; suffix: string } {
+  const prefix = v.startsWith("~") ? "~" : "";
+  const rest = v.replace(/^~/, "");
+  const match = rest.match(/^([\d,]+)(.*)$/);
+  if (!match) return { to: 0, prefix, suffix: v };
+  const to = parseInt(match[1].replace(/,/g, ""), 10);
+  return { to: Number.isFinite(to) ? to : 0, prefix, suffix: match[2] ?? "" };
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
