@@ -151,6 +151,7 @@ Required output:
         plan,
         recommended_tier: plan.recommendedTier,
         consent_newsletter: data.consentNewsletter,
+        ip_hash: ipHash,
       });
     } catch (err) {
       console.error("Failed to persist assessment lead", err);
