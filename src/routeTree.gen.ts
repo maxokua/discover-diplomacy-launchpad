@@ -38,6 +38,7 @@ import { Route as EmployersResumeDropRouteImport } from './routes/employers.resu
 import { Route as EmployersApplyRouteImport } from './routes/employers.apply'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CoachesApplyRouteImport } from './routes/coaches.apply'
+import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
 import { Route as AuthenticatedUniversityRouteImport } from './routes/_authenticated/university'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedEmployerRouteImport } from './routes/_authenticated/employer'
@@ -48,6 +49,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
 import { Route as AuthenticatedResumeAnalysesIndexRouteImport } from './routes/_authenticated/resume-analyses.index'
 import { Route as AuthenticatedEmployerIndexRouteImport } from './routes/_authenticated/employer.index'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedCoachIndexRouteImport } from './routes/_authenticated/coach.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -217,6 +219,11 @@ const CoachesApplyRoute = CoachesApplyRouteImport.update({
   path: '/apply',
   getParentRoute: () => CoachesRoute,
 } as any)
+const AuthenticatedWelcomeRoute = AuthenticatedWelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedUniversityRoute = AuthenticatedUniversityRouteImport.update({
   id: '/university',
   path: '/university',
@@ -269,6 +276,12 @@ const AuthenticatedEmployerIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedEmployerRoute,
+  } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const AuthenticatedCoachIndexRoute = AuthenticatedCoachIndexRouteImport.update({
   id: '/',
@@ -430,10 +443,11 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/billing': typeof AuthenticatedBillingRoute
   '/coach': typeof AuthenticatedCoachRouteWithChildren
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/employer': typeof AuthenticatedEmployerRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
   '/university': typeof AuthenticatedUniversityRoute
+  '/welcome': typeof AuthenticatedWelcomeRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
@@ -457,6 +471,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/coach/': typeof AuthenticatedCoachIndexRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/employer/': typeof AuthenticatedEmployerIndexRoute
   '/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
@@ -490,9 +505,9 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
   '/billing': typeof AuthenticatedBillingRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/university': typeof AuthenticatedUniversityRoute
+  '/welcome': typeof AuthenticatedWelcomeRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
@@ -516,6 +531,7 @@ export interface FileRoutesByTo {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/coach': typeof AuthenticatedCoachIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/employer': typeof AuthenticatedEmployerIndexRoute
   '/resume-analyses': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review': typeof AuthenticatedResumeReviewIndexRoute
@@ -554,10 +570,11 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRouteWithChildren
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/employer': typeof AuthenticatedEmployerRouteWithChildren
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/university': typeof AuthenticatedUniversityRoute
+  '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
   '/coaches/apply': typeof CoachesApplyRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/employers/apply': typeof EmployersApplyRoute
@@ -581,6 +598,7 @@ export interface FileRoutesById {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/coach/': typeof AuthenticatedCoachIndexRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/employer/': typeof AuthenticatedEmployerIndexRoute
   '/_authenticated/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/_authenticated/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
@@ -623,6 +641,7 @@ export interface FileRouteTypes {
     | '/employer'
     | '/profile'
     | '/university'
+    | '/welcome'
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
@@ -646,6 +665,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/admin/'
     | '/coach/'
+    | '/dashboard/'
     | '/employer/'
     | '/resume-analyses/'
     | '/resume-review/'
@@ -679,9 +699,9 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/waitlist'
     | '/billing'
-    | '/dashboard'
     | '/profile'
     | '/university'
+    | '/welcome'
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
@@ -705,6 +725,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/admin'
     | '/coach'
+    | '/dashboard'
     | '/employer'
     | '/resume-analyses'
     | '/resume-review'
@@ -746,6 +767,7 @@ export interface FileRouteTypes {
     | '/_authenticated/employer'
     | '/_authenticated/profile'
     | '/_authenticated/university'
+    | '/_authenticated/welcome'
     | '/coaches/apply'
     | '/email/unsubscribe'
     | '/employers/apply'
@@ -769,6 +791,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/_authenticated/admin/'
     | '/_authenticated/coach/'
+    | '/_authenticated/dashboard/'
     | '/_authenticated/employer/'
     | '/_authenticated/resume-analyses/'
     | '/_authenticated/resume-review/'
@@ -1018,6 +1041,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesApplyRouteImport
       parentRoute: typeof CoachesRoute
     }
+    '/_authenticated/welcome': {
+      id: '/_authenticated/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof AuthenticatedWelcomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/university': {
       id: '/_authenticated/university'
       path: '/university'
@@ -1087,6 +1117,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/employer/'
       preLoaderRoute: typeof AuthenticatedEmployerIndexRouteImport
       parentRoute: typeof AuthenticatedEmployerRoute
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/_authenticated/coach/': {
       id: '/_authenticated/coach/'
@@ -1284,6 +1321,20 @@ const AuthenticatedCoachRouteChildren: AuthenticatedCoachRouteChildren = {
 const AuthenticatedCoachRouteWithChildren =
   AuthenticatedCoachRoute._addFileChildren(AuthenticatedCoachRouteChildren)
 
+interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+}
+
+const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
+  {
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  }
+
+const AuthenticatedDashboardRouteWithChildren =
+  AuthenticatedDashboardRoute._addFileChildren(
+    AuthenticatedDashboardRouteChildren,
+  )
+
 interface AuthenticatedEmployerUnlockedRouteChildren {
   AuthenticatedEmployerUnlockedCandidateIdRoute: typeof AuthenticatedEmployerUnlockedCandidateIdRoute
 }
@@ -1329,10 +1380,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRouteWithChildren
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
   AuthenticatedEmployerRoute: typeof AuthenticatedEmployerRouteWithChildren
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedUniversityRoute: typeof AuthenticatedUniversityRoute
+  AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
   AuthenticatedMembershipCheckoutRoute: typeof AuthenticatedMembershipCheckoutRoute
   AuthenticatedMembershipReturnRoute: typeof AuthenticatedMembershipReturnRoute
   AuthenticatedResumeAnalysesAnalysisIdRoute: typeof AuthenticatedResumeAnalysesAnalysisIdRoute
@@ -1346,10 +1398,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedCoachRoute: AuthenticatedCoachRouteWithChildren,
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
   AuthenticatedEmployerRoute: AuthenticatedEmployerRouteWithChildren,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedUniversityRoute: AuthenticatedUniversityRoute,
+  AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
   AuthenticatedMembershipCheckoutRoute: AuthenticatedMembershipCheckoutRoute,
   AuthenticatedMembershipReturnRoute: AuthenticatedMembershipReturnRoute,
   AuthenticatedResumeAnalysesAnalysisIdRoute:
