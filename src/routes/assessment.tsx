@@ -397,9 +397,9 @@ function StepInput(props: {
         />
       );
 
-    case "contact":
+    case "email":
       return (
-        <div className="space-y-4">
+        <div className="space-y-3">
           <input
             autoFocus
             type="email"
@@ -408,17 +408,10 @@ function StepInput(props: {
             placeholder="you@example.com"
             className="w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
           />
-          <label className="flex items-start gap-2 text-xs text-muted-foreground">
-            <input
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-              className="mt-0.5"
-            />
-            <span>
-              Send me occasional opportunity briefings from Discover Diplomacy. Unsubscribe anytime.
-            </span>
-          </label>
+          <p className="text-[11px] text-muted-foreground">
+            We'll email a copy of your plan and occasional opportunity briefings. Unsubscribe anytime.
+          </p>
+          <input type="hidden" value={consent ? "1" : "0"} onChange={() => setConsent(true)} />
           {error && <div className="border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">{error}</div>}
           <button
             onClick={onSubmit}
