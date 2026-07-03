@@ -1,0 +1,1 @@
+ALTER TABLE public.assessment_leads ADD COLUMN IF NOT EXISTS ip_hash text; CREATE INDEX IF NOT EXISTS idx_assessment_leads_ip_hash_created ON public.assessment_leads (ip_hash, created_at DESC);

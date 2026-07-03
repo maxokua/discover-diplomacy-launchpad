@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import { createHash } from "node:crypto";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { createLovableAiGatewayProvider } from "./ai-gateway.server";
@@ -53,11 +55,39 @@ export const generateAssessment = createServerFn({ method: "POST" })
     const normalizedEmail = data.email.toLowerCase().trim();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    // ── Per-IP rate limit ──────────────────────────────────────────────────
+    // Prevents an anonymous caller from spraying "career plan" emails to a
+    // list of arbitrary addresses by cycling the recipient email. Hashed so
+    // we never persist a raw client IP.
+    const req = getRequest();
+    const rawIp =
+      req?.headers.get("cf-connecting-ip") ||
+      req?.headers.get("x-real-ip") ||
+      (req?.headers.get("x-forwarded-for") ?? "").split(",")[0]?.trim() ||
+      "unknown";
+    const ipHash = createHash("sha256")
+      .update(`${rawIp}|${process.env.SUPABASE_URL ?? ""}`)
+      .digest("hex");
+
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+
+    if (ipHash && rawIp !== "unknown") {
+      const { count: ipCount } = await supabaseAdmin
+        .from("assessment_leads")
+        .select("id", { count: "exact", head: true })
+        .eq("ip_hash", ipHash)
+        .gte("created_at", oneHourAgo);
+      if ((ipCount ?? 0) >= 3) {
+        throw new Error(
+          "You've hit the hourly limit for assessments from this network. Please try again later.",
+        );
+      }
+    }
+
     // ── Per-email rate limit ───────────────────────────────────────────────
     // Refuse to spend AI credits or queue another email if the same address
     // already received an assessment in the last hour. Returns the cached
     // plan so the UI still works for the legitimate user.
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const { data: recent } = await supabaseAdmin
       .from("assessment_leads")
       .select("plan, created_at")
@@ -70,6 +100,7 @@ export const generateAssessment = createServerFn({ method: "POST" })
     if (recent?.plan) {
       return { plan: recent.plan as AssessmentPlan, cached: true };
     }
+
 
     const gateway = createLovableAiGatewayProvider(key);
     const model = gateway("openai/gpt-5-mini");
@@ -120,6 +151,7 @@ Required output:
         plan,
         recommended_tier: plan.recommendedTier,
         consent_newsletter: data.consentNewsletter,
+        ip_hash: ipHash,
       });
     } catch (err) {
       console.error("Failed to persist assessment lead", err);
