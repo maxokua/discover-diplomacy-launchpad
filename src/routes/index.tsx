@@ -70,6 +70,9 @@ function Hero() {
   return (
     <section className="border-b border-border bg-paper">
       <div className="mx-auto max-w-5xl px-6 pt-24 pb-28 text-center lg:px-10 lg:pt-32 lg:pb-36">
+        <div className="mx-auto mb-10 flex justify-center">
+          <HeroCompass size={128} />
+        </div>
         <Reveal as="div" className="eyebrow">
           International Affairs · Global Business · Multilaterals
         </Reveal>
