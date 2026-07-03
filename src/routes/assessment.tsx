@@ -543,7 +543,6 @@ function ResultsView({
         <div className="mt-10 flex flex-col gap-3">
           <Link
             to="/directory"
-            search={{ area: directoryFilter }}
             className="inline-flex w-full items-center justify-center gap-2 bg-navy-deep px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
           >
             See opportunities matched to your path <ArrowRight className="h-4 w-4" />
