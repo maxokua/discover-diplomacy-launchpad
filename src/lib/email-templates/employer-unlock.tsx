@@ -31,7 +31,7 @@ const Email = ({
         </Text>
         <ul style={list}>
           <li style={li}>You now have their contact info and full resume.</li>
-          <li style={li}>The placement fee (15% of first-year base salary) is only invoiced when this candidate is hired through this introduction.</li>
+          <li style={li}>Credits are non-refundable once an unlock is used.</li>
           <li style={li}>The candidate is never charged. We work for you on this side of the marketplace.</li>
         </ul>
         <div style={ctaWrap}>
