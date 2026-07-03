@@ -43,6 +43,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedEmployerRouteImport } from './routes/_authenticated/employer'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
+import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
 import { Route as AuthenticatedResumeAnalysesIndexRouteImport } from './routes/_authenticated/resume-analyses.index'
@@ -241,6 +242,11 @@ const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
   path: '/coach',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -422,6 +428,7 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/billing': typeof AuthenticatedBillingRoute
   '/coach': typeof AuthenticatedCoachRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/employer': typeof AuthenticatedEmployerRouteWithChildren
@@ -482,6 +489,7 @@ export interface FileRoutesByTo {
   '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
+  '/billing': typeof AuthenticatedBillingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/university': typeof AuthenticatedUniversityRoute
@@ -544,6 +552,7 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/waitlist': typeof WaitlistRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/employer': typeof AuthenticatedEmployerRouteWithChildren
@@ -608,6 +617,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/waitlist'
     | '/admin'
+    | '/billing'
     | '/coach'
     | '/dashboard'
     | '/employer'
@@ -668,6 +678,7 @@ export interface FileRouteTypes {
     | '/universities'
     | '/unsubscribe'
     | '/waitlist'
+    | '/billing'
     | '/dashboard'
     | '/profile'
     | '/university'
@@ -729,6 +740,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/waitlist'
     | '/_authenticated/admin'
+    | '/_authenticated/billing'
     | '/_authenticated/coach'
     | '/_authenticated/dashboard'
     | '/_authenticated/employer'
@@ -1041,6 +1053,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCoachRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/billing': {
+      id: '/_authenticated/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AuthenticatedBillingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -1308,6 +1327,7 @@ const AuthenticatedEmployerRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedCoachRoute: typeof AuthenticatedCoachRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmployerRoute: typeof AuthenticatedEmployerRouteWithChildren
@@ -1324,6 +1344,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedCoachRoute: AuthenticatedCoachRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmployerRoute: AuthenticatedEmployerRouteWithChildren,

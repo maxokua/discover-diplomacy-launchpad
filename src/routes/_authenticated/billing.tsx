@@ -21,8 +21,8 @@ import { IntrosInbox } from "@/components/resume-drop/IntrosInbox";
 
 type ResumeDropStatus = Awaited<ReturnType<typeof getResumeDropStatus>>;
 
-export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard | Discover Diplomacy" }] }),
+export const Route = createFileRoute("/_authenticated/billing")({
+  head: () => ({ meta: [{ title: "Billing & Account | Discover Diplomacy" }] }),
   component: DashboardPage,
 });
 
@@ -155,7 +155,7 @@ function DashboardPage() {
       const result = await createPortalSession({
         data: {
           environment: getStripeEnvironment(),
-          returnUrl: window.location.origin + "/dashboard",
+          returnUrl: window.location.origin + "/billing",
         },
       });
       if ("error" in result) throw new Error(result.error);
