@@ -424,7 +424,7 @@ function StepInput(props: {
               </>
             ) : (
               <>
-                Generate my plan <ArrowRight className="h-4 w-4" />
+                Get my results <ArrowRight className="h-4 w-4" />
               </>
             )}
           </button>
