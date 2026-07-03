@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/compass-logo.png.asset.json";
 
-const NAV = [
+const NAV: { to: string; label: string; exact?: boolean }[] = [
   { to: "/dashboard", label: "My Map", exact: true },
   { to: "/dashboard/opportunities", label: "Opportunities" },
   { to: "/dashboard/resume-studio", label: "Resume Studio" },
@@ -13,7 +13,7 @@ const NAV = [
   { to: "/dashboard/intel", label: "Intel Library" },
   { to: "/dashboard/community", label: "Community" },
   { to: "/dashboard/coaching", label: "Coaching" },
-] as const;
+];
 
 type Props = {
   children: ReactNode;
