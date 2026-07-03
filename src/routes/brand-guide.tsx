@@ -196,7 +196,7 @@ export default function BrandGuide() {
       <Section title="09 · Required CTAs" eyebrow="Surface on every major page">
         <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
           <li>1. <strong className="text-navy-deep">Take the free assessment</strong> → <code className="rounded bg-stone px-1.5 py-0.5 text-xs">/assessment</code></li>
-          <li>2. <strong className="text-navy-deep">Get the weekly digest</strong> → <code className="rounded bg-stone px-1.5 py-0.5 text-xs">/waitlist</code></li>
+          <li>2. <strong className="text-navy-deep">See pricing</strong> → <code className="rounded bg-stone px-1.5 py-0.5 text-xs">/pricing</code></li>
         </ul>
       </Section>
     </SiteLayout>

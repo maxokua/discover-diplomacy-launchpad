@@ -186,10 +186,10 @@ function AboutPage() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              to="/waitlist"
+              to="/pricing"
               className="inline-flex items-center gap-2 rounded-sm border border-navy-deep/30 px-6 py-3.5 text-sm font-medium text-navy-deep transition-colors hover:border-navy-deep hover:bg-navy-deep/5"
             >
-              Get the weekly digest
+              See pricing
             </Link>
           </Reveal>
         </div>

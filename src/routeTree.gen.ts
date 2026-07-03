@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WaitlistRouteImport } from './routes/waitlist'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as UniversitiesRouteImport } from './routes/universities'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -81,11 +80,6 @@ import { Route as AuthenticatedEmployerCreditsReturnRouteImport } from './routes
 import { Route as AuthenticatedEmployerCreditsCheckoutRouteImport } from './routes/_authenticated/employer.credits.checkout'
 import { Route as AuthenticatedDashboardCoachingCoachIdRouteImport } from './routes/_authenticated/dashboard.coaching.$coachId'
 
-const WaitlistRoute = WaitlistRouteImport.update({
-  id: '/waitlist',
-  path: '/waitlist',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
   path: '/unsubscribe',
@@ -488,7 +482,6 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
-  '/waitlist': typeof WaitlistRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/billing': typeof AuthenticatedBillingRoute
   '/coach': typeof AuthenticatedCoachRouteWithChildren
@@ -559,7 +552,6 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
-  '/waitlist': typeof WaitlistRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/university': typeof AuthenticatedUniversityRoute
@@ -629,7 +621,6 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
-  '/waitlist': typeof WaitlistRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRouteWithChildren
@@ -703,7 +694,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/universities'
     | '/unsubscribe'
-    | '/waitlist'
     | '/admin'
     | '/billing'
     | '/coach'
@@ -774,7 +764,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/universities'
     | '/unsubscribe'
-    | '/waitlist'
     | '/billing'
     | '/profile'
     | '/university'
@@ -843,7 +832,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/universities'
     | '/unsubscribe'
-    | '/waitlist'
     | '/_authenticated/admin'
     | '/_authenticated/billing'
     | '/_authenticated/coach'
@@ -917,7 +905,6 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   UniversitiesRoute: typeof UniversitiesRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
-  WaitlistRoute: typeof WaitlistRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   GuideInternationalRelationsJobsRequirementsRoute: typeof GuideInternationalRelationsJobsRequirementsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
@@ -929,13 +916,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/waitlist': {
-      id: '/waitlist'
-      path: '/waitlist'
-      fullPath: '/waitlist'
-      preLoaderRoute: typeof WaitlistRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/unsubscribe': {
       id: '/unsubscribe'
       path: '/unsubscribe'
@@ -1627,7 +1607,6 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   UniversitiesRoute: UniversitiesRoute,
   UnsubscribeRoute: UnsubscribeRoute,
-  WaitlistRoute: WaitlistRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   GuideInternationalRelationsJobsRequirementsRoute:
     GuideInternationalRelationsJobsRequirementsRoute,
