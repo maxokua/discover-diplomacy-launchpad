@@ -567,38 +567,3 @@ function ResultsView({
     </section>
   );
 }
-
-function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
-  return (
-    <div>
-      <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">{eyebrow}</div>
-      <h2 className="mt-2 font-display text-2xl text-navy-deep lg:text-3xl">{title}</h2>
-    </div>
-  );
-}
-
-function PlanBucket({ label, items }: { label: string; items: string[] }) {
-  return (
-    <div className="border border-border bg-paper p-5">
-      <div className="font-display text-base text-navy-deep">{label}</div>
-      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-navy-deep/85">
-        {items.map((it, i) => (
-          <li key={i} className="flex gap-2"><span className="text-emerald">→</span><span>{it}</span></li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function ListBlock({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div className="bg-paper p-6">
-      <div className="font-display text-lg text-navy-deep">{title}</div>
-      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-navy-deep/85">
-        {items.map((it, i) => (
-          <li key={i} className="flex gap-2"><span className="text-emerald">·</span><span>{it}</span></li>
-        ))}
-      </ul>
-    </div>
-  );
-}
