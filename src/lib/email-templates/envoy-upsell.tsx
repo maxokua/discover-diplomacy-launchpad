@@ -10,7 +10,7 @@ interface Props {
 const Email = ({ name, upgradeUrl = 'https://discoverdiplomacy.org/pricing' }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Thinking about unlimited coaching?</Preview>
+    <Preview>Thinking about hands-on coaching?</Preview>
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>
@@ -18,11 +18,11 @@ const Email = ({ name, upgradeUrl = 'https://discoverdiplomacy.org/pricing' }: P
         </Heading>
         <Text style={text}>
           You've been running Compass for about a month. Some members find that
-          unlimited coaching at the Envoy tier is what shifts the search from "I'm
+          recurring 1:1 coaching at the Envoy tier is what shifts the search from "I'm
           working on it" to "I have offers."
         </Text>
         <Text style={text}>
-          Envoy gets you unlimited 1:1 sessions with vetted coaches, priority
+          Envoy gets you two 1:1 sessions per month with vetted coaches (extra sessions at member rate), priority
           matching, mock interviews, and faster employer attention through the
           Resume Drop.
         </Text>
@@ -49,7 +49,7 @@ const Email = ({ name, upgradeUrl = 'https://discoverdiplomacy.org/pricing' }: P
 
 export const template: TemplateEntry = {
   component: Email,
-  subject: 'Thinking about unlimited coaching?',
+  subject: 'Thinking about hands-on coaching?',
   displayName: 'Compass → Envoy 30-day Check-in',
   previewData: { name: 'Jordan' },
 }
