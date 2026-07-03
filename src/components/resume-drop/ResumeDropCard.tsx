@@ -88,11 +88,8 @@ export function ResumeDropCard({
         <div className="mt-4 border border-border bg-stone/40 p-4 text-xs text-navy-deep/90">
           <strong>How does this work if I get hired?</strong>
           <p className="mt-2 text-muted-foreground">
-            If an employer hires you after unlocking your profile through Discover Diplomacy, we
-            take a small placement fee from the employer (not from you). This is how we sustain
-            the platform, keep coaching affordable for members, and continue vetting. The employer
-            also gets credits back as a thank you. You pay nothing — it's built into how employers
-            use the platform.
+            Employers spend credits to unlock your profile and reach out through Discover Diplomacy.
+            You pay nothing — the platform is funded by employer credits, not by candidates.
           </p>
         </div>
       )}
