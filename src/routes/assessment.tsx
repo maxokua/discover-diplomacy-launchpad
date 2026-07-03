@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Download, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { generateAssessment, type AssessmentPlan } from "@/lib/assessment.functions";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/assessment")({
 // Question definitions
 // -----------------------------------------------------------------------------
 
-type StepKey = "intro" | "interests" | "stage" | "blocker" | "nonNegotiables" | "strengths" | "network" | "contact";
+type StepKey = "interests" | "stage" | "blocker" | "nonNegotiables" | "network" | "email";
 
 const INTERESTS = [
   "Diplomacy & foreign service",
@@ -39,7 +39,6 @@ const INTERESTS = [
   "Development & humanitarian",
   "Multilateral institutions (UN/WB/IMF)",
   "Global business & geoeconomics",
-  "National security & intelligence",
 ];
 
 const STAGES = [
@@ -47,25 +46,23 @@ const STAGES = [
   "Graduate student",
   "Early-career (0–3 yrs)",
   "Mid-career transition",
-  "Career changer from another field",
+  "Career changer",
 ];
 
 const BLOCKERS = [
-  "I need clarity on what I actually want",
-  "I know what I want — I can't break in",
+  "I need clarity on what I want",
+  "I know what I want — can't break in",
   "I'm transitioning sectors",
   "My resume isn't landing interviews",
   "I need interview / case prep",
 ];
 
 const NON_NEGOTIABLES = [
-  "Stay in current city",
-  "Open to relocation (DC/NY/Geneva/etc.)",
+  "Open to relocation (DC/NY/Geneva)",
   "Salary $80k+",
-  "Salary $120k+",
   "Mission-driven only",
-  "Need security clearance path",
   "Remote-friendly",
+  "None of the above",
 ];
 
 const NETWORK = [
@@ -75,7 +72,7 @@ const NETWORK = [
   "Strong network, need a strategy",
 ];
 
-const STEPS: StepKey[] = ["intro", "interests", "stage", "blocker", "nonNegotiables", "strengths", "network", "contact"];
+const STEPS: StepKey[] = ["interests", "stage", "blocker", "nonNegotiables", "network", "email"];
 
 // -----------------------------------------------------------------------------
 // Page
@@ -283,23 +280,16 @@ function Avatar() {
 }
 
 const QUESTIONS: Record<StepKey, string> = {
-  intro:
-    "Hi — I'm here to help you figure out your path in global affairs. We'll go through 6 quick questions (about 2 minutes), then I'll put together a real plan for you.\n\nFirst — what should I call you?",
-  interests: "Which areas pull you the most? Pick any that apply.",
+  interests: "Which area of global affairs pulls you the most?",
   stage: "Where are you right now in your career?",
-  blocker: "What's the real thing in your way today? Be honest.",
-  nonNegotiables: "Any non-negotiables I should know about? Pick what's true.",
-  strengths:
-    "Tell me about your background — degrees, languages, internships, work, or anything you're known for. A sentence or two is plenty.",
+  blocker: "What's the real thing in your way today?",
+  nonNegotiables: "Any non-negotiables I should know about?",
   network: "How's your network in this space?",
-  contact:
-    "All set. Drop your email and I'll generate your personalized career plan right now — and send you a copy you can keep.",
+  email: "Drop your email and I'll generate your personalized plan.",
 };
 
 function summarize(step: StepKey, a: Answers, email: string): string | null {
   switch (step) {
-    case "intro":
-      return a.name ? a.name : null;
     case "interests":
       return a.interests.length ? a.interests.join(" · ") : null;
     case "stage":
@@ -308,11 +298,9 @@ function summarize(step: StepKey, a: Answers, email: string): string | null {
       return a.blocker || null;
     case "nonNegotiables":
       return a.nonNegotiables.length ? a.nonNegotiables.join(" · ") : "None";
-    case "strengths":
-      return a.strengths ? (a.strengths.length > 120 ? a.strengths.slice(0, 117) + "…" : a.strengths) : null;
     case "network":
       return a.network || null;
-    case "contact":
+    case "email":
       return email || null;
   }
 }
@@ -337,20 +325,6 @@ function StepInput(props: {
   const { step, answers, setAnswers, email, setEmail, consent, setConsent, onNext, onSubmit, submitting, error } = props;
 
   switch (step) {
-    case "intro":
-      return (
-        <div>
-          <input
-            autoFocus
-            value={answers.name}
-            onChange={(e) => setAnswers((a) => ({ ...a, name: e.target.value }))}
-            onKeyDown={(e) => e.key === "Enter" && answers.name.trim() && onNext()}
-            placeholder="Your first name"
-            className="w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-          />
-          <PrimaryNext onClick={onNext} disabled={!answers.name.trim()}>Start</PrimaryNext>
-        </div>
-      );
 
     case "interests":
       return (
@@ -410,22 +384,6 @@ function StepInput(props: {
         />
       );
 
-    case "strengths":
-      return (
-        <div>
-          <textarea
-            autoFocus
-            value={answers.strengths}
-            onChange={(e) => setAnswers((a) => ({ ...a, strengths: e.target.value }))}
-            placeholder="e.g. BA in IR from American, conversational French, State Dept summer internship, three years in nonprofit comms…"
-            rows={4}
-            maxLength={600}
-            className="w-full resize-none border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-          />
-          <div className="mt-1 text-right text-[11px] text-muted-foreground">{answers.strengths.length}/600</div>
-          <PrimaryNext onClick={onNext}>Continue</PrimaryNext>
-        </div>
-      );
 
     case "network":
       return (
@@ -439,9 +397,9 @@ function StepInput(props: {
         />
       );
 
-    case "contact":
+    case "email":
       return (
-        <div className="space-y-4">
+        <div className="space-y-3">
           <input
             autoFocus
             type="email"
@@ -450,17 +408,10 @@ function StepInput(props: {
             placeholder="you@example.com"
             className="w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
           />
-          <label className="flex items-start gap-2 text-xs text-muted-foreground">
-            <input
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-              className="mt-0.5"
-            />
-            <span>
-              Send me occasional opportunity briefings from Discover Diplomacy. Unsubscribe anytime.
-            </span>
-          </label>
+          <p className="text-[11px] text-muted-foreground">
+            We'll email a copy of your plan and occasional opportunity briefings. Unsubscribe anytime.
+          </p>
+          <input type="hidden" value={consent ? "1" : "0"} onChange={() => setConsent(true)} />
           {error && <div className="border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">{error}</div>}
           <button
             onClick={onSubmit}
@@ -473,7 +424,7 @@ function StepInput(props: {
               </>
             ) : (
               <>
-                Generate my plan <ArrowRight className="h-4 w-4" />
+                Get my results <ArrowRight className="h-4 w-4" />
               </>
             )}
           </button>
@@ -575,152 +526,43 @@ function ResultsView({
   email: string;
   onRestart: () => void;
 }) {
-  function handleDownload() {
-    if (typeof window !== "undefined") window.print();
-  }
-
+  const archetype = plan.recommendedTier;
+  
   return (
-    <>
-      <section className="border-b border-border bg-paper print:border-0">
-        <div className="mx-auto max-w-4xl px-6 py-10 lg:py-14 lg:px-10">
-          <div className="eyebrow text-emerald">Your personalized plan</div>
-          <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-            {answers.name ? `${answers.name}, here's your map.` : "Here's your map."}
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-navy-deep/80">{plan.summary}</p>
-          <div className="mt-6 flex flex-wrap gap-3 print:hidden">
-            <button
-              onClick={handleDownload}
-              className="inline-flex items-center gap-2 bg-navy-deep px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
-            >
-              <Download className="h-4 w-4" /> Download PDF
-            </button>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 border border-navy-deep px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-navy-deep hover:text-paper"
-            >
-              Schedule a free consultation <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <button
-              onClick={onRestart}
-              className="text-xs uppercase tracking-wider text-muted-foreground hover:text-navy-deep"
-            >
-              Retake assessment
-            </button>
-          </div>
-          <p className="mt-3 text-[11px] text-muted-foreground print:hidden">
-            We've emailed your plan to <span className="font-medium text-navy-deep">{email}</span>. Check spam if you don't see it within a few minutes.
-          </p>
+    <section className="bg-paper">
+      <div className="mx-auto max-w-2xl px-6 py-16 lg:py-24 lg:px-10 text-center">
+        <div className="eyebrow text-emerald">Your archetype</div>
+        <h1 className="mt-3 font-display text-4xl text-navy-deep lg:text-5xl">
+          {plan.paths[0]?.title ?? archetype}
+        </h1>
+        <p className="mt-6 text-base leading-relaxed text-navy-deep/80">{plan.summary}</p>
+        <p className="mt-4 text-[11px] text-muted-foreground">
+          A copy of this has been sent to {email}.
+        </p>
+
+        <div className="mt-10 flex flex-col gap-3">
+          <Link
+            to="/directory"
+            className="inline-flex w-full items-center justify-center gap-2 bg-navy-deep px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+          >
+            See opportunities matched to your path <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            to="/waitlist"
+            search={{ interest: "compass" }}
+            className="inline-flex w-full items-center justify-center gap-2 border border-navy-deep px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-navy-deep hover:text-paper"
+          >
+            Start Compass
+          </Link>
         </div>
-      </section>
 
-      {/* Paths */}
-      <section className="bg-stone print:bg-paper">
-        <div className="mx-auto max-w-4xl px-6 py-12 lg:py-16 lg:px-10">
-          <SectionHeader eyebrow="Recommended paths" title="Three directions that fit you" />
-          <div className="mt-6 grid gap-px bg-border md:grid-cols-3">
-            {plan.paths.map((p, i) => (
-              <div key={i} className="flex h-full flex-col bg-paper p-6">
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">Path 0{i + 1}</div>
-                <h3 className="mt-2 font-display text-lg text-navy-deep">{p.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-navy-deep/80">{p.why}</p>
-                <div className="mt-5">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Example roles</div>
-                  <ul className="mt-2 space-y-1 text-sm text-navy-deep">
-                    {p.exampleRoles.map((r) => <li key={r}>· {r}</li>)}
-                  </ul>
-                </div>
-                <div className="mt-5">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Target employers</div>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {p.exampleEmployers.map((e) => (
-                      <span key={e} className="border border-border bg-stone px-2 py-0.5 text-[11px] text-navy-deep">{e}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 90 day plan */}
-      <section className="border-t border-border bg-paper">
-        <div className="mx-auto max-w-4xl px-6 py-12 lg:py-16 lg:px-10">
-          <SectionHeader eyebrow="90-day action plan" title="What to do, in order" />
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
-            <PlanBucket label="Days 0–30" items={plan.ninetyDayPlan.days0to30} />
-            <PlanBucket label="Days 30–60" items={plan.ninetyDayPlan.days30to60} />
-            <PlanBucket label="Days 60–90" items={plan.ninetyDayPlan.days60to90} />
-          </div>
-        </div>
-      </section>
-
-      {/* Networking + Resume */}
-      <section className="border-t border-border bg-stone print:bg-paper">
-        <div className="mx-auto grid max-w-4xl gap-px bg-border px-6 py-12 md:grid-cols-2 lg:py-16 lg:px-10">
-          <ListBlock title="Networking strategy" items={plan.networkingStrategy} />
-          <ListBlock title="Resume updates" items={plan.resumeUpdates} />
-        </div>
-      </section>
-
-      {/* Tier recommendation */}
-      <section className="border-t border-border bg-navy-deep text-paper print:bg-paper print:text-navy-deep">
-        <div className="mx-auto max-w-4xl px-6 py-12 lg:py-16 lg:px-10">
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">Recommended for you</div>
-          <h2 className="mt-3 font-display text-2xl lg:text-3xl">{plan.recommendedTier}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-paper/80 print:text-navy-deep/80">{plan.tierRationale}</p>
-          <div className="mt-6 flex flex-wrap gap-3 print:hidden">
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 bg-paper px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-paper/90"
-            >
-              See {plan.recommendedTier} <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 border border-paper/40 px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-paper hover:border-paper"
-            >
-              Talk to a coach first
-            </Link>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
-
-function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
-  return (
-    <div>
-      <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">{eyebrow}</div>
-      <h2 className="mt-2 font-display text-2xl text-navy-deep lg:text-3xl">{title}</h2>
-    </div>
-  );
-}
-
-function PlanBucket({ label, items }: { label: string; items: string[] }) {
-  return (
-    <div className="border border-border bg-paper p-5">
-      <div className="font-display text-base text-navy-deep">{label}</div>
-      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-navy-deep/85">
-        {items.map((it, i) => (
-          <li key={i} className="flex gap-2"><span className="text-emerald">→</span><span>{it}</span></li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function ListBlock({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div className="bg-paper p-6">
-      <div className="font-display text-lg text-navy-deep">{title}</div>
-      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-navy-deep/85">
-        {items.map((it, i) => (
-          <li key={i} className="flex gap-2"><span className="text-emerald">·</span><span>{it}</span></li>
-        ))}
-      </ul>
-    </div>
+        <button
+          onClick={onRestart}
+          className="mt-8 text-[11px] uppercase tracking-wider text-muted-foreground hover:text-navy-deep"
+        >
+          Retake assessment
+        </button>
+      </div>
+    </section>
   );
 }

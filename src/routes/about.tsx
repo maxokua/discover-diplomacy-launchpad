@@ -53,7 +53,7 @@ function AboutPage() {
 
           <Reveal delay={140} className="mt-12 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
             {[
-              { t: "Candidates", d: "Compass or Envoy — self-directed tools or unlimited coaching.", to: "/pricing" as const },
+              { t: "Candidates", d: "Compass or Envoy — self-directed tools or recurring 1:1 coaching.", to: "/pricing" as const },
               { t: "Universities", d: "Bulk Compass at $20/student/mo for IR programs.", to: "/universities" as const },
               { t: "Employers", d: "Browse pre-screened candidates. Free + paid tiers.", to: "/employers" as const },
               { t: "Coaches", d: "Apply to coach. Earn at the top of the market.", to: "/coaches/apply" as const },

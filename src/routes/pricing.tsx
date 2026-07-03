@@ -111,40 +111,33 @@ function TabButton({
 // ─── Individuals ────────────────────────────────────────────────────────────
 
 const COMPASS_FEATURES = [
-  "Resume & LinkedIn review",
-  "Application drafting & tailoring",
-  "Industry & company research briefs",
-  "Weekly opportunity digest (50+ global roles)",
-  "Resume Drop opt-in (employers discover you)",
-  "Members-only community",
-  "Job board with smart alerts by sector, region, role",
-  "Coach profile directory",
-  "Unlimited questions via email",
+  "Weekly opportunity digest curated for your goals",
+  "Full job board with smart alerts",
+  "Instant AI resume score & feedback (unlimited)",
+  "Resume Drop eligibility — get discovered by vetted employers",
+  "Members-only community with priority Q&A",
 ];
 
 const ENVOY_FEATURES = [
   "Everything in Compass, plus:",
-  "Unlimited 1:1 coaching with vetted coaches",
-  "Priority coach matching — we source your mentor",
-  "Mock interviews & tailored interview prep",
-  "Priority placement in Resume Drop",
-  "Monthly group workshops & cohorts with senior coaches",
-  "Exclusive hiring intel — see who's actively hiring",
-  "Dedicated support — faster, higher-priority replies",
+  "2 one-on-one sessions/month with vetted coaches (use for coaching, mock interviews, or reviews; extra sessions at member rate)",
+  "Priority Resume Drop placement & employer matching",
+  "Monthly live group workshops",
+  "Exclusive hiring intel briefings",
 ];
 
 const FAQ: { q: string; a: string }[] = [
   {
     q: "I'm not sure which tier is right for me.",
-    a: "Compass if you're self-directed and want the tools, intel, and members-only community to run your own search. Envoy if you want a mentor walking you through strategy, applications, and interviews. Most members start with Compass and upgrade to Envoy once they want hands-on guidance — you can switch anytime.",
+    a: "Compass if you're self-directed and want the tools, intel, and members-only community to run your own search. Envoy if you want vetted coaches walking you through strategy, applications, and interviews. Most members start with Compass and upgrade to Envoy once they want hands-on guidance — you can switch anytime.",
   },
   {
     q: "Can I switch between tiers?",
     a: "Yes. Upgrade or downgrade anytime from your dashboard. If you upgrade mid-cycle, we prorate the difference.",
   },
   {
-    q: "What if I want to try coaching before committing to Envoy?",
-    a: "Book a single 30-minute intro session with a coach for $25 — available to Compass members. See if the chemistry's there, then decide whether Envoy makes sense.",
+    q: "Can I try coaching without Envoy?",
+    a: "Yes — single sessions are available through the coach directory at standard rates. Envoy just makes it recurring and priced for people who want ongoing support.",
   },
   {
     q: "Can I get a discount if I prepay annually?",
@@ -201,7 +194,10 @@ function IndividualsTab() {
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 lg:grid-cols-2 lg:px-10 lg:py-16">
           {/* Compass */}
           <Reveal>
-            <div className="flex h-full flex-col border border-border bg-paper p-8 lg:p-10">
+            <div className="relative flex h-full flex-col border-2 border-navy-deep bg-paper p-8 lg:p-10">
+              <div className="absolute -top-3 left-8 inline-flex items-center gap-2 rounded-full bg-navy-deep px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-paper">
+                <Star className="h-3 w-3" /> Most popular
+              </div>
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-navy-deep/15 bg-navy-deep/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
                 <CompassIcon className="h-3 w-3" /> Self-directed
               </div>
@@ -219,8 +215,8 @@ function IndividualsTab() {
                 Everything you need. On your terms.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Tools, templates, intel, and the members-only community. Build your own path to
-                your next role.
+                Tools, intel, and the members-only community. Run your own search with the
+                right infrastructure behind you.
               </p>
               <ul className="mt-6 space-y-3">
                 {COMPASS_FEATURES.map((i) => (
@@ -239,7 +235,7 @@ function IndividualsTab() {
                   Start with Compass
                 </Link>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. Choose monthly or annual (save 20%).
+                  Cancel anytime. Monthly or annual (save 20%).
                 </p>
               </div>
             </div>
@@ -247,12 +243,9 @@ function IndividualsTab() {
 
           {/* Envoy */}
           <Reveal delay={120}>
-            <div className="relative flex h-full flex-col border-2 border-emerald bg-paper p-8 lg:p-10">
-              <div className="absolute -top-3 left-8 inline-flex items-center gap-2 rounded-full bg-emerald px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
-                <Star className="h-3 w-3" /> For serious job seekers
-              </div>
+            <div className="relative flex h-full flex-col border border-border bg-paper p-8 lg:p-10">
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald/30 bg-emerald/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">
-                <Sparkles className="h-3 w-3" /> Mentor included
+                <Sparkles className="h-3 w-3" /> Hands-on
               </div>
               <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Envoy</h2>
               <div className="mt-3 flex items-baseline gap-2">
@@ -265,20 +258,15 @@ function IndividualsTab() {
                   : ""}
               </p>
               <p className="mt-4 font-display text-base text-navy-deep">
-                Everything in Compass, plus a mentor.
+                Everything in Compass, plus:
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Unlimited coaching, priority matching, strategic guidance. Get hired faster with
-                expert help at every step.
+                Recurring 1:1 time with vetted coaches, priority placement, and the intel briefings
+                serious job seekers ask for.
               </p>
               <ul className="mt-6 space-y-3">
-                {ENVOY_FEATURES.map((i, idx) => (
-                  <li
-                    key={i}
-                    className={`flex gap-3 text-sm ${
-                      idx === 0 ? "font-medium text-navy-deep" : "text-navy-deep/85"
-                    }`}
-                  >
+                {ENVOY_FEATURES.slice(1).map((i) => (
+                  <li key={i} className="flex gap-3 text-sm text-navy-deep/85">
                     <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
                     <span>{i}</span>
                   </li>
@@ -293,7 +281,7 @@ function IndividualsTab() {
                   Start Envoy
                 </Link>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. See why it's worth it.
+                  Cancel anytime. Monthly or annual (save 20%).
                 </p>
               </div>
             </div>

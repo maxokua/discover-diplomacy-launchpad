@@ -116,7 +116,7 @@ function PrivacyPage() {
               can be inaccurate, incomplete, or biased — review and verify before relying on
               it. You can request that we delete AI-generated artifacts tied to your account by
               emailing us. If you do not want your content processed by AI, do not upload
-              materials or use AI-powered features; most of the product depends on them.
+              materials or use AI features; most of the product depends on them.
             </p>
 
             <h2 className="font-display text-xl text-navy-deep">

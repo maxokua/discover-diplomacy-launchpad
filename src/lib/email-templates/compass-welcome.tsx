@@ -37,7 +37,7 @@ const Email = ({
 
         <Section style={section}>
           <Text style={listItem}>
-            <strong>1. Upload your resume</strong> — get an AI-powered review and
+            <strong>1. Upload your resume</strong> — get an AI resume score and
             ATS check inside your dashboard.
           </Text>
           <Text style={listItem}>
