@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/coaching/$coachI
   loader: async ({ params }) => {
     const [profile, coachRes] = await Promise.all([
       getDashboardProfile(),
-      supabase
+      (supabase as any)
         .from("coaches")
         .select(
           "id, slug, name, title, background, specialties, languages, price_per_session_cents, is_sample",
@@ -16,7 +16,10 @@ export const Route = createFileRoute("/_authenticated/dashboard/coaching/$coachI
         .maybeSingle(),
     ]);
     if (!coachRes.data) throw notFound();
-    return { profile, coach: coachRes.data };
+    return { profile, coach: coachRes.data as {
+      id: string; slug: string; name: string; title: string; background: string;
+      specialties: string[]; languages: string[]; price_per_session_cents: number; is_sample: boolean;
+    } };
   },
   component: CoachDetail,
   notFoundComponent: () => (
