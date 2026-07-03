@@ -250,7 +250,7 @@ function Founder() {
               honest preparation, and access to people who've walked the path.
             </p>
             <div className="mt-6 text-sm font-medium text-navy-deep">
-              Max Brannon · Founder, Discover Diplomacy
+              Max Okamura · Founder & CEO, Discover Diplomacy
             </div>
           </div>
         </Reveal>
