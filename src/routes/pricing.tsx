@@ -274,8 +274,8 @@ function IndividualsTab() {
               </ul>
               <div className="mt-8 pt-2">
                 <Link
-                  to="/waitlist"
-                  search={{ interest: "envoy" }}
+                  to="/membership/checkout"
+                  search={{ tier: "envoy", cadence: isAnnual ? "annual" : "monthly" }}
                   className="inline-flex w-full items-center justify-center bg-emerald px-6 py-3 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-emerald/90"
                 >
                   Start Envoy
