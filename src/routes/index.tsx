@@ -229,12 +229,21 @@ function Stats() {
           </h2>
         </Reveal>
         <ul className="mt-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((s, i) => (
-            <Reveal key={s.l} delay={i * 60} className="text-center">
-              <div className="font-display text-5xl text-navy-deep lg:text-6xl">{s.v}</div>
-              <div className="mt-4 text-sm uppercase tracking-[0.14em] text-muted-foreground">{s.l}</div>
-            </Reveal>
-          ))}
+          {stats.map((s, i) => {
+            const { to, prefix, suffix } = parseStat(s.v);
+            return (
+              <Reveal key={s.l} delay={i * 60} className="text-center">
+                <div className="font-display text-5xl text-navy-deep lg:text-6xl">
+                  {to > 0 ? (
+                    <CountUp to={to} prefix={prefix} suffix={suffix} duration={900} />
+                  ) : (
+                    s.v
+                  )}
+                </div>
+                <div className="mt-4 text-sm uppercase tracking-[0.14em] text-muted-foreground">{s.l}</div>
+              </Reveal>
+            );
+          })}
         </ul>
       </div>
     </section>
