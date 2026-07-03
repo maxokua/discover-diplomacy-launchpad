@@ -73,7 +73,7 @@ function CoachDetail() {
               Specialties
             </h2>
             <div className="mt-3 flex flex-wrap gap-2">
-              {coach.specialties.map((s) => (
+              {coach.specialties.map((s: string) => (
                 <span key={s} className="rounded-sm border border-border bg-stone px-2.5 py-1 text-sm text-navy-deep">
                   {s}
                 </span>
