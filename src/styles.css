@@ -259,30 +259,7 @@ a[class*="bg-emerald"]:active, button[class*="bg-emerald"]:active {
   transform: translateY(0);
 }
 
-/* Sheen sweep on solid CTA buttons */
-a[class*="bg-navy"], button[class*="bg-navy"],
-a[class*="bg-emerald"], button[class*="bg-emerald"] {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-a[class*="bg-navy"]::before, button[class*="bg-navy"]::before,
-a[class*="bg-emerald"]::before, button[class*="bg-emerald"]::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
-  transform: translateX(-120%);
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-  z-index: 0;
-}
-a[class*="bg-navy"]:hover::before, button[class*="bg-navy"]:hover::before,
-a[class*="bg-emerald"]:hover::before, button[class*="bg-emerald"]:hover::before {
-  transform: translateX(120%);
-}
-a[class*="bg-navy"] > *, button[class*="bg-navy"] > *,
-a[class*="bg-emerald"] > *, button[class*="bg-emerald"] > * { position: relative; z-index: 1; }
+/* Sheen sweep removed — no gradients per design system */
 
 /* Logo: gentle rotation on hover */
 header a[class*="items-center"] img {
