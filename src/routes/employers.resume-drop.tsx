@@ -174,60 +174,6 @@ function ResumeDropPage() {
         </div>
       </section>
 
-      {/* PLACEMENT FEES */}
-      <section className="border-b border-border bg-stone/40">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <div className="eyebrow">Placement fees & credits back</div>
-          <h2 className="mt-3 font-display text-3xl text-navy-deep lg:text-4xl">
-            How it works when you hire.
-          </h2>
-          <p className="mt-4 max-w-3xl text-sm text-muted-foreground">
-            When a candidate you unlocked through the Member Pool is hired, two things happen: you
-            get credits back (to use on future unlocks), and Discover Diplomacy takes a small
-            placement fee to sustain the platform and continue vetting talent.
-          </p>
-          <div className="mt-8 overflow-x-auto border border-border bg-paper">
-            <table className="w-full text-sm">
-              <thead className="bg-navy-deep text-paper">
-                <tr>
-                  <th className="px-4 py-3 text-left text-[11px] uppercase tracking-wider">
-                    Plan
-                  </th>
-                  <th className="px-4 py-3 text-left text-[11px] uppercase tracking-wider">
-                    Credits back per hire
-                  </th>
-                  <th className="px-4 py-3 text-left text-[11px] uppercase tracking-wider">
-                    DD placement fee
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border text-navy-deep">
-                <FeeRow
-                  plan="À la carte"
-                  credits={fees?.alacarte_credits_back ?? 3}
-                  fee={fees?.alacarte_fee_cents ?? 120000}
-                />
-                <FeeRow
-                  plan="Starter ($30/mo)"
-                  credits={fees?.starter_credits_back ?? 4}
-                  fee={fees?.starter_fee_cents ?? 70000}
-                />
-                <FeeRow
-                  plan="Professional ($100/mo)"
-                  credits={fees?.professional_credits_back ?? 5}
-                  fee={fees?.professional_fee_cents ?? 50000}
-                />
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-4 max-w-3xl text-xs text-muted-foreground">
-            We charge more on à la carte because you're not committed to the platform and we take
-            on more risk. Starter and Professional subscribers get lower fees because you're
-            investing with us monthly — it's a partnership. Either way, you get credits back to
-            reinvest.
-          </p>
-        </div>
-      </section>
 
       {/* WHY MEMBER POOL */}
       <section className="border-b border-border bg-paper">
