@@ -511,19 +511,6 @@ function EmployersTab() {
             ))}
           </div>
 
-          <Reveal delay={200}>
-            <div className="mt-10 border border-border bg-paper p-6">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
-                Placement fee
-              </div>
-              <p className="mt-3 text-sm text-muted-foreground">
-                When a candidate you sourced through Discover Diplomacy is hired, a one-time
-                placement fee applies — <strong className="text-navy-deep">15% of first-year base salary</strong> for
-                full-time roles, <strong className="text-navy-deep">10%</strong> for fellowships and contracts under
-                12 months. We invoice at the hire date. The candidate is never charged.
-              </p>
-            </div>
-          </Reveal>
         </div>
       </section>
     </>
