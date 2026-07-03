@@ -384,22 +384,6 @@ function StepInput(props: {
         />
       );
 
-    case "strengths":
-      return (
-        <div>
-          <textarea
-            autoFocus
-            value={answers.strengths}
-            onChange={(e) => setAnswers((a) => ({ ...a, strengths: e.target.value }))}
-            placeholder="e.g. BA in IR from American, conversational French, State Dept summer internship, three years in nonprofit comms…"
-            rows={4}
-            maxLength={600}
-            className="w-full resize-none border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-          />
-          <div className="mt-1 text-right text-[11px] text-muted-foreground">{answers.strengths.length}/600</div>
-          <PrimaryNext onClick={onNext}>Continue</PrimaryNext>
-        </div>
-      );
 
     case "network":
       return (
