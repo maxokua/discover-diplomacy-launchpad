@@ -194,7 +194,10 @@ function IndividualsTab() {
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 lg:grid-cols-2 lg:px-10 lg:py-16">
           {/* Compass */}
           <Reveal>
-            <div className="flex h-full flex-col border border-border bg-paper p-8 lg:p-10">
+            <div className="relative flex h-full flex-col border-2 border-navy-deep bg-paper p-8 lg:p-10">
+              <div className="absolute -top-3 left-8 inline-flex items-center gap-2 rounded-full bg-navy-deep px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-paper">
+                <Star className="h-3 w-3" /> Most popular
+              </div>
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-navy-deep/15 bg-navy-deep/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
                 <CompassIcon className="h-3 w-3" /> Self-directed
               </div>
@@ -212,8 +215,8 @@ function IndividualsTab() {
                 Everything you need. On your terms.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Tools, templates, intel, and the members-only community. Build your own path to
-                your next role.
+                Tools, intel, and the members-only community. Run your own search with the
+                right infrastructure behind you.
               </p>
               <ul className="mt-6 space-y-3">
                 {COMPASS_FEATURES.map((i) => (
@@ -232,7 +235,7 @@ function IndividualsTab() {
                   Start with Compass
                 </Link>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. Choose monthly or annual (save 20%).
+                  Cancel anytime. Monthly or annual (save 20%).
                 </p>
               </div>
             </div>
@@ -240,12 +243,9 @@ function IndividualsTab() {
 
           {/* Envoy */}
           <Reveal delay={120}>
-            <div className="relative flex h-full flex-col border-2 border-emerald bg-paper p-8 lg:p-10">
-              <div className="absolute -top-3 left-8 inline-flex items-center gap-2 rounded-full bg-emerald px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
-                <Star className="h-3 w-3" /> For serious job seekers
-              </div>
+            <div className="relative flex h-full flex-col border border-border bg-paper p-8 lg:p-10">
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald/30 bg-emerald/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">
-                <Sparkles className="h-3 w-3" /> Mentor included
+                <Sparkles className="h-3 w-3" /> Hands-on
               </div>
               <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Envoy</h2>
               <div className="mt-3 flex items-baseline gap-2">
@@ -258,20 +258,15 @@ function IndividualsTab() {
                   : ""}
               </p>
               <p className="mt-4 font-display text-base text-navy-deep">
-                Everything in Compass, plus a mentor.
+                Everything in Compass, plus:
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Unlimited coaching, priority matching, strategic guidance. Get hired faster with
-                expert help at every step.
+                Recurring 1:1 time with vetted coaches, priority placement, and the intel briefings
+                serious job seekers ask for.
               </p>
               <ul className="mt-6 space-y-3">
-                {ENVOY_FEATURES.map((i, idx) => (
-                  <li
-                    key={i}
-                    className={`flex gap-3 text-sm ${
-                      idx === 0 ? "font-medium text-navy-deep" : "text-navy-deep/85"
-                    }`}
-                  >
+                {ENVOY_FEATURES.slice(1).map((i) => (
+                  <li key={i} className="flex gap-3 text-sm text-navy-deep/85">
                     <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
                     <span>{i}</span>
                   </li>
@@ -286,7 +281,7 @@ function IndividualsTab() {
                   Start Envoy
                 </Link>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. See why it's worth it.
+                  Cancel anytime. Monthly or annual (save 20%).
                 </p>
               </div>
             </div>
