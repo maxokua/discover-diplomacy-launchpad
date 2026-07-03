@@ -2,7 +2,19 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Search, MapPin, Building2, Compass as CompassIcon, CheckCircle2, Target, DoorOpen } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { HeroCompass } from "@/components/hero-compass";
+import { CountUp } from "@/components/scroll-effects";
 import { BRAND, TRACTION } from "@/lib/brand";
+
+/** Parse strings like "125,000+", "25,000+", "~50", "75+" into { to, prefix, suffix }. */
+function parseStat(v: string): { to: number; prefix: string; suffix: string } {
+  const prefix = v.startsWith("~") ? "~" : "";
+  const rest = v.replace(/^~/, "");
+  const match = rest.match(/^([\d,]+)(.*)$/);
+  if (!match) return { to: 0, prefix, suffix: v };
+  const to = parseInt(match[1].replace(/,/g, ""), 10);
+  return { to: Number.isFinite(to) ? to : 0, prefix, suffix: match[2] ?? "" };
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,6 +70,9 @@ function Hero() {
   return (
     <section className="border-b border-border bg-paper">
       <div className="mx-auto max-w-5xl px-6 pt-24 pb-28 text-center lg:px-10 lg:pt-32 lg:pb-36">
+        <div className="mx-auto mb-10 flex justify-center">
+          <HeroCompass size={128} />
+        </div>
         <Reveal as="div" className="eyebrow">
           International Affairs · Global Business · Multilaterals
         </Reveal>
@@ -214,12 +229,21 @@ function Stats() {
           </h2>
         </Reveal>
         <ul className="mt-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((s, i) => (
-            <Reveal key={s.l} delay={i * 60} className="text-center">
-              <div className="font-display text-5xl text-navy-deep lg:text-6xl">{s.v}</div>
-              <div className="mt-4 text-sm uppercase tracking-[0.14em] text-muted-foreground">{s.l}</div>
-            </Reveal>
-          ))}
+          {stats.map((s, i) => {
+            const { to, prefix, suffix } = parseStat(s.v);
+            return (
+              <Reveal key={s.l} delay={i * 60} className="text-center">
+                <div className="font-display text-5xl text-navy-deep lg:text-6xl">
+                  {to > 0 ? (
+                    <CountUp to={to} prefix={prefix} suffix={suffix} duration={900} />
+                  ) : (
+                    s.v
+                  )}
+                </div>
+                <div className="mt-4 text-sm uppercase tracking-[0.14em] text-muted-foreground">{s.l}</div>
+              </Reveal>
+            );
+          })}
         </ul>
       </div>
     </section>
@@ -229,29 +253,19 @@ function Stats() {
 function Founder() {
   return (
     <section className="border-b border-border bg-stone">
-      <div className="mx-auto max-w-5xl px-6 py-24 lg:px-10 lg:py-32">
-        <Reveal className="grid gap-12 lg:grid-cols-12 lg:items-center">
-          <div className="lg:col-span-4">
-            <div
-              aria-hidden
-              className="mx-auto flex h-48 w-48 items-center justify-center rounded-lg border border-border bg-paper font-display text-6xl text-navy-deep lg:mx-0"
-            >
-              M
-            </div>
-          </div>
-          <div className="lg:col-span-8">
-            <div className="eyebrow">Why we built this</div>
-            <p className="mt-6 font-display text-2xl leading-snug text-navy-deep lg:text-[28px]">
-              "Talented people were losing the international careers they wanted
-              because no one told them how the doors actually open."
-            </p>
-            <p className="mt-6 text-muted-foreground">
-              Discover Diplomacy is the platform I wish I'd had — a real directory,
-              honest preparation, and access to people who've walked the path.
-            </p>
-            <div className="mt-6 text-sm font-medium text-navy-deep">
-              Max Okamura · Founder & CEO, Discover Diplomacy
-            </div>
+      <div className="mx-auto max-w-3xl px-6 py-24 lg:px-10 lg:py-32">
+        <Reveal>
+          <div className="eyebrow">Why we built this</div>
+          <p className="mt-6 font-display text-2xl leading-snug text-navy-deep lg:text-[28px]">
+            "Talented people were losing the international careers they wanted
+            because no one told them how the doors actually open."
+          </p>
+          <p className="mt-6 text-muted-foreground">
+            Discover Diplomacy is the platform I wish I'd had — a real directory,
+            honest preparation, and access to people who've walked the path.
+          </p>
+          <div className="mt-6 text-sm font-medium text-navy-deep">
+            Max Okamura · Founder & CEO, Discover Diplomacy
           </div>
         </Reveal>
       </div>
