@@ -527,7 +527,7 @@ function ResultsView({
   onRestart: () => void;
 }) {
   const archetype = plan.recommendedTier;
-  const directoryFilter = answers.interests[0] ?? "";
+  
   return (
     <section className="bg-paper">
       <div className="mx-auto max-w-2xl px-6 py-16 lg:py-24 lg:px-10 text-center">
