@@ -31,7 +31,7 @@ export const Route = createFileRoute("/assessment")({
 // Question definitions
 // -----------------------------------------------------------------------------
 
-type StepKey = "intro" | "interests" | "stage" | "blocker" | "nonNegotiables" | "strengths" | "network" | "contact";
+type StepKey = "interests" | "stage" | "blocker" | "nonNegotiables" | "network" | "email";
 
 const INTERESTS = [
   "Diplomacy & foreign service",
@@ -39,7 +39,6 @@ const INTERESTS = [
   "Development & humanitarian",
   "Multilateral institutions (UN/WB/IMF)",
   "Global business & geoeconomics",
-  "National security & intelligence",
 ];
 
 const STAGES = [
@@ -47,25 +46,23 @@ const STAGES = [
   "Graduate student",
   "Early-career (0–3 yrs)",
   "Mid-career transition",
-  "Career changer from another field",
+  "Career changer",
 ];
 
 const BLOCKERS = [
-  "I need clarity on what I actually want",
-  "I know what I want — I can't break in",
+  "I need clarity on what I want",
+  "I know what I want — can't break in",
   "I'm transitioning sectors",
   "My resume isn't landing interviews",
   "I need interview / case prep",
 ];
 
 const NON_NEGOTIABLES = [
-  "Stay in current city",
-  "Open to relocation (DC/NY/Geneva/etc.)",
+  "Open to relocation (DC/NY/Geneva)",
   "Salary $80k+",
-  "Salary $120k+",
   "Mission-driven only",
-  "Need security clearance path",
   "Remote-friendly",
+  "None of the above",
 ];
 
 const NETWORK = [
@@ -75,7 +72,7 @@ const NETWORK = [
   "Strong network, need a strategy",
 ];
 
-const STEPS: StepKey[] = ["intro", "interests", "stage", "blocker", "nonNegotiables", "strengths", "network", "contact"];
+const STEPS: StepKey[] = ["interests", "stage", "blocker", "nonNegotiables", "network", "email"];
 
 // -----------------------------------------------------------------------------
 // Page
