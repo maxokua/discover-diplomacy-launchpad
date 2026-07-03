@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Download, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { generateAssessment, type AssessmentPlan } from "@/lib/assessment.functions";
 
