@@ -34,9 +34,10 @@ export const Route = createFileRoute("/_authenticated/dashboard/coaching/")({
 });
 
 function CoachingIndex() {
-  const { profile, coaches } = Route.useLoaderData();
+  const data = Route.useLoaderData() as { profile: { plan: string; full_name: string | null; email: string | null }; coaches: Coach[] };
+  const { profile, coaches } = data;
   const isEnvoy = profile.plan === "envoy";
-  const anySamples = coaches.some((c) => c.is_sample);
+  const anySamples = coaches.some((c: Coach) => c.is_sample);
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10 lg:py-14">
