@@ -61,11 +61,17 @@ import { Route as AuthenticatedMembershipCheckoutRouteImport } from './routes/_a
 import { Route as AuthenticatedEmployerUnlockedRouteImport } from './routes/_authenticated/employer.unlocked'
 import { Route as AuthenticatedEmployerResumesRouteImport } from './routes/_authenticated/employer.resumes'
 import { Route as AuthenticatedEmployerBrowseRouteImport } from './routes/_authenticated/employer.browse'
+import { Route as AuthenticatedDashboardResumeStudioRouteImport } from './routes/_authenticated/dashboard.resume-studio'
+import { Route as AuthenticatedDashboardResumeDropRouteImport } from './routes/_authenticated/dashboard.resume-drop'
+import { Route as AuthenticatedDashboardOpportunitiesRouteImport } from './routes/_authenticated/dashboard.opportunities'
+import { Route as AuthenticatedDashboardIntelRouteImport } from './routes/_authenticated/dashboard.intel'
+import { Route as AuthenticatedDashboardCommunityRouteImport } from './routes/_authenticated/dashboard.community'
 import { Route as AuthenticatedCoachClientsRouteImport } from './routes/_authenticated/coach.clients'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminUniversitiesRouteImport } from './routes/_authenticated/admin.universities'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as AuthenticatedAdminOrganizationsRouteImport } from './routes/_authenticated/admin.organizations'
+import { Route as AuthenticatedDashboardCoachingIndexRouteImport } from './routes/_authenticated/dashboard.coaching.index'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -73,6 +79,7 @@ import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/publi
 import { Route as AuthenticatedEmployerUnlockedCandidateIdRouteImport } from './routes/_authenticated/employer.unlocked.$candidateId'
 import { Route as AuthenticatedEmployerCreditsReturnRouteImport } from './routes/_authenticated/employer.credits.return'
 import { Route as AuthenticatedEmployerCreditsCheckoutRouteImport } from './routes/_authenticated/employer.credits.checkout'
+import { Route as AuthenticatedDashboardCoachingCoachIdRouteImport } from './routes/_authenticated/dashboard.coaching.$coachId'
 
 const WaitlistRoute = WaitlistRouteImport.update({
   id: '/waitlist',
@@ -346,6 +353,36 @@ const AuthenticatedEmployerBrowseRoute =
     path: '/browse',
     getParentRoute: () => AuthenticatedEmployerRoute,
   } as any)
+const AuthenticatedDashboardResumeStudioRoute =
+  AuthenticatedDashboardResumeStudioRouteImport.update({
+    id: '/resume-studio',
+    path: '/resume-studio',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardResumeDropRoute =
+  AuthenticatedDashboardResumeDropRouteImport.update({
+    id: '/resume-drop',
+    path: '/resume-drop',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardOpportunitiesRoute =
+  AuthenticatedDashboardOpportunitiesRouteImport.update({
+    id: '/opportunities',
+    path: '/opportunities',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardIntelRoute =
+  AuthenticatedDashboardIntelRouteImport.update({
+    id: '/intel',
+    path: '/intel',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardCommunityRoute =
+  AuthenticatedDashboardCommunityRouteImport.update({
+    id: '/community',
+    path: '/community',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedCoachClientsRoute =
   AuthenticatedCoachClientsRouteImport.update({
     id: '/clients',
@@ -374,6 +411,12 @@ const AuthenticatedAdminOrganizationsRoute =
     id: '/organizations',
     path: '/organizations',
     getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedDashboardCoachingIndexRoute =
+  AuthenticatedDashboardCoachingIndexRouteImport.update({
+    id: '/coaching/',
+    path: '/coaching/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
@@ -416,6 +459,12 @@ const AuthenticatedEmployerCreditsCheckoutRoute =
     id: '/credits/checkout',
     path: '/credits/checkout',
     getParentRoute: () => AuthenticatedEmployerRoute,
+  } as any)
+const AuthenticatedDashboardCoachingCoachIdRoute =
+  AuthenticatedDashboardCoachingCoachIdRouteImport.update({
+    id: '/coaching/$coachId',
+    path: '/coaching/$coachId',
+    getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -460,6 +509,11 @@ export interface FileRoutesByFullPath {
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
+  '/dashboard/intel': typeof AuthenticatedDashboardIntelRoute
+  '/dashboard/opportunities': typeof AuthenticatedDashboardOpportunitiesRoute
+  '/dashboard/resume-drop': typeof AuthenticatedDashboardResumeDropRoute
+  '/dashboard/resume-studio': typeof AuthenticatedDashboardResumeStudioRoute
   '/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/employer/unlocked': typeof AuthenticatedEmployerUnlockedRouteWithChildren
@@ -475,6 +529,7 @@ export interface FileRoutesByFullPath {
   '/employer/': typeof AuthenticatedEmployerIndexRoute
   '/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
+  '/dashboard/coaching/$coachId': typeof AuthenticatedDashboardCoachingCoachIdRoute
   '/employer/credits/checkout': typeof AuthenticatedEmployerCreditsCheckoutRoute
   '/employer/credits/return': typeof AuthenticatedEmployerCreditsReturnRoute
   '/employer/unlocked/$candidateId': typeof AuthenticatedEmployerUnlockedCandidateIdRoute
@@ -482,6 +537,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/dashboard/coaching/': typeof AuthenticatedDashboardCoachingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -520,6 +576,11 @@ export interface FileRoutesByTo {
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
+  '/dashboard/intel': typeof AuthenticatedDashboardIntelRoute
+  '/dashboard/opportunities': typeof AuthenticatedDashboardOpportunitiesRoute
+  '/dashboard/resume-drop': typeof AuthenticatedDashboardResumeDropRoute
+  '/dashboard/resume-studio': typeof AuthenticatedDashboardResumeStudioRoute
   '/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/employer/unlocked': typeof AuthenticatedEmployerUnlockedRouteWithChildren
@@ -535,6 +596,7 @@ export interface FileRoutesByTo {
   '/employer': typeof AuthenticatedEmployerIndexRoute
   '/resume-analyses': typeof AuthenticatedResumeAnalysesIndexRoute
   '/resume-review': typeof AuthenticatedResumeReviewIndexRoute
+  '/dashboard/coaching/$coachId': typeof AuthenticatedDashboardCoachingCoachIdRoute
   '/employer/credits/checkout': typeof AuthenticatedEmployerCreditsCheckoutRoute
   '/employer/credits/return': typeof AuthenticatedEmployerCreditsReturnRoute
   '/employer/unlocked/$candidateId': typeof AuthenticatedEmployerUnlockedCandidateIdRoute
@@ -542,6 +604,7 @@ export interface FileRoutesByTo {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/dashboard/coaching': typeof AuthenticatedDashboardCoachingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -587,6 +650,11 @@ export interface FileRoutesById {
   '/_authenticated/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/coach/clients': typeof AuthenticatedCoachClientsRoute
+  '/_authenticated/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
+  '/_authenticated/dashboard/intel': typeof AuthenticatedDashboardIntelRoute
+  '/_authenticated/dashboard/opportunities': typeof AuthenticatedDashboardOpportunitiesRoute
+  '/_authenticated/dashboard/resume-drop': typeof AuthenticatedDashboardResumeDropRoute
+  '/_authenticated/dashboard/resume-studio': typeof AuthenticatedDashboardResumeStudioRoute
   '/_authenticated/employer/browse': typeof AuthenticatedEmployerBrowseRoute
   '/_authenticated/employer/resumes': typeof AuthenticatedEmployerResumesRoute
   '/_authenticated/employer/unlocked': typeof AuthenticatedEmployerUnlockedRouteWithChildren
@@ -602,6 +670,7 @@ export interface FileRoutesById {
   '/_authenticated/employer/': typeof AuthenticatedEmployerIndexRoute
   '/_authenticated/resume-analyses/': typeof AuthenticatedResumeAnalysesIndexRoute
   '/_authenticated/resume-review/': typeof AuthenticatedResumeReviewIndexRoute
+  '/_authenticated/dashboard/coaching/$coachId': typeof AuthenticatedDashboardCoachingCoachIdRoute
   '/_authenticated/employer/credits/checkout': typeof AuthenticatedEmployerCreditsCheckoutRoute
   '/_authenticated/employer/credits/return': typeof AuthenticatedEmployerCreditsReturnRoute
   '/_authenticated/employer/unlocked/$candidateId': typeof AuthenticatedEmployerUnlockedCandidateIdRoute
@@ -609,6 +678,7 @@ export interface FileRoutesById {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/_authenticated/dashboard/coaching/': typeof AuthenticatedDashboardCoachingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -654,6 +724,11 @@ export interface FileRouteTypes {
     | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
+    | '/dashboard/community'
+    | '/dashboard/intel'
+    | '/dashboard/opportunities'
+    | '/dashboard/resume-drop'
+    | '/dashboard/resume-studio'
     | '/employer/browse'
     | '/employer/resumes'
     | '/employer/unlocked'
@@ -669,6 +744,7 @@ export interface FileRouteTypes {
     | '/employer/'
     | '/resume-analyses/'
     | '/resume-review/'
+    | '/dashboard/coaching/$coachId'
     | '/employer/credits/checkout'
     | '/employer/credits/return'
     | '/employer/unlocked/$candidateId'
@@ -676,6 +752,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/dashboard/coaching/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -714,6 +791,11 @@ export interface FileRouteTypes {
     | '/admin/universities'
     | '/admin/users'
     | '/coach/clients'
+    | '/dashboard/community'
+    | '/dashboard/intel'
+    | '/dashboard/opportunities'
+    | '/dashboard/resume-drop'
+    | '/dashboard/resume-studio'
     | '/employer/browse'
     | '/employer/resumes'
     | '/employer/unlocked'
@@ -729,6 +811,7 @@ export interface FileRouteTypes {
     | '/employer'
     | '/resume-analyses'
     | '/resume-review'
+    | '/dashboard/coaching/$coachId'
     | '/employer/credits/checkout'
     | '/employer/credits/return'
     | '/employer/unlocked/$candidateId'
@@ -736,6 +819,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/dashboard/coaching'
   id:
     | '__root__'
     | '/'
@@ -780,6 +864,11 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/universities'
     | '/_authenticated/admin/users'
     | '/_authenticated/coach/clients'
+    | '/_authenticated/dashboard/community'
+    | '/_authenticated/dashboard/intel'
+    | '/_authenticated/dashboard/opportunities'
+    | '/_authenticated/dashboard/resume-drop'
+    | '/_authenticated/dashboard/resume-studio'
     | '/_authenticated/employer/browse'
     | '/_authenticated/employer/resumes'
     | '/_authenticated/employer/unlocked'
@@ -795,6 +884,7 @@ export interface FileRouteTypes {
     | '/_authenticated/employer/'
     | '/_authenticated/resume-analyses/'
     | '/_authenticated/resume-review/'
+    | '/_authenticated/dashboard/coaching/$coachId'
     | '/_authenticated/employer/credits/checkout'
     | '/_authenticated/employer/credits/return'
     | '/_authenticated/employer/unlocked/$candidateId'
@@ -802,6 +892,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/_authenticated/dashboard/coaching/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1202,6 +1293,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEmployerBrowseRouteImport
       parentRoute: typeof AuthenticatedEmployerRoute
     }
+    '/_authenticated/dashboard/resume-studio': {
+      id: '/_authenticated/dashboard/resume-studio'
+      path: '/resume-studio'
+      fullPath: '/dashboard/resume-studio'
+      preLoaderRoute: typeof AuthenticatedDashboardResumeStudioRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/resume-drop': {
+      id: '/_authenticated/dashboard/resume-drop'
+      path: '/resume-drop'
+      fullPath: '/dashboard/resume-drop'
+      preLoaderRoute: typeof AuthenticatedDashboardResumeDropRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/opportunities': {
+      id: '/_authenticated/dashboard/opportunities'
+      path: '/opportunities'
+      fullPath: '/dashboard/opportunities'
+      preLoaderRoute: typeof AuthenticatedDashboardOpportunitiesRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/intel': {
+      id: '/_authenticated/dashboard/intel'
+      path: '/intel'
+      fullPath: '/dashboard/intel'
+      preLoaderRoute: typeof AuthenticatedDashboardIntelRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/community': {
+      id: '/_authenticated/dashboard/community'
+      path: '/community'
+      fullPath: '/dashboard/community'
+      preLoaderRoute: typeof AuthenticatedDashboardCommunityRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/coach/clients': {
       id: '/_authenticated/coach/clients'
       path: '/clients'
@@ -1236,6 +1362,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/organizations'
       preLoaderRoute: typeof AuthenticatedAdminOrganizationsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/dashboard/coaching/': {
+      id: '/_authenticated/dashboard/coaching/'
+      path: '/coaching'
+      fullPath: '/dashboard/coaching/'
+      preLoaderRoute: typeof AuthenticatedDashboardCoachingIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
@@ -1286,6 +1419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEmployerCreditsCheckoutRouteImport
       parentRoute: typeof AuthenticatedEmployerRoute
     }
+    '/_authenticated/dashboard/coaching/$coachId': {
+      id: '/_authenticated/dashboard/coaching/$coachId'
+      path: '/coaching/$coachId'
+      fullPath: '/dashboard/coaching/$coachId'
+      preLoaderRoute: typeof AuthenticatedDashboardCoachingCoachIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
   }
 }
 
@@ -1322,12 +1462,31 @@ const AuthenticatedCoachRouteWithChildren =
   AuthenticatedCoachRoute._addFileChildren(AuthenticatedCoachRouteChildren)
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardCommunityRoute: typeof AuthenticatedDashboardCommunityRoute
+  AuthenticatedDashboardIntelRoute: typeof AuthenticatedDashboardIntelRoute
+  AuthenticatedDashboardOpportunitiesRoute: typeof AuthenticatedDashboardOpportunitiesRoute
+  AuthenticatedDashboardResumeDropRoute: typeof AuthenticatedDashboardResumeDropRoute
+  AuthenticatedDashboardResumeStudioRoute: typeof AuthenticatedDashboardResumeStudioRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardCoachingCoachIdRoute: typeof AuthenticatedDashboardCoachingCoachIdRoute
+  AuthenticatedDashboardCoachingIndexRoute: typeof AuthenticatedDashboardCoachingIndexRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardCommunityRoute: AuthenticatedDashboardCommunityRoute,
+    AuthenticatedDashboardIntelRoute: AuthenticatedDashboardIntelRoute,
+    AuthenticatedDashboardOpportunitiesRoute:
+      AuthenticatedDashboardOpportunitiesRoute,
+    AuthenticatedDashboardResumeDropRoute:
+      AuthenticatedDashboardResumeDropRoute,
+    AuthenticatedDashboardResumeStudioRoute:
+      AuthenticatedDashboardResumeStudioRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardCoachingCoachIdRoute:
+      AuthenticatedDashboardCoachingCoachIdRoute,
+    AuthenticatedDashboardCoachingIndexRoute:
+      AuthenticatedDashboardCoachingIndexRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =

@@ -20,14 +20,15 @@ export const Route = createFileRoute("/_authenticated/dashboard/coaching/")({
   loader: async () => {
     const [profile, coachesRes] = await Promise.all([
       getDashboardProfile(),
-      supabase
+      (supabase as any)
         .from("coaches")
         .select(
           "id, slug, name, title, background, specialties, languages, price_per_session_cents, is_sample, sort_order",
         )
         .order("sort_order", { ascending: true }),
     ]);
-    return { profile, coaches: (coachesRes.data ?? []) as Coach[] };
+    const coaches: Coach[] = (coachesRes.data ?? []) as Coach[];
+    return { profile, coaches };
   },
   component: CoachingIndex,
 });
