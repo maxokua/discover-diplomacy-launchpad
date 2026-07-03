@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, Check, Loader2, Share2, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
-import { generateAssessment, type AssessmentPlan } from "@/lib/assessment.functions";
+import {
+  generateAssessment,
+  type AssessmentAnswers,
+  type AssessmentPlan,
+} from "@/lib/assessment.functions";
 
 export const Route = createFileRoute("/assessment")({
   head: () => ({
@@ -12,13 +16,12 @@ export const Route = createFileRoute("/assessment")({
       {
         name: "description",
         content:
-          "Take a 2-minute conversational assessment and get a personalized career plan for diplomacy, international policy, multilateral institutions, and global business.",
+          "A 3-minute conversation with a mentor. Get a personalized map into diplomacy, policy, multilaterals, development, and global business.",
       },
       { property: "og:title", content: "Career Assessment — Discover Diplomacy" },
       {
         property: "og:description",
-        content:
-          "Get a personalized 90-day action plan for your career in global affairs in under 2 minutes.",
+        content: "3 minutes. 10 questions. Your personalized career map in global affairs.",
       },
       { property: "og:url", content: "https://discoverdiplomacy.org/assessment" },
     ],
@@ -28,91 +31,454 @@ export const Route = createFileRoute("/assessment")({
 });
 
 // -----------------------------------------------------------------------------
-// Question definitions
+// Question definitions (10 counted + name warm-up + email)
 // -----------------------------------------------------------------------------
 
-type StepKey = "interests" | "stage" | "blocker" | "nonNegotiables" | "network" | "email";
+type QKey =
+  | "name"
+  | "q1"
+  | "q2"
+  | "q3"
+  | "q4"
+  | "q5"
+  | "q6"
+  | "q7"
+  | "q8"
+  | "q9"
+  | "q10"
+  | "email";
 
-const INTERESTS = [
-  "Diplomacy & foreign service",
-  "International policy & think tanks",
-  "Development & humanitarian",
-  "Multilateral institutions (UN/WB/IMF)",
-  "Global business & geoeconomics",
-];
+const COUNTED_ORDER: QKey[] = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
+const STEPS: QKey[] = ["name", ...COUNTED_ORDER, "email"];
 
-const STAGES = [
-  "Undergraduate student",
-  "Graduate student",
-  "Early-career (0–3 yrs)",
-  "Mid-career transition",
-  "Career changer",
-];
+const MENTOR = "Your mentor · DD";
 
-const BLOCKERS = [
-  "I need clarity on what I want",
-  "I know what I want — can't break in",
-  "I'm transitioning sectors",
-  "My resume isn't landing interviews",
-  "I need interview / case prep",
-];
+type Question = {
+  prompt: string;
+  helper?: string;
+  options?: string[];
+  multi?: { max: number };
+  reactions?: Record<string, string>;
+  defaultReaction?: string;
+};
 
-const NON_NEGOTIABLES = [
-  "Open to relocation (DC/NY/Geneva)",
-  "Salary $80k+",
-  "Mission-driven only",
-  "Remote-friendly",
-  "None of the above",
-];
+const Q: Record<Exclude<QKey, "name" | "email">, Question> = {
+  q1: {
+    prompt: "Where are you in your journey?",
+    options: [
+      "Undergrad (1st–2nd year)",
+      "Undergrad (3rd–4th year)",
+      "Grad student",
+      "Working, early career",
+      "Switching into this field",
+    ],
+    defaultReaction: "Got it — that shapes what I'd have you do first.",
+  },
+  q2: {
+    prompt: "Which world pulls you the most?",
+    options: [
+      "Representing my country (diplomacy & foreign service)",
+      "Shaping policy ideas (think tanks & research)",
+      "Global institutions (UN & multilaterals)",
+      "Mission-driven fieldwork (NGOs & development)",
+      "Global business & risk (private sector)",
+    ],
+    defaultReaction: "That's the anchor for your primary path.",
+  },
+  q3: {
+    prompt: "What kind of work makes you lose track of time?",
+    options: [
+      "Researching & writing",
+      "Building relationships & persuading",
+      "Running projects & operations",
+      "Data & analysis",
+      "Communicating to audiences",
+    ],
+    defaultReaction: "Noted — I'll flavor your roles around that.",
+  },
+  q4: {
+    prompt: "Which issues do you follow in your free time?",
+    helper: "Pick up to 2.",
+    options: [
+      "Security & defense",
+      "Trade & economics",
+      "Climate & energy",
+      "Tech policy",
+      "Human rights & humanitarian",
+    ],
+    multi: { max: 2 },
+    defaultReaction: "Those are useful signals for niching down.",
+  },
+  q5: {
+    prompt: "Where would you actually move for the right role?",
+    options: [
+      "Washington DC",
+      "New York",
+      "Anywhere in the US",
+      "Abroad (Geneva, Brussels, field posts)",
+      "I need remote-flexible",
+    ],
+    defaultReaction: "Location changes which employers are realistic. Good to know.",
+  },
+  q6: {
+    prompt: "Choose your trade-off:",
+    options: [
+      "Prestige track, slower advancement",
+      "Small org, big responsibility now",
+      "Stability & clear structure",
+      "Highest-impact work, even if unglamorous",
+      "Best compensation available",
+    ],
+    defaultReaction: "That helps me rank paths, not just list them.",
+  },
+  q7: {
+    prompt: "What's your timeline?",
+    options: [
+      "Applying right now",
+      "This coming cycle (3–6 months)",
+      "Next year",
+      "Exploring, no rush",
+    ],
+    reactions: {
+      "Applying right now": "Then we're compressing this. I'll put deadlines in phase 1.",
+    },
+    defaultReaction: "Good — that sets the pace of your plan.",
+  },
+  q8: {
+    prompt: "Which of these do you already have?",
+    helper: "Select all that apply.",
+    options: [
+      "Second language (professional)",
+      "Quant or data skills",
+      "Published or professional writing",
+      "International living or work experience",
+      "Still building",
+    ],
+    multi: { max: 5 },
+    defaultReaction: "That changes what your resume should lead with.",
+  },
+  q9: {
+    prompt: "Are you authorized to work in the U.S.?",
+    helper: "Only used to match you to eligible roles — never shared.",
+    options: [
+      "U.S. citizen",
+      "Green card or work-authorized",
+      "International student (visa)",
+      "Prefer not to say",
+    ],
+    reactions: {
+      "International student (visa)":
+        "Got it — I'll steer you away from anything that requires citizenship.",
+    },
+    defaultReaction: "Thanks — I'll filter for what's actually open to you.",
+  },
+  q10: {
+    prompt: "What's the biggest thing standing between you and the job?",
+    options: [
+      "I don't know what roles exist",
+      "My resume & materials",
+      "No network in this field",
+      "Interviews & assessments",
+      "Getting seen by employers",
+    ],
+    defaultReaction: "That's the piece I'll build the plan around.",
+  },
+};
 
-const NETWORK = [
-  "Almost none — starting from scratch",
-  "A few contacts in the field",
-  "Solid network, need to activate it",
-  "Strong network, need a strategy",
-];
+// -----------------------------------------------------------------------------
+// Answers state
+// -----------------------------------------------------------------------------
 
-const STEPS: StepKey[] = ["interests", "stage", "blocker", "nonNegotiables", "network", "email"];
+type LocalAnswers = {
+  name: string;
+  q1: string;
+  q2: string;
+  q3: string;
+  q4: string[];
+  q5: string;
+  q6: string;
+  q7: string;
+  q8: string[];
+  q9: string;
+  q10: string;
+};
+
+const EMPTY: LocalAnswers = {
+  name: "",
+  q1: "",
+  q2: "",
+  q3: "",
+  q4: [],
+  q5: "",
+  q6: "",
+  q7: "",
+  q8: [],
+  q9: "",
+  q10: "",
+};
+
+// -----------------------------------------------------------------------------
+// Archetype logic
+// -----------------------------------------------------------------------------
+
+type Archetype = {
+  key: string;
+  title: string;
+  category: string; // directory category filter
+  subsection?: string;
+  requiresCitizenship?: boolean;
+  employers: Record<string, string[]>; // location bucket -> employers
+  roles: string[];
+};
+
+const ARCHETYPES: Record<string, Archetype> = {
+  foreign_service: {
+    key: "foreign_service",
+    title: "Foreign Service & Diplomacy",
+    category: "Government",
+    subsection: "Foreign Service",
+    requiresCitizenship: true,
+    roles: ["Foreign Service Officer", "Consular Officer", "Civil Service policy analyst"],
+    employers: {
+      dc: ["U.S. Department of State", "USAID", "Foreign Commercial Service", "Peace Corps"],
+      abroad: ["U.S. Embassies (worldwide)", "State Dept. political sections", "USAID missions", "Foreign Commercial Service"],
+      default: ["U.S. Department of State", "USAID", "Foreign Commercial Service", "Peace Corps"],
+    },
+  },
+  policy_research: {
+    key: "policy_research",
+    title: "Policy & Research",
+    category: "NGO/IGO/Think Tank",
+    subsection: "Foreign Policy",
+    roles: ["Research Associate", "Program Coordinator", "Policy Analyst"],
+    employers: {
+      dc: ["CSIS", "Brookings", "Atlantic Council", "CFR"],
+      ny: ["Council on Foreign Relations", "Carnegie Endowment", "Human Rights Watch", "International Peace Institute"],
+      abroad: ["Chatham House", "IISS", "Carnegie Europe", "European Council on Foreign Relations"],
+      default: ["CSIS", "Brookings", "Atlantic Council", "RAND"],
+    },
+  },
+  multilateral: {
+    key: "multilateral",
+    title: "Multilateral Institutions",
+    category: "NGO/IGO/Think Tank",
+    roles: ["Junior Professional Officer (JPO)", "Young Professional (YPP)", "Program Analyst"],
+    employers: {
+      dc: ["World Bank", "IMF", "IFC", "Inter-American Development Bank"],
+      ny: ["UN Secretariat", "UNDP", "UNICEF", "UN Women"],
+      abroad: ["UN Geneva", "WHO", "OECD (Paris)", "ILO"],
+      default: ["World Bank", "IMF", "UN Secretariat", "OECD"],
+    },
+  },
+  development: {
+    key: "development",
+    title: "Development & Humanitarian",
+    category: "NGO/IGO/Think Tank",
+    subsection: "International Development",
+    roles: ["Program Officer", "Field Coordinator", "M&E Analyst"],
+    employers: {
+      dc: ["Mercy Corps", "IRC", "Chemonics", "DAI"],
+      abroad: ["IRC field offices", "MSF", "Save the Children", "Norwegian Refugee Council"],
+      default: ["Mercy Corps", "IRC", "Save the Children", "Chemonics"],
+    },
+  },
+  global_business: {
+    key: "global_business",
+    title: "Global Business & Geoeconomics",
+    category: "NGO/IGO/Think Tank",
+    subsection: "International Economic Policy",
+    roles: ["Geopolitical Risk Analyst", "Public Sector Consultant", "Country Risk Associate"],
+    employers: {
+      dc: ["McKinsey Public Sector", "EY-Parthenon", "Eurasia Group", "Albright Stonebridge"],
+      ny: ["Eurasia Group", "BlackRock Geopolitics", "Goldman Sachs Public Sector", "Kroll"],
+      abroad: ["Control Risks", "Oxford Analytica", "Eurasia Group (London)", "S&P Global"],
+      default: ["Eurasia Group", "McKinsey Public Sector", "Control Risks", "Kroll"],
+    },
+  },
+};
+
+const Q2_TO_ARCHETYPE: Record<string, string> = {
+  "Representing my country (diplomacy & foreign service)": "foreign_service",
+  "Shaping policy ideas (think tanks & research)": "policy_research",
+  "Global institutions (UN & multilaterals)": "multilateral",
+  "Mission-driven fieldwork (NGOs & development)": "development",
+  "Global business & risk (private sector)": "global_business",
+};
+
+const ADJACENCY: Record<string, [string, string]> = {
+  foreign_service: ["multilateral", "policy_research"],
+  policy_research: ["multilateral", "global_business"],
+  multilateral: ["development", "policy_research"],
+  development: ["multilateral", "policy_research"],
+  global_business: ["policy_research", "multilateral"],
+};
+
+function locationBucket(q5: string): "dc" | "ny" | "abroad" | "default" {
+  if (q5.startsWith("Washington")) return "dc";
+  if (q5.startsWith("New York")) return "ny";
+  if (q5.startsWith("Abroad")) return "abroad";
+  return "default";
+}
+
+function directoryHref(a: Archetype): string {
+  const params = new URLSearchParams();
+  params.set("category", a.category);
+  if (a.subsection) params.set("subsection", a.subsection);
+  return `/directory?${params.toString()}`;
+}
+
+function pathFromArchetype(a: Archetype, ans: LocalAnswers): AssessmentPlan["primary"] {
+  const bucket = locationBucket(ans.q5);
+  const employers = a.employers[bucket] ?? a.employers.default;
+  const workStyle = ans.q3.toLowerCase();
+  const tradeoff = ans.q6.toLowerCase();
+  const why = `This fits your pull toward ${a.title.toLowerCase()} and the way you described the work — ${workStyle}. It also matches your trade-off (${tradeoff}) better than the alternatives.`;
+  return {
+    title: a.title,
+    why,
+    exampleRoles: a.roles.slice(0, 3),
+    exampleEmployers: employers.slice(0, 4),
+    directoryHref: directoryHref(a),
+  };
+}
+
+function computePlan(ans: LocalAnswers): AssessmentPlan {
+  // Primary from Q2
+  let primaryKey = Q2_TO_ARCHETYPE[ans.q2] ?? "policy_research";
+  // Q9 gate: no citizenship → don't recommend Foreign Service as primary
+  if (
+    ARCHETYPES[primaryKey]?.requiresCitizenship &&
+    ans.q9 !== "U.S. citizen"
+  ) {
+    // Substitute with multilateral or private-sector equivalent
+    primaryKey = ans.q6.includes("compensation") ? "global_business" : "multilateral";
+  }
+  const primary = ARCHETYPES[primaryKey];
+  let adj = ADJACENCY[primaryKey] ?? ["policy_research", "multilateral"];
+  // Filter foreign_service out of adjacent if not citizen
+  adj = adj.filter(
+    (k) => !(ARCHETYPES[k]?.requiresCitizenship && ans.q9 !== "U.S. citizen"),
+  ) as [string, string];
+  const fallback = ["multilateral", "policy_research", "global_business", "development"].filter(
+    (k) => k !== primaryKey && !adj.includes(k),
+  );
+  while (adj.length < 2) adj.push(fallback.shift()!);
+
+  const primaryPath = pathFromArchetype(primary, ans);
+  const adjacent = (adj.slice(0, 2) as string[]).map((k) => pathFromArchetype(ARCHETYPES[k], ans));
+
+  const name = ans.name || "friend";
+  const summary = `You told me three things that matter: you're pulled toward ${ans.q2.split(" (")[0].toLowerCase()}, you're ${ans.q1.toLowerCase()}, and the biggest gap is "${ans.q10.toLowerCase()}." This plan is built around exactly that — no generic advice, no fluff.`;
+
+  // 90-day plan adapted to Q7 + Q10
+  const urgent = ans.q7 === "Applying right now";
+  const days0to30: string[] = [];
+  const days30to60: string[] = [];
+  const days60to90: string[] = [];
+
+  // Q10-driven phase 1 anchor
+  switch (ans.q10) {
+    case "I don't know what roles exist":
+      days0to30.push(
+        `Browse the Discover Diplomacy directory filtered to ${primary.title} and save 10 roles that make you curious.`,
+      );
+      break;
+    case "My resume & materials":
+      days0to30.push(
+        "Run your resume through the AI Resume Score on your dashboard and fix the top 3 flags this week.",
+      );
+      break;
+    case "No network in this field":
+      days0to30.push(
+        "Join the members community and use the alumni-outreach script to send your first 5 messages.",
+      );
+      break;
+    case "Interviews & assessments":
+      days0to30.push(
+        "Draft answers to the 10 most common cone/case questions for your path and record yourself once.",
+      );
+      break;
+    case "Getting seen by employers":
+      days0to30.push(
+        "Set up your Discover Diplomacy profile so you're browsable — vetted candidates get surfaced to hiring employers.",
+      );
+      break;
+  }
+
+  // Always: digest plug (exactly one)
+  days0to30.push(
+    "Subscribe to the Wednesday digest so deadlines find you, not the other way around.",
+  );
+
+  // Urgency override
+  if (urgent) {
+    days0to30.push(
+      `Apply to 3 live ${primary.title} roles from the directory this month — don't wait for the plan to feel perfect.`,
+    );
+  } else {
+    days0to30.push(
+      `Pick 2 ${primary.title.toLowerCase()} employers and read their last 3 published pieces so you can speak their language.`,
+    );
+  }
+
+  // Phase 2
+  if (ans.q10 === "No network in this field") {
+    days30to60.push("Book 5 informational interviews — target alumni and 2-years-ahead peers, not senior partners.");
+  } else {
+    days30to60.push("Book 3 informational interviews with people in your primary path.");
+  }
+  if (ans.q10 === "Getting seen by employers") {
+    days30to60.push("Complete your Resume Drop profile — vetted candidates get surfaced directly to hiring employers.");
+  } else {
+    days30to60.push(`Ship one artifact — a short memo, brief, or analysis — on a ${(ans.q4[0] || "policy").toLowerCase()} issue you care about.`);
+  }
+  days30to60.push("Apply to 2 stretch roles and 2 realistic roles — track outcomes, not just applications.");
+
+  // Phase 3
+  days60to90.push("Decide: which of the three paths is the actual bet, and which two are backups.");
+  days60to90.push("Bring your 90-day results to a single coaching session — refine, don't restart.");
+  if (urgent) {
+    days60to90.push("Close 2 offers to negotiation stage. If you have zero, we regroup on strategy, not effort.");
+  } else {
+    days60to90.push("Set your next 90-day cycle — same structure, tighter target list.");
+  }
+
+  return {
+    archetype: primary.title,
+    summary: name ? summary : summary,
+    primary: primaryPath,
+    adjacent: [adjacent[0], adjacent[1]],
+    days0to30,
+    days30to60,
+    days60to90,
+  };
+}
 
 // -----------------------------------------------------------------------------
 // Page
 // -----------------------------------------------------------------------------
 
-type Answers = {
-  name: string;
-  interests: string[];
-  stage: string;
-  blocker: string;
-  nonNegotiables: string[];
-  strengths: string;
-  network: string;
-};
-
 function AssessmentPage() {
   const [stepIdx, setStepIdx] = useState(0);
-  const [answers, setAnswers] = useState<Answers>({
-    name: "",
-    interests: [],
-    stage: "",
-    blocker: "",
-    nonNegotiables: [],
-    strengths: "",
-    network: "",
-  });
+  const [answers, setAnswers] = useState<LocalAnswers>(EMPTY);
   const [email, setEmail] = useState("");
-  const [consent, setConsent] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [plan, setPlan] = useState<AssessmentPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const generate = useServerFn(generateAssessment);
   const step = STEPS[stepIdx];
-  const progress = Math.round(((stepIdx + (plan ? 1 : 0)) / STEPS.length) * 100);
+
+  // Progress: only count Q1–Q10
+  const countedIdx = COUNTED_ORDER.indexOf(step as any);
+  const questionNumber = countedIdx >= 0 ? countedIdx + 1 : step === "name" ? 0 : 10;
+  const percent = Math.round((Math.max(0, questionNumber - (step === "email" ? 0 : 1)) / 10) * 100);
+  const showCounter = step !== "name" && step !== "email";
 
   const transcriptRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" });
-  }, [stepIdx, plan]);
+  }, [stepIdx]);
 
   function next() {
     setStepIdx((i) => Math.min(i + 1, STEPS.length - 1));
@@ -125,14 +491,29 @@ function AssessmentPage() {
     setError(null);
     setSubmitting(true);
     try {
-      const { plan } = await generate({
+      const localPlan = computePlan(answers);
+      const payloadAnswers: AssessmentAnswers = {
+        name: answers.name,
+        q1_stage: answers.q1,
+        q2_sector: answers.q2,
+        q3_work: answers.q3,
+        q4_issues: answers.q4,
+        q5_location: answers.q5,
+        q6_tradeoff: answers.q6,
+        q7_timeline: answers.q7,
+        q8_have: answers.q8,
+        q9_authorization: answers.q9 as AssessmentAnswers["q9_authorization"],
+        q10_blocker: answers.q10,
+      };
+      const { plan: returned } = await generate({
         data: {
           email: email.trim(),
-          consentNewsletter: consent,
-          answers,
+          consentNewsletter: true,
+          answers: payloadAnswers,
+          plan: localPlan,
         },
       });
-      setPlan(plan);
+      setPlan(returned ?? localPlan);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
     } finally {
@@ -143,13 +524,11 @@ function AssessmentPage() {
   function reset() {
     setPlan(null);
     setStepIdx(0);
-    setAnswers({ name: "", interests: [], stage: "", blocker: "", nonNegotiables: [], strengths: "", network: "" });
+    setAnswers(EMPTY);
     setEmail("");
-    setConsent(true);
     setError(null);
   }
 
-  // ---------- Results view ----------
   if (plan) {
     return (
       <SiteLayout>
@@ -158,19 +537,18 @@ function AssessmentPage() {
     );
   }
 
-  // ---------- Stepper view ----------
   return (
     <SiteLayout>
       <section className="border-b border-border bg-paper">
         <div className="mx-auto max-w-3xl px-6 py-12 lg:py-16 lg:px-10">
           <div className="eyebrow flex items-center gap-2 text-emerald">
-            <Sparkles className="h-3.5 w-3.5" /> 2-minute assessment
+            <Sparkles className="h-3.5 w-3.5" /> 3-minute assessment
           </div>
           <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
             Find your path in global affairs.
           </h1>
           <p className="mt-3 text-base text-muted-foreground">
-            A short conversation. A personalized career map. No generic advice.
+            A short conversation with a mentor. A personalized career map at the end. No generic advice.
           </p>
         </div>
       </section>
@@ -180,11 +558,34 @@ function AssessmentPage() {
           {/* Progress bar */}
           <div className="mb-6">
             <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-wider text-muted-foreground">
-              <span>Step {Math.min(stepIdx + 1, STEPS.length)} of {STEPS.length}</span>
-              <span>{progress}%</span>
+              <span>
+                {showCounter
+                  ? `Question ${questionNumber} of 10`
+                  : step === "name"
+                    ? "Warm-up"
+                    : "Almost done"}
+              </span>
+              <span>
+                {step === "email"
+                  ? "100%"
+                  : showCounter
+                    ? `${Math.round(((questionNumber - 1) / 10) * 100)}%`
+                    : "0%"}
+              </span>
             </div>
             <div className="h-1 w-full overflow-hidden bg-border">
-              <div className="h-full bg-navy-deep transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+              <div
+                className="h-full bg-navy-deep transition-all duration-500 ease-out"
+                style={{
+                  width: `${
+                    step === "email"
+                      ? 100
+                      : showCounter
+                        ? ((questionNumber - 1) / 10) * 100
+                        : 0
+                  }%`,
+                }}
+              />
             </div>
           </div>
 
@@ -194,7 +595,14 @@ function AssessmentPage() {
             className="max-h-[60vh] overflow-y-auto border border-border bg-paper p-5 lg:p-8 space-y-5 shadow-sm"
           >
             {STEPS.slice(0, stepIdx + 1).map((s, i) => (
-              <Turn key={s} stepKey={s} answers={answers} email={email} isCurrent={i === stepIdx} />
+              <Turn
+                key={s}
+                stepKey={s}
+                answers={answers}
+                email={email}
+                isCurrent={i === stepIdx}
+                prevKey={i > 0 ? STEPS[i - 1] : null}
+              />
             ))}
           </div>
 
@@ -206,8 +614,6 @@ function AssessmentPage() {
               setAnswers={setAnswers}
               email={email}
               setEmail={setEmail}
-              consent={consent}
-              setConsent={setConsent}
               onNext={next}
               onSubmit={submit}
               submitting={submitting}
@@ -234,30 +640,58 @@ function AssessmentPage() {
 }
 
 // -----------------------------------------------------------------------------
-// Chat "turn" — the mentor question + your answer summary
+// Chat "turn"
 // -----------------------------------------------------------------------------
+
+function reactionFor(prevKey: QKey | null, answers: LocalAnswers): string | null {
+  if (!prevKey || prevKey === "name" || prevKey === "email") {
+    if (prevKey === "name" && answers.name) return `Nice to meet you, ${answers.name}. Let's do this.`;
+    return null;
+  }
+  const q = Q[prevKey as Exclude<QKey, "name" | "email">];
+  const chosen =
+    prevKey === "q4" || prevKey === "q8"
+      ? (answers[prevKey] as string[])[0]
+      : (answers[prevKey] as string);
+  if (!chosen) return null;
+  if (q.reactions && q.reactions[chosen]) return q.reactions[chosen];
+  return q.defaultReaction ?? null;
+}
 
 function Turn({
   stepKey,
   answers,
   email,
   isCurrent,
+  prevKey,
 }: {
-  stepKey: StepKey;
-  answers: Answers;
+  stepKey: QKey;
+  answers: LocalAnswers;
   email: string;
   isCurrent: boolean;
+  prevKey: QKey | null;
 }) {
-  const question = QUESTIONS[stepKey];
+  const prompt = promptFor(stepKey, answers);
+  const helper = stepKey !== "name" && stepKey !== "email" ? Q[stepKey].helper : undefined;
   const answerSummary = summarize(stepKey, answers, email);
+  const reaction = reactionFor(prevKey, answers);
 
   return (
     <div className="space-y-3">
+      {reaction && (
+        <div className="flex gap-3">
+          <Avatar dim />
+          <p className="mt-1 text-xs italic text-muted-foreground">{reaction}</p>
+        </div>
+      )}
       <div className="flex gap-3">
         <Avatar />
         <div className="flex-1">
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">Your mentor</div>
-          <p className="mt-1 text-sm leading-relaxed text-navy-deep whitespace-pre-line">{question}</p>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">
+            {MENTOR}
+          </div>
+          <p className="mt-1 text-sm leading-relaxed text-navy-deep whitespace-pre-line">{prompt}</p>
+          {helper && <p className="mt-1 text-[11px] text-muted-foreground">{helper}</p>}
         </div>
       </div>
       {!isCurrent && answerSummary && (
@@ -271,169 +705,167 @@ function Turn({
   );
 }
 
-function Avatar() {
+function Avatar({ dim = false }: { dim?: boolean }) {
   return (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-navy-deep text-paper font-display text-xs">
+    <div
+      className={
+        "flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-display text-xs " +
+        (dim ? "bg-muted text-muted-foreground" : "bg-navy-deep text-paper")
+      }
+    >
       DD
     </div>
   );
 }
 
-const QUESTIONS: Record<StepKey, string> = {
-  interests: "Which area of global affairs pulls you the most?",
-  stage: "Where are you right now in your career?",
-  blocker: "What's the real thing in your way today?",
-  nonNegotiables: "Any non-negotiables I should know about?",
-  network: "How's your network in this space?",
-  email: "Drop your email and I'll generate your personalized plan.",
-};
+function promptFor(step: QKey, a: LocalAnswers): string {
+  if (step === "name") return "Before we start — what should I call you?";
+  if (step === "email") {
+    const name = a.name ? `${a.name}, ` : "";
+    return `${name}drop your email and I'll build your map.`;
+  }
+  return Q[step].prompt;
+}
 
-function summarize(step: StepKey, a: Answers, email: string): string | null {
+function summarize(step: QKey, a: LocalAnswers, email: string): string | null {
   switch (step) {
-    case "interests":
-      return a.interests.length ? a.interests.join(" · ") : null;
-    case "stage":
-      return a.stage || null;
-    case "blocker":
-      return a.blocker || null;
-    case "nonNegotiables":
-      return a.nonNegotiables.length ? a.nonNegotiables.join(" · ") : "None";
-    case "network":
-      return a.network || null;
+    case "name":
+      return a.name || null;
+    case "q4":
+      return a.q4.length ? a.q4.join(" · ") : null;
+    case "q8":
+      return a.q8.length ? a.q8.join(" · ") : null;
     case "email":
       return email || null;
+    default:
+      return (a[step] as string) || null;
   }
 }
 
 // -----------------------------------------------------------------------------
-// Active input area
+// Active input
 // -----------------------------------------------------------------------------
 
 function StepInput(props: {
-  step: StepKey;
-  answers: Answers;
-  setAnswers: (u: (a: Answers) => Answers) => void;
+  step: QKey;
+  answers: LocalAnswers;
+  setAnswers: (u: (a: LocalAnswers) => LocalAnswers) => void;
   email: string;
   setEmail: (s: string) => void;
-  consent: boolean;
-  setConsent: (b: boolean) => void;
   onNext: () => void;
   onSubmit: () => void;
   submitting: boolean;
   error: string | null;
 }) {
-  const { step, answers, setAnswers, email, setEmail, consent, setConsent, onNext, onSubmit, submitting, error } = props;
+  const { step, answers, setAnswers, email, setEmail, onNext, onSubmit, submitting, error } = props;
 
-  switch (step) {
-
-    case "interests":
-      return (
-        <ChipsMulti
-          options={INTERESTS}
-          values={answers.interests}
-          onToggle={(v) =>
-            setAnswers((a) => ({
-              ...a,
-              interests: a.interests.includes(v) ? a.interests.filter((x) => x !== v) : [...a.interests, v],
-            }))
-          }
-          onNext={onNext}
-          minRequired={1}
-        />
-      );
-
-    case "stage":
-      return (
-        <ChipsSingle
-          options={STAGES}
-          value={answers.stage}
-          onPick={(v) => {
-            setAnswers((a) => ({ ...a, stage: v }));
-            setTimeout(onNext, 200);
+  if (step === "name") {
+    return (
+      <div className="space-y-3">
+        <input
+          autoFocus
+          type="text"
+          value={answers.name}
+          onChange={(e) => setAnswers((a) => ({ ...a, name: e.target.value }))}
+          placeholder="First name"
+          maxLength={80}
+          className="w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && answers.name.trim()) onNext();
           }}
         />
-      );
-
-    case "blocker":
-      return (
-        <ChipsSingle
-          options={BLOCKERS}
-          value={answers.blocker}
-          onPick={(v) => {
-            setAnswers((a) => ({ ...a, blocker: v }));
-            setTimeout(onNext, 200);
-          }}
-        />
-      );
-
-    case "nonNegotiables":
-      return (
-        <ChipsMulti
-          options={NON_NEGOTIABLES}
-          values={answers.nonNegotiables}
-          onToggle={(v) =>
-            setAnswers((a) => ({
-              ...a,
-              nonNegotiables: a.nonNegotiables.includes(v)
-                ? a.nonNegotiables.filter((x) => x !== v)
-                : [...a.nonNegotiables, v],
-            }))
-          }
-          onNext={onNext}
-          allowEmpty
-        />
-      );
-
-
-    case "network":
-      return (
-        <ChipsSingle
-          options={NETWORK}
-          value={answers.network}
-          onPick={(v) => {
-            setAnswers((a) => ({ ...a, network: v }));
-            setTimeout(onNext, 200);
-          }}
-        />
-      );
-
-    case "email":
-      return (
-        <div className="space-y-3">
-          <input
-            autoFocus
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className="w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-          />
-          <p className="text-[11px] text-muted-foreground">
-            We'll email a copy of your plan and occasional opportunity briefings. Unsubscribe anytime.
-          </p>
-          <input type="hidden" value={consent ? "1" : "0"} onChange={() => setConsent(true)} />
-          {error && <div className="border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">{error}</div>}
-          <button
-            onClick={onSubmit}
-            disabled={submitting || !/^\S+@\S+\.\S+$/.test(email)}
-            className="inline-flex w-full items-center justify-center gap-2 bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy disabled:opacity-50"
-          >
-            {submitting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Building your plan…
-              </>
-            ) : (
-              <>
-                Get my results <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </button>
-        </div>
-      );
+        <PrimaryNext onClick={onNext} disabled={!answers.name.trim()}>
+          Start
+        </PrimaryNext>
+      </div>
+    );
   }
+
+  if (step === "email") {
+    return (
+      <div className="space-y-3">
+        <input
+          autoFocus
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          className="w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
+        />
+        <p className="text-[11px] text-muted-foreground">
+          We'll email a copy of your plan. Unsubscribe anytime.
+        </p>
+        {error && (
+          <div className="border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+            {error}
+          </div>
+        )}
+        <button
+          onClick={onSubmit}
+          disabled={submitting || !/^\S+@\S+\.\S+$/.test(email)}
+          className="inline-flex w-full items-center justify-center gap-2 bg-navy-deep px-5 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy disabled:opacity-50"
+        >
+          {submitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" /> Building your map…
+            </>
+          ) : (
+            <>
+              Get my map <ArrowRight className="h-4 w-4" />
+            </>
+          )}
+        </button>
+      </div>
+    );
+  }
+
+  const q = Q[step];
+  const isMulti = !!q.multi;
+
+  if (isMulti) {
+    const values = answers[step as "q4" | "q8"];
+    const max = q.multi!.max;
+    return (
+      <ChipsMulti
+        options={q.options!}
+        values={values}
+        max={max}
+        onToggle={(v) =>
+          setAnswers((a) => {
+            const cur = a[step as "q4" | "q8"];
+            if (cur.includes(v)) {
+              return { ...a, [step]: cur.filter((x) => x !== v) };
+            }
+            if (cur.length >= max) return a;
+            return { ...a, [step]: [...cur, v] };
+          })
+        }
+        onNext={onNext}
+      />
+    );
+  }
+
+  return (
+    <ChipsSingle
+      options={q.options!}
+      value={answers[step as "q1"] as string}
+      onPick={(v) => {
+        setAnswers((a) => ({ ...a, [step]: v }));
+        setTimeout(onNext, 250);
+      }}
+    />
+  );
 }
 
-function PrimaryNext({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
+function PrimaryNext({
+  onClick,
+  disabled,
+  children,
+}: {
+  onClick: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <button
       onClick={onClick}
@@ -445,7 +877,15 @@ function PrimaryNext({ onClick, disabled, children }: { onClick: () => void; dis
   );
 }
 
-function ChipsSingle({ options, value, onPick }: { options: string[]; value: string; onPick: (v: string) => void }) {
+function ChipsSingle({
+  options,
+  value,
+  onPick,
+}: {
+  options: string[];
+  value: string;
+  onPick: (v: string) => void;
+}) {
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((o) => {
@@ -474,31 +914,31 @@ function ChipsMulti({
   values,
   onToggle,
   onNext,
-  minRequired,
-  allowEmpty,
+  max,
 }: {
   options: string[];
   values: string[];
   onToggle: (v: string) => void;
   onNext: () => void;
-  minRequired?: number;
-  allowEmpty?: boolean;
+  max: number;
 }) {
-  const canNext = allowEmpty || values.length >= (minRequired ?? 1);
+  const canNext = values.length >= 1;
   return (
     <div>
       <div className="flex flex-wrap gap-2">
         {options.map((o) => {
           const active = values.includes(o);
+          const disabled = !active && values.length >= max;
           return (
             <button
               key={o}
               onClick={() => onToggle(o)}
+              disabled={disabled}
               className={
                 "inline-flex items-center gap-1.5 border px-3.5 py-2 text-xs transition-colors " +
                 (active
                   ? "border-navy-deep bg-navy-deep text-paper"
-                  : "border-border bg-paper text-navy-deep hover:border-navy-deep")
+                  : "border-border bg-paper text-navy-deep hover:border-navy-deep disabled:opacity-30")
               }
             >
               {active && <Check className="h-3 w-3" />} {o}
@@ -506,7 +946,9 @@ function ChipsMulti({
           );
         })}
       </div>
-      <PrimaryNext onClick={onNext} disabled={!canNext}>Continue</PrimaryNext>
+      <PrimaryNext onClick={onNext} disabled={!canNext}>
+        Continue
+      </PrimaryNext>
     </div>
   );
 }
@@ -522,47 +964,203 @@ function ResultsView({
   onRestart,
 }: {
   plan: AssessmentPlan;
-  answers: Answers;
+  answers: LocalAnswers;
   email: string;
   onRestart: () => void;
 }) {
-  const archetype = plan.recommendedTier;
-  
+  const [shared, setShared] = useState(false);
+  const name = answers.name || "friend";
+  const shareText = useMemo(
+    () => `My Discover Diplomacy archetype: ${plan.archetype}. Find yours →`,
+    [plan.archetype],
+  );
+
+  async function shareArchetype() {
+    const url = "https://discoverdiplomacy.org/assessment";
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Discover Diplomacy", text: shareText, url });
+        setShared(true);
+        return;
+      } catch {
+        /* fallthrough */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(`${shareText} ${url}`);
+      setShared(true);
+    } catch {
+      /* ignore */
+    }
+  }
+
   return (
-    <section className="bg-paper">
-      <div className="mx-auto max-w-2xl px-6 py-16 lg:py-24 lg:px-10 text-center">
-        <div className="eyebrow text-emerald">Your archetype</div>
-        <h1 className="mt-3 font-display text-4xl text-navy-deep lg:text-5xl">
-          {plan.paths[0]?.title ?? archetype}
-        </h1>
-        <p className="mt-6 text-base leading-relaxed text-navy-deep/80">{plan.summary}</p>
-        <p className="mt-4 text-[11px] text-muted-foreground">
-          A copy of this has been sent to {email}.
-        </p>
-
-        <div className="mt-10 flex flex-col gap-3">
-          <Link
-            to="/directory"
-            className="inline-flex w-full items-center justify-center gap-2 bg-navy-deep px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
-          >
-            See opportunities matched to your path <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link
-            to="/waitlist"
-            search={{ interest: "compass" }}
-            className="inline-flex w-full items-center justify-center gap-2 border border-navy-deep px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-navy-deep hover:text-paper"
-          >
-            Start Compass
-          </Link>
+    <>
+      {/* Header */}
+      <section className="border-b border-border bg-paper">
+        <div className="mx-auto max-w-3xl px-6 py-14 lg:py-20 lg:px-10">
+          <div className="eyebrow text-emerald">Your map</div>
+          <h1 className="mt-3 font-display text-4xl text-navy-deep lg:text-5xl">
+            {name}, here's your map.
+          </h1>
+          <p className="mt-5 text-lg leading-relaxed text-navy-deep/85">{plan.summary}</p>
+          <p className="mt-4 text-xs text-muted-foreground">
+            A copy has been sent to {email}. Your archetype: <strong>{plan.archetype}</strong>.
+          </p>
         </div>
+      </section>
 
-        <button
-          onClick={onRestart}
-          className="mt-8 text-[11px] uppercase tracking-wider text-muted-foreground hover:text-navy-deep"
-        >
-          Retake assessment
-        </button>
+      {/* Primary path */}
+      <section className="bg-stone">
+        <div className="mx-auto max-w-3xl px-6 py-12 lg:py-16 lg:px-10">
+          <div className="eyebrow mb-3 text-emerald">Your primary path</div>
+          <PathCard path={plan.primary} featured />
+        </div>
+      </section>
+
+      {/* Adjacent paths */}
+      <section className="bg-paper">
+        <div className="mx-auto max-w-3xl px-6 py-12 lg:py-16 lg:px-10">
+          <div className="eyebrow mb-3">Also worth exploring</div>
+          <div className="grid gap-5 md:grid-cols-2">
+            {plan.adjacent.map((p) => (
+              <PathCard key={p.title} path={p} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 90-day plan */}
+      <section className="bg-stone">
+        <div className="mx-auto max-w-3xl px-6 py-12 lg:py-16 lg:px-10">
+          <div className="eyebrow mb-3 text-emerald">Your 90-day plan</div>
+          <h2 className="font-display text-2xl text-navy-deep lg:text-3xl">
+            What I'd have you do next.
+          </h2>
+          <div className="mt-8 space-y-6">
+            <Phase label="Days 0–30" items={plan.days0to30} />
+            <Phase label="Days 30–60" items={plan.days30to60} />
+            <Phase label="Days 60–90" items={plan.days60to90} />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-paper">
+        <div className="mx-auto max-w-2xl px-6 py-14 lg:py-20 lg:px-10 text-center">
+          <h2 className="font-display text-3xl text-navy-deep lg:text-4xl">
+            Want this plan tracked, not just read?
+          </h2>
+          <p className="mt-4 text-base text-muted-foreground">
+            Compass is the members' toolkit: your plan, the directory, the digest, the AI resume score, and the community — all in one place.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <Link
+              to="/pricing"
+              className="inline-flex items-center justify-center gap-2 bg-navy-deep px-8 py-4 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+            >
+              Start Compass — your plan, tracked <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/coaches"
+              className="text-xs uppercase tracking-wider text-navy-deep underline hover:text-emerald"
+            >
+              Or book a single session with a vetted coach →
+            </Link>
+          </div>
+
+          <div className="mt-12 border-t border-border pt-8">
+            <button
+              onClick={shareArchetype}
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground hover:text-navy-deep"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+              {shared ? "Copied — share your archetype" : "Share your result"}
+            </button>
+            <div className="mt-3 text-[11px] text-muted-foreground">
+              Only your archetype name is shared. Your answers stay private.
+            </div>
+          </div>
+
+          <button
+            onClick={onRestart}
+            className="mt-10 text-[11px] uppercase tracking-wider text-muted-foreground hover:text-navy-deep"
+          >
+            Retake assessment
+          </button>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function PathCard({
+  path,
+  featured = false,
+}: {
+  path: AssessmentPlan["primary"];
+  featured?: boolean;
+}) {
+  return (
+    <div
+      className={
+        "flex h-full flex-col border p-6 lg:p-8 " +
+        (featured ? "border-navy-deep bg-paper shadow-md" : "border-border bg-paper")
+      }
+    >
+      <h3
+        className={
+          "font-display text-navy-deep " + (featured ? "text-2xl lg:text-3xl" : "text-xl")
+        }
+      >
+        {path.title}
+      </h3>
+      <p className="mt-3 text-sm leading-relaxed text-navy-deep/85">{path.why}</p>
+
+      <div className="mt-5 space-y-3 text-xs">
+        <div>
+          <div className="font-semibold uppercase tracking-wider text-emerald">Example roles</div>
+          <div className="mt-1 text-navy-deep/80">{path.exampleRoles.join(" · ")}</div>
+        </div>
+        <div>
+          <div className="font-semibold uppercase tracking-wider text-emerald">
+            Target employers
+          </div>
+          <div className="mt-1 text-navy-deep/80">{path.exampleEmployers.join(", ")}</div>
+        </div>
       </div>
-    </section>
+
+      {path.directoryHref && (
+        <a
+          href={path.directoryHref}
+          className={
+            "mt-6 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider " +
+            (featured
+              ? "self-start bg-navy-deep px-4 py-2.5 text-paper hover:bg-navy"
+              : "text-navy-deep hover:text-emerald")
+          }
+        >
+          See live {path.title} opportunities <ArrowRight className="h-3.5 w-3.5" />
+        </a>
+      )}
+    </div>
+  );
+}
+
+function Phase({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div className="border-l-2 border-navy-deep pl-5">
+      <div className="font-display text-sm font-semibold uppercase tracking-wider text-navy-deep">
+        {label}
+      </div>
+      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-navy-deep/85">
+        {items.map((it, i) => (
+          <li key={i} className="flex gap-3">
+            <span className="text-emerald">→</span>
+            <span>{it}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
