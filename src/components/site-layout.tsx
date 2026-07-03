@@ -40,9 +40,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             onClick={() => setOpen(false)}
           >
             <img
+              key={pathname}
               src={logoAsset.url}
               alt="Discover Diplomacy"
-              className="h-9 w-9 shrink-0"
+              className="h-9 w-9 shrink-0 nav-logo-spin"
             />
             <div className="min-w-0 leading-tight">
               <div className="truncate font-display text-[18px] font-semibold text-navy-deep">
