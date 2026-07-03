@@ -253,29 +253,19 @@ function Stats() {
 function Founder() {
   return (
     <section className="border-b border-border bg-stone">
-      <div className="mx-auto max-w-5xl px-6 py-24 lg:px-10 lg:py-32">
-        <Reveal className="grid gap-12 lg:grid-cols-12 lg:items-center">
-          <div className="lg:col-span-4">
-            <div
-              aria-hidden
-              className="mx-auto flex h-48 w-48 items-center justify-center rounded-lg border border-border bg-paper font-display text-6xl text-navy-deep lg:mx-0"
-            >
-              M
-            </div>
-          </div>
-          <div className="lg:col-span-8">
-            <div className="eyebrow">Why we built this</div>
-            <p className="mt-6 font-display text-2xl leading-snug text-navy-deep lg:text-[28px]">
-              "Talented people were losing the international careers they wanted
-              because no one told them how the doors actually open."
-            </p>
-            <p className="mt-6 text-muted-foreground">
-              Discover Diplomacy is the platform I wish I'd had — a real directory,
-              honest preparation, and access to people who've walked the path.
-            </p>
-            <div className="mt-6 text-sm font-medium text-navy-deep">
-              Max Okamura · Founder & CEO, Discover Diplomacy
-            </div>
+      <div className="mx-auto max-w-3xl px-6 py-24 lg:px-10 lg:py-32">
+        <Reveal>
+          <div className="eyebrow">Why we built this</div>
+          <p className="mt-6 font-display text-2xl leading-snug text-navy-deep lg:text-[28px]">
+            "Talented people were losing the international careers they wanted
+            because no one told them how the doors actually open."
+          </p>
+          <p className="mt-6 text-muted-foreground">
+            Discover Diplomacy is the platform I wish I'd had — a real directory,
+            honest preparation, and access to people who've walked the path.
+          </p>
+          <div className="mt-6 text-sm font-medium text-navy-deep">
+            Max Okamura · Founder & CEO, Discover Diplomacy
           </div>
         </Reveal>
       </div>
