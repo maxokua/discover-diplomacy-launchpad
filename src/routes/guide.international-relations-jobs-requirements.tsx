@@ -98,6 +98,7 @@ export const Route = createFileRoute("/guide/international-relations-jobs-requir
 function GuidePage() {
   return (
     <SiteLayout>
+      <ScrollCompass />
       <article>
         <Hero />
         <TableOfContents />
