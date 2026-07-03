@@ -526,118 +526,45 @@ function ResultsView({
   email: string;
   onRestart: () => void;
 }) {
-  function handleDownload() {
-    if (typeof window !== "undefined") window.print();
-  }
-
+  const archetype = plan.recommendedTier;
+  const directoryFilter = answers.interests[0] ?? "";
   return (
-    <>
-      <section className="border-b border-border bg-paper print:border-0">
-        <div className="mx-auto max-w-4xl px-6 py-10 lg:py-14 lg:px-10">
-          <div className="eyebrow text-emerald">Your personalized plan</div>
-          <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-            {answers.name ? `${answers.name}, here's your map.` : "Here's your map."}
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-navy-deep/80">{plan.summary}</p>
-          <div className="mt-6 flex flex-wrap gap-3 print:hidden">
-            <button
-              onClick={handleDownload}
-              className="inline-flex items-center gap-2 bg-navy-deep px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
-            >
-              <Download className="h-4 w-4" /> Download PDF
-            </button>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 border border-navy-deep px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-navy-deep hover:text-paper"
-            >
-              Schedule a free consultation <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <button
-              onClick={onRestart}
-              className="text-xs uppercase tracking-wider text-muted-foreground hover:text-navy-deep"
-            >
-              Retake assessment
-            </button>
-          </div>
-          <p className="mt-3 text-[11px] text-muted-foreground print:hidden">
-            We've emailed your plan to <span className="font-medium text-navy-deep">{email}</span>. Check spam if you don't see it within a few minutes.
-          </p>
-        </div>
-      </section>
+    <section className="bg-paper">
+      <div className="mx-auto max-w-2xl px-6 py-16 lg:py-24 lg:px-10 text-center">
+        <div className="eyebrow text-emerald">Your archetype</div>
+        <h1 className="mt-3 font-display text-4xl text-navy-deep lg:text-5xl">
+          {plan.paths[0]?.title ?? archetype}
+        </h1>
+        <p className="mt-6 text-base leading-relaxed text-navy-deep/80">{plan.summary}</p>
+        <p className="mt-4 text-[11px] text-muted-foreground">
+          A copy of this has been sent to {email}.
+        </p>
 
-      {/* Paths */}
-      <section className="bg-stone print:bg-paper">
-        <div className="mx-auto max-w-4xl px-6 py-12 lg:py-16 lg:px-10">
-          <SectionHeader eyebrow="Recommended paths" title="Three directions that fit you" />
-          <div className="mt-6 grid gap-px bg-border md:grid-cols-3">
-            {plan.paths.map((p, i) => (
-              <div key={i} className="flex h-full flex-col bg-paper p-6">
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">Path 0{i + 1}</div>
-                <h3 className="mt-2 font-display text-lg text-navy-deep">{p.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-navy-deep/80">{p.why}</p>
-                <div className="mt-5">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Example roles</div>
-                  <ul className="mt-2 space-y-1 text-sm text-navy-deep">
-                    {p.exampleRoles.map((r) => <li key={r}>· {r}</li>)}
-                  </ul>
-                </div>
-                <div className="mt-5">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Target employers</div>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {p.exampleEmployers.map((e) => (
-                      <span key={e} className="border border-border bg-stone px-2 py-0.5 text-[11px] text-navy-deep">{e}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="mt-10 flex flex-col gap-3">
+          <Link
+            to="/directory"
+            search={{ area: directoryFilter }}
+            className="inline-flex w-full items-center justify-center gap-2 bg-navy-deep px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+          >
+            See opportunities matched to your path <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            to="/waitlist"
+            search={{ interest: "compass" }}
+            className="inline-flex w-full items-center justify-center gap-2 border border-navy-deep px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-navy-deep hover:text-paper"
+          >
+            Start Compass
+          </Link>
         </div>
-      </section>
 
-      {/* 90 day plan */}
-      <section className="border-t border-border bg-paper">
-        <div className="mx-auto max-w-4xl px-6 py-12 lg:py-16 lg:px-10">
-          <SectionHeader eyebrow="90-day action plan" title="What to do, in order" />
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
-            <PlanBucket label="Days 0–30" items={plan.ninetyDayPlan.days0to30} />
-            <PlanBucket label="Days 30–60" items={plan.ninetyDayPlan.days30to60} />
-            <PlanBucket label="Days 60–90" items={plan.ninetyDayPlan.days60to90} />
-          </div>
-        </div>
-      </section>
-
-      {/* Networking + Resume */}
-      <section className="border-t border-border bg-stone print:bg-paper">
-        <div className="mx-auto grid max-w-4xl gap-px bg-border px-6 py-12 md:grid-cols-2 lg:py-16 lg:px-10">
-          <ListBlock title="Networking strategy" items={plan.networkingStrategy} />
-          <ListBlock title="Resume updates" items={plan.resumeUpdates} />
-        </div>
-      </section>
-
-      {/* Tier recommendation */}
-      <section className="border-t border-border bg-navy-deep text-paper print:bg-paper print:text-navy-deep">
-        <div className="mx-auto max-w-4xl px-6 py-12 lg:py-16 lg:px-10">
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald">Recommended for you</div>
-          <h2 className="mt-3 font-display text-2xl lg:text-3xl">{plan.recommendedTier}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-paper/80 print:text-navy-deep/80">{plan.tierRationale}</p>
-          <div className="mt-6 flex flex-wrap gap-3 print:hidden">
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 bg-paper px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-paper/90"
-            >
-              See {plan.recommendedTier} <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 border border-paper/40 px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-paper hover:border-paper"
-            >
-              Talk to a coach first
-            </Link>
-          </div>
-        </div>
-      </section>
-    </>
+        <button
+          onClick={onRestart}
+          className="mt-8 text-[11px] uppercase tracking-wider text-muted-foreground hover:text-navy-deep"
+        >
+          Retake assessment
+        </button>
+      </div>
+    </section>
   );
 }
 
