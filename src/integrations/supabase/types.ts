@@ -344,6 +344,57 @@ export type Database = {
         }
         Relationships: []
       }
+      coaches: {
+        Row: {
+          avatar_kind: string
+          background: string
+          created_at: string
+          id: string
+          is_sample: boolean
+          languages: string[]
+          name: string
+          photo_url: string | null
+          price_per_session_cents: number
+          slug: string
+          sort_order: number
+          specialties: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_kind?: string
+          background: string
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          languages?: string[]
+          name: string
+          photo_url?: string | null
+          price_per_session_cents?: number
+          slug: string
+          sort_order?: number
+          specialties?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_kind?: string
+          background?: string
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          languages?: string[]
+          name?: string
+          photo_url?: string | null
+          price_per_session_cents?: number
+          slug?: string
+          sort_order?: number
+          specialties?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -861,28 +912,73 @@ export type Database = {
         }
         Relationships: []
       }
+      plan_task_progress: {
+        Row: {
+          checked: boolean
+          created_at: string
+          id: string
+          phase: string
+          task_index: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          checked?: boolean
+          created_at?: string
+          id?: string
+          phase: string
+          task_index: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          checked?: boolean
+          created_at?: string
+          id?: string
+          phase?: string
+          task_index?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          archetype: string | null
+          assessment_answers: Json | null
           created_at: string
+          dashboard_role: string
           email: string | null
           full_name: string | null
           id: string
+          onboarding_complete: boolean
+          plan: string
           service_tier: string | null
           updated_at: string
         }
         Insert: {
+          archetype?: string | null
+          assessment_answers?: Json | null
           created_at?: string
+          dashboard_role?: string
           email?: string | null
           full_name?: string | null
           id: string
+          onboarding_complete?: boolean
+          plan?: string
           service_tier?: string | null
           updated_at?: string
         }
         Update: {
+          archetype?: string | null
+          assessment_answers?: Json | null
           created_at?: string
+          dashboard_role?: string
           email?: string | null
           full_name?: string | null
           id?: string
+          onboarding_complete?: boolean
+          plan?: string
           service_tier?: string | null
           updated_at?: string
         }
