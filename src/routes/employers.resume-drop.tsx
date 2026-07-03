@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
-import { getPlacementFees, requestEmployerAccess } from "@/lib/resume-drop.functions";
+import { requestEmployerAccess } from "@/lib/resume-drop.functions";
 
 export const Route = createFileRoute("/employers/resume-drop")({
   head: () => ({
@@ -28,14 +28,7 @@ export const Route = createFileRoute("/employers/resume-drop")({
   component: ResumeDropPage,
 });
 
-type Fees = Awaited<ReturnType<typeof getPlacementFees>>["fees"];
-
 function ResumeDropPage() {
-  const [fees, setFees] = useState<Fees | null>(null);
-
-  useEffect(() => {
-    getPlacementFees().then((r) => setFees(r.fees));
-  }, []);
 
   return (
     <SiteLayout>
