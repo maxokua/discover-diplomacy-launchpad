@@ -49,42 +49,41 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.5rem;
 
-  /* Brand palette — see BRAND.md §9 */
-  --navy-deep: #0E1E36;       /* primary dark grounds */
-  --navy: #15233D;            /* slightly lifted navy / heading ink */
-  --ink: #15233D;             /* headings */
-  --gilt: #C8A24A;            /* single accent: gold, used sparingly */
-  --azure: #2E6FB0;           /* secondary / links */
-  --paper: #FAFBFD;           /* light backgrounds */
-  --slate: #1F2838;           /* body text */
-  --muted-ink: #5C6675;       /* secondary text */
-  --hairline: #DBE1EA;        /* dividers */
-  --stone: #F1F3F7;           /* warm light surface */
-  /* Legacy alias retained for old utilities */
+  /* Brand palette */
+  --navy-deep: #0F2440;       /* primary */
+  --navy: #15233D;
+  --ink: #1A1A1A;             /* near-black text */
+  --gilt: #B8873A;            /* single warm accent — primary CTAs only */
+  --azure: #2E6FB0;
+  --paper: #FFFFFF;           /* clean white bg */
+  --slate: #1A1A1A;           /* body text */
+  --muted-ink: #5C6675;
+  --hairline: #E5E7EB;        /* subtle dividers */
+  --stone: #FAF9F6;           /* very subtle warm gray */
   --emerald: var(--gilt);
   --rule: var(--hairline);
 
-  --background: var(--paper);
-  --foreground: var(--slate);
+  --background: #FFFFFF;
+  --foreground: var(--ink);
   --card: #FFFFFF;
-  --card-foreground: var(--slate);
+  --card-foreground: var(--ink);
   --popover: #FFFFFF;
-  --popover-foreground: var(--slate);
+  --popover-foreground: var(--ink);
   --primary: var(--navy-deep);
-  --primary-foreground: var(--paper);
+  --primary-foreground: #FFFFFF;
   --secondary: var(--stone);
   --secondary-foreground: var(--navy-deep);
   --muted: var(--stone);
   --muted-foreground: var(--muted-ink);
   --accent: var(--gilt);
-  --accent-foreground: var(--navy-deep);
+  --accent-foreground: #FFFFFF;
   --destructive: oklch(0.50 0.22 27);
-  --destructive-foreground: var(--paper);
+  --destructive-foreground: #FFFFFF;
   --border: var(--hairline);
   --input: var(--hairline);
-  --ring: var(--navy);
+  --ring: var(--navy-deep);
 }
 
 .dark {
