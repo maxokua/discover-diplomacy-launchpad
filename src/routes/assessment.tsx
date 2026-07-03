@@ -325,20 +325,6 @@ function StepInput(props: {
   const { step, answers, setAnswers, email, setEmail, consent, setConsent, onNext, onSubmit, submitting, error } = props;
 
   switch (step) {
-    case "intro":
-      return (
-        <div>
-          <input
-            autoFocus
-            value={answers.name}
-            onChange={(e) => setAnswers((a) => ({ ...a, name: e.target.value }))}
-            onKeyDown={(e) => e.key === "Enter" && answers.name.trim() && onNext()}
-            placeholder="Your first name"
-            className="w-full border border-border bg-paper px-4 py-3 text-sm text-navy-deep focus:outline-none focus:ring-1 focus:ring-navy-deep"
-          />
-          <PrimaryNext onClick={onNext} disabled={!answers.name.trim()}>Start</PrimaryNext>
-        </div>
-      );
 
     case "interests":
       return (
