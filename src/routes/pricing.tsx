@@ -26,7 +26,8 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Simple pricing for different paths. Compass ($20/mo) or Envoy ($150/mo) for individuals. $20/student/mo for universities. Free + paid tiers for employers.",
+          "Simple pricing for different paths. Compass ($20/mo) for individuals. $20/student/mo for universities.",
+
       },
       { property: "og:title", content: "Pricing | Discover Diplomacy" },
       {
@@ -188,13 +189,10 @@ function IndividualsTab() {
           </div>
         </div>
 
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 lg:grid-cols-2 lg:px-10 lg:py-16">
+        <div className="mx-auto grid max-w-3xl gap-8 px-6 py-12 lg:px-10 lg:py-16">
           {/* Compass */}
           <Reveal>
             <div className="relative flex h-full flex-col border-2 border-navy-deep bg-paper p-8 lg:p-10">
-              <div className="absolute -top-3 left-8 inline-flex items-center gap-2 rounded-full bg-navy-deep px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-paper">
-                <Star className="h-3 w-3" /> Most popular
-              </div>
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-navy-deep/15 bg-navy-deep/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
                 <CompassIcon className="h-3 w-3" /> Self-directed
               </div>
@@ -237,53 +235,8 @@ function IndividualsTab() {
               </div>
             </div>
           </Reveal>
-
-          {/* Envoy */}
-          <Reveal delay={120}>
-            <div className="relative flex h-full flex-col border border-border bg-paper p-8 lg:p-10">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald/30 bg-emerald/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald">
-                <Sparkles className="h-3 w-3" /> Hands-on
-              </div>
-              <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">Envoy</h2>
-              <div className="mt-3 flex items-baseline gap-2">
-                <span className="font-display text-4xl text-navy-deep">{envoyPrice}</span>
-                <span className="text-sm text-muted-foreground">{envoyCadence}</span>
-              </div>
-              <p className="mt-1 text-xs text-emerald min-h-[1rem]">
-                {isAnnual
-                  ? `${PRICING.envoy.annualEquivalent} · ${PRICING.envoy.annualSavings}/yr`
-                  : ""}
-              </p>
-              <p className="mt-4 font-display text-base text-navy-deep">
-                Everything in Compass, plus:
-              </p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Recurring 1:1 time with vetted coaches, priority placement, and the intel briefings
-                serious job seekers ask for.
-              </p>
-              <ul className="mt-6 space-y-3">
-                {ENVOY_FEATURES.slice(1).map((i) => (
-                  <li key={i} className="flex gap-3 text-sm text-navy-deep/85">
-                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
-                    <span>{i}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8 pt-2">
-                <WaitlistButton
-                  interest="envoy"
-                  variant="emerald"
-                  className="w-full"
-                >
-                  Join the Envoy waitlist
-                </WaitlistButton>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  We're opening access in waves. No payment collected.
-                </p>
-              </div>
-            </div>
-          </Reveal>
         </div>
+
       </section>
 
       <section className="border-b border-border bg-stone">
