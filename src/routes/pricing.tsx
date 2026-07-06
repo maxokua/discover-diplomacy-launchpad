@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { WaitlistButton, useWaitlist, type WaitlistInterest } from "@/components/waitlist-dialog";
 import {
   Accordion,
   AccordionContent,
