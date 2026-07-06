@@ -2,12 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Check,
-  Star,
   Compass as CompassIcon,
-  Sparkles,
   GraduationCap,
   Building2,
 } from "lucide-react";
+
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
 import { WaitlistButton, useWaitlist, type WaitlistInterest } from "@/components/waitlist-dialog";
@@ -116,36 +115,21 @@ const COMPASS_FEATURES = [
   "Members-only community with priority Q&A",
 ];
 
-const ENVOY_FEATURES = [
-  "Everything in Compass, plus:",
-  "2 one-on-one sessions/month with vetted coaches (use for coaching, mock interviews, or reviews; extra sessions at member rate)",
-  "Priority Resume Drop placement & employer matching",
-  "Monthly live group workshops",
-  "Exclusive hiring intel briefings",
-];
-
 const FAQ: { q: string; a: string }[] = [
   {
-    q: "I'm not sure which tier is right for me.",
-    a: "Compass if you're self-directed and want the tools, intel, and members-only community to run your own search. Envoy if you want vetted coaches walking you through strategy, applications, and interviews. Most members start with Compass and upgrade to Envoy once they want hands-on guidance — you can switch anytime.",
-  },
-  {
-    q: "Can I switch between tiers?",
-    a: "Yes. Upgrade or downgrade anytime from your dashboard. If you upgrade mid-cycle, we prorate the difference.",
-  },
-  {
-    q: "Can I try coaching without Envoy?",
-    a: "Yes — single sessions are available through the coach directory at standard rates. Envoy just makes it recurring and priced for people who want ongoing support.",
+    q: "What does Compass include?",
+    a: "Tools, intel, and the members-only community — the resume tools, job board, weekly digest, Resume Drop eligibility, and priority Q&A. Everything you need to run your own search.",
   },
   {
     q: "Can I get a discount if I prepay annually?",
-    a: "Yes. Annual billing saves you ~20% on either tier — flip the toggle to see annual pricing.",
+    a: "Yes. Annual billing saves you ~20% — flip the toggle to see annual pricing.",
   },
   {
     q: "Do you offer need-based pricing?",
-    a: "If $20 or $150 a month is out of reach right now, email hello@discoverdiplomacy.org and we'll work something out.",
+    a: "If the monthly price is out of reach right now, email hello@discoverdiplomacy.org and we'll work something out.",
   },
 ];
+
 
 function IndividualsTab() {
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
@@ -153,8 +137,7 @@ function IndividualsTab() {
 
   const compassPrice = isAnnual ? PRICING.compass.annualLabel : PRICING.compass.priceLabel;
   const compassCadence = isAnnual ? PRICING.compass.annualCadence : PRICING.compass.cadence;
-  const envoyPrice = isAnnual ? PRICING.envoy.annualLabel : PRICING.envoy.priceLabel;
-  const envoyCadence = isAnnual ? PRICING.envoy.annualCadence : PRICING.envoy.cadence;
+
 
   return (
     <>
