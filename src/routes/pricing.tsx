@@ -228,15 +228,15 @@ function IndividualsTab() {
                 ))}
               </ul>
               <div className="mt-8 pt-2">
-                <Link
-                  to="/membership/checkout"
-                  search={{ tier: "compass", cadence: isAnnual ? "annual" : "monthly" }}
-                  className="inline-flex w-full items-center justify-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                <WaitlistButton
+                  interest="compass"
+                  variant="navy"
+                  className="w-full"
                 >
-                  Start with Compass
-                </Link>
+                  Join the Compass waitlist
+                </WaitlistButton>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. Monthly or annual (save 20%).
+                  We're opening access in waves. No payment collected.
                 </p>
               </div>
             </div>
