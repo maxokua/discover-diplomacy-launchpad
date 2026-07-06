@@ -1,11 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { z } from "zod";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
-import { createSubscriptionCheckout } from "@/lib/payments.functions";
 import { SiteLayout } from "@/components/site-layout";
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { useWaitlist, type WaitlistInterest } from "@/components/waitlist-dialog";
 
 const search = z.object({
   tier: z.enum(["compass", "envoy"]).default("compass"),
@@ -14,65 +11,39 @@ const search = z.object({
 
 export const Route = createFileRoute("/_authenticated/membership/checkout")({
   validateSearch: (s) => search.parse(s),
-  head: () => ({ meta: [{ title: "Start your plan | Discover Diplomacy" }] }),
-  component: MembershipCheckoutPage,
+  head: () => ({ meta: [{ title: "Join the waitlist | Discover Diplomacy" }] }),
+  component: MembershipWaitlistPage,
 });
 
-const COPY = {
-  compass: { name: "Compass", monthly: "$20 / month", annual: "$192 / year (save $48)" },
-  envoy: { name: "Envoy", monthly: "$150 / month", annual: "$1,440 / year (save $360)" },
-} as const;
+function MembershipWaitlistPage() {
+  const { tier } = Route.useSearch() as { tier: "compass" | "envoy" };
+  const { open } = useWaitlist();
+  const interest: WaitlistInterest = tier;
+  const label = tier === "envoy" ? "Envoy" : "Compass";
 
-function MembershipCheckoutPage() {
-  const { tier, cadence } = Route.useSearch() as {
-    tier: "compass" | "envoy";
-    cadence: "monthly" | "annual";
-  };
-  const copy = COPY[tier];
-  const price = cadence === "annual" ? copy.annual : copy.monthly;
-
-
-  const options = useMemo(
-    () => ({
-      fetchClientSecret: async () => {
-        const result = await createSubscriptionCheckout({
-          data: {
-            tier,
-            cadence,
-            environment: getStripeEnvironment(),
-            returnUrl:
-              window.location.origin +
-              "/membership/return?session_id={CHECKOUT_SESSION_ID}",
-          },
-        });
-        if ("error" in result) throw new Error(result.error);
-        if (!result.clientSecret) throw new Error("No client secret returned");
-        return result.clientSecret;
-      },
-    }),
-    [tier, cadence],
-  );
+  useEffect(() => {
+    open({ interest, title: `Join the ${label} waitlist` });
+  }, [open, interest, label]);
 
   return (
     <SiteLayout>
-      <PaymentTestModeBanner />
       <section className="bg-paper">
-        <div className="mx-auto max-w-4xl px-6 py-12 lg:px-10 lg:py-16">
-          <div className="eyebrow">Checkout</div>
+        <div className="mx-auto max-w-2xl px-6 py-20 lg:px-10">
+          <div className="eyebrow">Coming soon</div>
           <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
-            {copy.name} · {price}
+            {label} opens in waves.
           </h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Billed {cadence}. Cancel anytime from your dashboard.
+          <p className="mt-4 text-sm text-muted-foreground">
+            Payments aren't live yet. Join the waitlist and we'll email you the moment {label}{" "}
+            is available.
           </p>
-          <div className="mt-10">
-            <EmbeddedCheckoutProvider stripe={getStripe()} options={options}>
-              <EmbeddedCheckout />
-            </EmbeddedCheckoutProvider>
-          </div>
-          <p className="mt-6 text-xs text-muted-foreground">
-            <Link to="/services">← Compare plans</Link>
-          </p>
+          <button
+            type="button"
+            onClick={() => open({ interest, title: `Join the ${label} waitlist` })}
+            className="mt-8 inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+          >
+            Join the {label} waitlist
+          </button>
         </div>
       </section>
     </SiteLayout>
