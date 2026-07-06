@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "discover-diplomacy-mcp",
+      "version": "0.1.0",
+      "title": "Discover Diplomacy"
+    },
+    "tools": [
+      {
+        "name": "search_directory",
+        "title": "Search opportunity directory",
+        "description": "Search Discover Diplomacy's directory of international affairs opportunities (NGOs, think tanks, government, multilaterals, fellowships, internships).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Free-text query matched against name, description, and location.",
+              "type": "string"
+            },
+            "category": {
+              "description": "Optional category filter, e.g. 'NGO/IGO/Think Tank', 'Government', 'Fellowship'.",
+              "type": "string"
+            },
+            "location": {
+              "description": "Optional location substring, e.g. 'Washington DC', 'New York City', 'Online'.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Max results to return (default 20).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_directory_categories",
+        "title": "List directory categories",
+        "description": "List all categories available in the Discover Diplomacy opportunity directory, with counts.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_pricing",
+        "title": "Get Discover Diplomacy pricing",
+        "description": "Return current pricing tiers for candidates, employers, and universities on Discover Diplomacy.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

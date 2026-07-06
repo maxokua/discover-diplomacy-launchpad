@@ -19,6 +19,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MembershipRouteImport } from './routes/membership'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as EmployersRouteImport } from './routes/employers'
 import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -45,6 +46,8 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/coach'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AuthenticatedResumeReviewIndexRouteImport } from './routes/_authenticated/resume-review.index'
 import { Route as AuthenticatedResumeAnalysesIndexRouteImport } from './routes/_authenticated/resume-analyses.index'
 import { Route as AuthenticatedEmployerIndexRouteImport } from './routes/_authenticated/employer.index'
@@ -70,6 +73,7 @@ import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminUniversitiesRouteImport } from './routes/_authenticated/admin.universities'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as AuthenticatedAdminOrganizationsRouteImport } from './routes/_authenticated/admin.organizations'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AuthenticatedDashboardCoachingIndexRouteImport } from './routes/_authenticated/dashboard.coaching.index'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -128,6 +132,11 @@ const PricingRoute = PricingRouteImport.update({
 const MembershipRoute = MembershipRouteImport.update({
   id: '/membership',
   path: '/membership',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmployersRoute = EmployersRouteImport.update({
@@ -260,6 +269,18 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedResumeReviewIndexRoute =
   AuthenticatedResumeReviewIndexRouteImport.update({
     id: '/resume-review/',
@@ -406,6 +427,12 @@ const AuthenticatedAdminOrganizationsRoute =
     path: '/organizations',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedDashboardCoachingIndexRoute =
   AuthenticatedDashboardCoachingIndexRouteImport.update({
     id: '/coaching/',
@@ -472,6 +499,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
+  '/mcp': typeof McpRoute
   '/membership': typeof MembershipRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -482,6 +510,8 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/billing': typeof AuthenticatedBillingRoute
   '/coach': typeof AuthenticatedCoachRouteWithChildren
@@ -497,6 +527,7 @@ export interface FileRoutesByFullPath {
   '/employers/sample-profiles': typeof EmployersSampleProfilesRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
@@ -542,6 +573,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
+  '/mcp': typeof McpRoute
   '/membership': typeof MembershipRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -552,6 +584,8 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/university': typeof AuthenticatedUniversityRoute
@@ -563,6 +597,7 @@ export interface FileRoutesByTo {
   '/employers/sample-profiles': typeof EmployersSampleProfilesRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/coaches': typeof CoachesIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
@@ -611,6 +646,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
+  '/mcp': typeof McpRoute
   '/membership': typeof MembershipRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -621,6 +657,8 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/universities': typeof UniversitiesRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/coach': typeof AuthenticatedCoachRouteWithChildren
@@ -636,6 +674,7 @@ export interface FileRoutesById {
   '/employers/sample-profiles': typeof EmployersSampleProfilesRoute
   '/guide/international-relations-jobs-requirements': typeof GuideInternationalRelationsJobsRequirementsRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/organizations': typeof AuthenticatedAdminOrganizationsRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/universities': typeof AuthenticatedAdminUniversitiesRoute
@@ -684,6 +723,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/employers'
+    | '/mcp'
     | '/membership'
     | '/pricing'
     | '/privacy'
@@ -694,6 +734,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/universities'
     | '/unsubscribe'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/billing'
     | '/coach'
@@ -709,6 +751,7 @@ export interface FileRouteTypes {
     | '/employers/sample-profiles'
     | '/guide/international-relations-jobs-requirements'
     | '/coaches/'
+    | '/.mcp/invoke-tool/$tool'
     | '/admin/organizations'
     | '/admin/reviews'
     | '/admin/universities'
@@ -754,6 +797,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/employers'
+    | '/mcp'
     | '/membership'
     | '/pricing'
     | '/privacy'
@@ -764,6 +808,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/universities'
     | '/unsubscribe'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/billing'
     | '/profile'
     | '/university'
@@ -775,6 +821,7 @@ export interface FileRouteTypes {
     | '/employers/sample-profiles'
     | '/guide/international-relations-jobs-requirements'
     | '/coaches'
+    | '/.mcp/invoke-tool/$tool'
     | '/admin/organizations'
     | '/admin/reviews'
     | '/admin/universities'
@@ -822,6 +869,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/employers'
+    | '/mcp'
     | '/membership'
     | '/pricing'
     | '/privacy'
@@ -832,6 +880,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/universities'
     | '/unsubscribe'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
     | '/_authenticated/billing'
     | '/_authenticated/coach'
@@ -847,6 +897,7 @@ export interface FileRouteTypes {
     | '/employers/sample-profiles'
     | '/guide/international-relations-jobs-requirements'
     | '/coaches/'
+    | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/organizations'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/universities'
@@ -895,6 +946,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DirectoryRoute: typeof DirectoryRoute
   EmployersRoute: typeof EmployersRouteWithChildren
+  McpRoute: typeof McpRoute
   MembershipRoute: typeof MembershipRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -905,8 +957,11 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   UniversitiesRoute: typeof UniversitiesRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   GuideInternationalRelationsJobsRequirementsRoute: typeof GuideInternationalRelationsJobsRequirementsRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -984,6 +1039,13 @@ declare module '@tanstack/react-router' {
       path: '/membership'
       fullPath: '/membership'
       preLoaderRoute: typeof MembershipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/employers': {
@@ -1168,6 +1230,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/resume-review/': {
       id: '/_authenticated/resume-review/'
       path: '/resume-review'
@@ -1342,6 +1418,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/organizations'
       preLoaderRoute: typeof AuthenticatedAdminOrganizationsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard/coaching/': {
       id: '/_authenticated/dashboard/coaching/'
@@ -1597,6 +1680,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DirectoryRoute: DirectoryRoute,
   EmployersRoute: EmployersRouteWithChildren,
+  McpRoute: McpRoute,
   MembershipRoute: MembershipRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
@@ -1607,9 +1691,13 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   UniversitiesRoute: UniversitiesRoute,
   UnsubscribeRoute: UnsubscribeRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   GuideInternationalRelationsJobsRequirementsRoute:
     GuideInternationalRelationsJobsRequirementsRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
@@ -1619,3 +1707,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
