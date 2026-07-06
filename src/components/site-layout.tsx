@@ -160,7 +160,7 @@ function SiteFooter() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-8 lg:col-span-8 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 lg:col-span-8 lg:grid-cols-3">
           <FooterCol
             title="Candidates"
             links={[
@@ -171,18 +171,9 @@ function SiteFooter() {
             ]}
           />
           <FooterCol
-            title="Employers"
-            links={[
-              { to: "/employers", label: "For Employers" },
-              { to: "/employer/browse", label: "Browse Talent" },
-              { to: "/employers/apply", label: "Request Access" },
-            ]}
-          />
-          <FooterCol
             title="Universities"
             links={[
               { to: "/universities", label: "University Program" },
-              { to: "/coaches", label: "Coaches" },
             ]}
           />
           <FooterCol
