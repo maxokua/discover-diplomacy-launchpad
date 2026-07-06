@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
+import { WaitlistButton, useWaitlist, type WaitlistInterest } from "@/components/waitlist-dialog";
 import {
   Accordion,
   AccordionContent,
@@ -227,15 +228,15 @@ function IndividualsTab() {
                 ))}
               </ul>
               <div className="mt-8 pt-2">
-                <Link
-                  to="/membership/checkout"
-                  search={{ tier: "compass", cadence: isAnnual ? "annual" : "monthly" }}
-                  className="inline-flex w-full items-center justify-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
+                <WaitlistButton
+                  interest="compass"
+                  variant="navy"
+                  className="w-full"
                 >
-                  Start with Compass
-                </Link>
+                  Join the Compass waitlist
+                </WaitlistButton>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. Monthly or annual (save 20%).
+                  We're opening access in waves. No payment collected.
                 </p>
               </div>
             </div>
@@ -273,15 +274,15 @@ function IndividualsTab() {
                 ))}
               </ul>
               <div className="mt-8 pt-2">
-                <Link
-                  to="/membership/checkout"
-                  search={{ tier: "envoy", cadence: isAnnual ? "annual" : "monthly" }}
-                  className="inline-flex w-full items-center justify-center bg-emerald px-6 py-3 text-xs font-medium uppercase tracking-wider text-navy-deep hover:bg-emerald/90"
+                <WaitlistButton
+                  interest="envoy"
+                  variant="emerald"
+                  className="w-full"
                 >
-                  Start Envoy
-                </Link>
+                  Join the Envoy waitlist
+                </WaitlistButton>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Cancel anytime. Monthly or annual (save 20%).
+                  We're opening access in waves. No payment collected.
                 </p>
               </div>
             </div>
@@ -396,7 +397,19 @@ function UniversitiesTab() {
 // ─── Employers ──────────────────────────────────────────────────────────────
 
 function EmployersTab() {
-  const tiers = [
+  const { open } = useWaitlist();
+  type Tier = {
+    name: string;
+    price: string;
+    cadence: string;
+    body: string;
+    features: string[];
+    cta:
+      | { kind: "link"; label: string; to: string }
+      | { kind: "waitlist"; label: string; interest: WaitlistInterest };
+    tone: "default" | "feature";
+  };
+  const tiers: Tier[] = [
     {
       name: "Free",
       price: "$0",
@@ -407,8 +420,8 @@ function EmployersTab() {
         "Verified-employer badge after vetting",
         "Email alerts for new public profiles",
       ],
-      cta: { label: "Apply for access", to: "/employers/apply" },
-      tone: "default" as const,
+      cta: { kind: "link", label: "Apply for access", to: "/employers/apply" },
+      tone: "default",
     },
     {
       name: "Starter",
@@ -421,8 +434,8 @@ function EmployersTab() {
         "Member Pool browsing (Resume Drop)",
         "Direct contact through Discover Diplomacy",
       ],
-      cta: { label: "Get Starter", to: "/employers/apply" },
-      tone: "default" as const,
+      cta: { kind: "waitlist", label: "Join the waitlist", interest: "employer" },
+      tone: "default",
     },
     {
       name: "Professional",
@@ -436,8 +449,8 @@ function EmployersTab() {
         "Saved searches and alerts",
         "Priority support",
       ],
-      cta: { label: "Get Professional", to: "/employers/apply" },
-      tone: "feature" as const,
+      cta: { kind: "waitlist", label: "Join the waitlist", interest: "employer" },
+      tone: "feature",
     },
     {
       name: "À la carte",
@@ -450,8 +463,8 @@ function EmployersTab() {
         "Credits never expire",
         "Stackable with Starter or Professional",
       ],
-      cta: { label: "Buy credits", to: "/employers/apply" },
-      tone: "default" as const,
+      cta: { kind: "waitlist", label: "Join the waitlist", interest: "employer" },
+      tone: "default",
     },
   ];
 
@@ -466,49 +479,58 @@ function EmployersTab() {
                 Unlock vetted international talent.
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                Free tier lets you browse public candidates. Starter and Professional unlock the
-                Member Pool with monthly candidate credits.
+                Free tier lets you browse public candidates. Paid tiers open in waves — join
+                the waitlist to be first in.
               </p>
             </div>
           </Reveal>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {tiers.map((t, i) => (
-              <Reveal key={t.name} delay={i * 80}>
-                <div
-                  className={
-                    "flex h-full flex-col border bg-paper p-6 " +
-                    (t.tone === "feature" ? "border-2 border-emerald" : "border-border")
-                  }
-                >
-                  <h3 className="font-display text-2xl text-navy-deep">{t.name}</h3>
-                  <div className="mt-3 flex items-baseline gap-1">
-                    <span className="font-display text-3xl text-navy-deep">{t.price}</span>
-                    <span className="text-xs text-muted-foreground">{t.cadence}</span>
-                  </div>
-                  <p className="mt-3 text-sm text-muted-foreground">{t.body}</p>
-                  <ul className="mt-5 flex-1 space-y-2.5 text-sm">
-                    {t.features.map((f) => (
-                      <li key={f} className="flex gap-2.5 text-navy-deep/85">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    to={t.cta.to}
+            {tiers.map((t, i) => {
+              const ctaClass =
+                "mt-6 inline-flex items-center justify-center px-4 py-2.5 text-xs font-medium uppercase tracking-wider " +
+                (t.tone === "feature"
+                  ? "bg-emerald text-navy-deep hover:bg-emerald/90"
+                  : "bg-navy-deep text-paper hover:bg-navy");
+              return (
+                <Reveal key={t.name} delay={i * 80}>
+                  <div
                     className={
-                      "mt-6 inline-flex items-center justify-center px-4 py-2.5 text-xs font-medium uppercase tracking-wider " +
-                      (t.tone === "feature"
-                        ? "bg-emerald text-navy-deep hover:bg-emerald/90"
-                        : "bg-navy-deep text-paper hover:bg-navy")
+                      "flex h-full flex-col border bg-paper p-6 " +
+                      (t.tone === "feature" ? "border-2 border-emerald" : "border-border")
                     }
                   >
-                    {t.cta.label}
-                  </Link>
-                </div>
-              </Reveal>
-            ))}
+                    <h3 className="font-display text-2xl text-navy-deep">{t.name}</h3>
+                    <div className="mt-3 flex items-baseline gap-1">
+                      <span className="font-display text-3xl text-navy-deep">{t.price}</span>
+                      <span className="text-xs text-muted-foreground">{t.cadence}</span>
+                    </div>
+                    <p className="mt-3 text-sm text-muted-foreground">{t.body}</p>
+                    <ul className="mt-5 flex-1 space-y-2.5 text-sm">
+                      {t.features.map((f) => (
+                        <li key={f} className="flex gap-2.5 text-navy-deep/85">
+                          <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {t.cta.kind === "link" ? (
+                      <Link to={t.cta.to} className={ctaClass}>
+                        {t.cta.label}
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => open({ interest: t.cta.kind === "waitlist" ? t.cta.interest : "employer" })}
+                        className={ctaClass}
+                      >
+                        {t.cta.label}
+                      </button>
+                    )}
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
 
         </div>
@@ -516,3 +538,4 @@ function EmployersTab() {
     </>
   );
 }
+
