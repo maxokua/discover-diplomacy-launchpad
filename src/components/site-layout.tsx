@@ -12,7 +12,6 @@ const NAV_LINKS: NavLink[] = [
   { to: "/", label: "Home" },
   { to: "/directory", label: "Directory" },
   { to: "/pricing", label: "Pricing" },
-  { to: "/employers", label: "For Employers" },
 ];
 
 export function SiteLayout({ children }: { children: ReactNode }) {
