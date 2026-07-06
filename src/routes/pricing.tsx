@@ -41,14 +41,14 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
-type Tab = "individuals" | "universities" | "employers";
+type Tab = "individuals" | "universities";
 
 function PricingPage() {
   const [tab, setTab] = useState<Tab>("individuals");
   useEffect(() => {
     if (typeof window === "undefined") return;
     const p = new URLSearchParams(window.location.search).get("tab");
-    if (p === "individuals" || p === "universities" || p === "employers") setTab(p);
+    if (p === "individuals" || p === "universities") setTab(p);
   }, []);
 
   return (
@@ -72,16 +72,12 @@ function PricingPage() {
             <TabButton active={tab === "universities"} onClick={() => setTab("universities")}>
               For Universities
             </TabButton>
-            <TabButton active={tab === "employers"} onClick={() => setTab("employers")}>
-              For Employers
-            </TabButton>
           </div>
         </div>
       </section>
 
       {tab === "individuals" && <IndividualsTab />}
       {tab === "universities" && <UniversitiesTab />}
-      {tab === "employers" && <EmployersTab />}
     </SiteLayout>
   );
 }
