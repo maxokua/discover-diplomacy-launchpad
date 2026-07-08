@@ -202,8 +202,13 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
         maxRedemptions: number;
         duration: "forever" | "once";
       }) => {
-        const exists = await stripe.promotionCodes.list({ code: opts.code, limit: 1 });
-        if (exists.data.length) return;
+        const existing = await stripe.promotionCodes.list({ code: opts.code, limit: 1 });
+        if (existing.data.length) {
+          const current = existing.data[0];
+          if (current.max_redemptions === opts.maxRedemptions && current.active) return;
+          // max_redemptions is immutable — deactivate the old code and create a fresh one.
+          await stripe.promotionCodes.update(current.id, { active: false });
+        }
         let couponId: string | undefined;
         const coupons = await stripe.coupons.list({ limit: 100 });
         const match = coupons.data.find(
@@ -233,7 +238,7 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
           couponId: "iheartmax_100",
           percentOff: 100,
           name: "IHEARTMAX 100% off",
-          maxRedemptions: 25,
+          maxRedemptions: 1,
           duration: "forever",
         });
         await ensurePromo({
