@@ -1,70 +1,39 @@
-## Decisions locked in
-- **Compass stays $20/mo.** I'll use $20 everywhere the prompt says $35 — the rest of the messaging stays as you wrote it.
-- **Ship in one pass.** All 10 deliverables this turn.
-- **Rename routes with redirects:** `/services` → `/pricing`, `/coaches` → `/for-coaches`, `/employers` → `/for-employers`. Old URLs redirect via thin route files so existing links/SEO don't break.
-- **Create employer Stripe tiers:** Starter $30/mo, Professional $100/mo, à la carte unlock $18 one-time. Free tier = no Stripe product.
+# Save payments setup to project memory
 
-## What I'll build
+You're about to disconnect Stripe and reconnect a different account. When you do that, all products/prices in Stripe are gone and I'll be asked to set them up again. To avoid re-asking every question, I'll persist your decisions to project memory now so I can reapply them verbatim on reconnect.
 
-### 1. Navigation (`src/components/site-layout.tsx`)
-Header: Logo · **For Candidates ▾** (Compass, Envoy, Coach Directory, Resume Drop, Free Assessment, Sign In) · **For Universities ▾** (Program, Demo) · **For Employers ▾** (Browse, Pricing, Demo) · **For Coaches ▾** (Apply, Directory) · About · Contact.
-Mobile: accordion sections mirroring the dropdowns.
-Footer: 5 columns (Candidates / Universities / Employers / Coaches / Company) + social row.
+## What I'll remember
 
-### 2. Homepage (`src/routes/index.tsx`)
-- New hero: "Discover the opportunities. Prepare the materials. Get hired. Fast." + subhead + 3 CTAs (Start with Compass · See Envoy + Coaching · For universities).
-- **Three paths** section: Compass / Envoy / Universities cards (prompt copy, $20 not $35).
-- **Built for international careers** section: Clarity / Preparation / Access cards.
-- **Social proof** with the new numbers (X placements left as `—` for you to fill, won't fabricate).
-- Pre-footer university callout.
+**Active products (recreate in the new Stripe account):**
+- Compass Membership — $20/mo recurring — `price_id: compass_monthly` — tax_code `txcd_10103001`
+- Expert Resume Review — $25 one-time — `price_id: resume_review_onetime` — tax_code `txcd_10000000`
 
-### 3. Pricing page (`src/routes/pricing.tsx` — new, replaces /services)
-Three-tab layout (Individuals / Universities / Employers):
-- **Individuals:** keep existing Compass vs Envoy comparison, annual toggle, FAQ.
-- **Universities:** pull in the universities-page pricing block.
-- **Employers:** Free / Starter $30 / Pro $100 / $18 à la carte, with placement fee note.
-Old `/services` becomes a 1-line redirect → `/pricing`.
+**Hidden / waitlist only (do NOT create in Stripe, keep checkout hidden):**
+- Envoy ($150/mo)
+- Employer credits (Starter $30/mo, Professional $100/mo, à la carte $18/credit)
 
-### 4. `/for-coaches` (new, replaces /coaches/index)
-Existing content + clearer "Coaches earn a share of bookings. Apply to join." + visible link into the coach directory. `/coaches` → redirect.
+**Post-purchase business logic:**
+- Compass purchase → `subscriptions` row + `sync_user_service_tier` sets `profiles.service_tier='compass'` + HubSpot contact upsert (`dd_product=compass`, `dd_lifecycle=subscription_active`)
+- Resume Review purchase → `resume_reviews.status='paid'` + email ping to `max@discoverdiplomacy.org` (template `resume-review-request`) + HubSpot upsert. Reviews are performed manually by Max — no automated review.
+- Cancellation → keep access until `current_period_end` (already handled in `sync_user_service_tier`)
+- Upgrades/downgrades → not implemented yet
 
-### 5. `/for-employers` (new, replaces /employers)
-Existing content + Resume Drop section + tier clarification (Free=browse public, Starter/Pro=unlock Member Pool) + placement-fee block. `/employers` → redirect.
+**CRM:** HubSpot connector (`HUBSPOT_API_KEY`). Helper at `src/lib/crm/hubspot.server.ts` (`syncHubspotContact`). Fire-and-forget from webhook; never blocks checkout.
 
-### 6. `/about`
-Add audiences paragraph + "talent infrastructure layer" line. Light touch — preserve existing story.
+**Notify email:** `max@discoverdiplomacy.org` for new resume reviews.
 
-### 7. Stripe employer tiers
-Create products: `employer_starter` ($30/mo), `employer_professional` ($100/mo), `employer_unlock_credit` ($18 one-time, quantity 1–100). Wire into the Employers tab.
+## What you'll do
 
-### 8. Email templates (`src/lib/email-templates/`)
-Four React Email templates + registry entries:
-- `compass-welcome` — post-signup
-- `compass-upsell-30day` — low engagement nudge to Envoy
-- `university-cohort-monthly` — director report
-- `employer-first-unlock` — post-unlock guidance
-No sender wiring this turn (those triggers depend on data we haven't built); templates ship registered and previewable.
+1. Disconnect the current Stripe account from the Payments dashboard (three-dots menu → Disconnect Stripe).
+2. Reconnect the correct Stripe account.
+3. Tell me you're done — I'll recreate the two products above and confirm the webhook + HubSpot wiring still works. No re-asking about prices, hidden tiers, cancellation, or the reviewer email.
 
-### 9. Messaging guide (`MESSAGING.md`)
-Internal doc: old → new phrasing table, tier vocabulary, audience tone rules.
+## Technical details
 
-### 10. Global terminology pass
-Targeted ripgrep + replace across routes/components for:
-- "membership" (in candidate context) → "Compass" or "Compass or Envoy"
-- "platform" / "advisory practice" → "international career platform"
-- "$35" (residual) → "$20"
-- "Start a Membership" → "Start with Compass"
-Skip auto-generated files, types, migrations, and email-infra code.
+- Memory files updated: `mem://index.md` (Core rules) and `mem://features/active-pricing.md` (full decision record).
+- Code already in place and unchanged by the reconnect: checkout server functions, webhook handler, HubSpot sync helper, `resume-review-request` email template.
+- Only Stripe-side objects (products, prices, webhook secret) need to be recreated after reconnect; the `enable_stripe_payments` flow handles the webhook automatically.
 
-## What I'm NOT doing
-- Not changing `/membership` checkout flow — it already points to Compass/Envoy.
-- Not wiring email triggers (templates registered, send call sites later when each event source exists).
-- Not fabricating a placement count for social proof — leaving an editable placeholder.
-- Not touching authenticated dashboards' copy beyond what's already correct.
-
-## Verification
-- `tsgo` typecheck after writes.
-- Spot-check homepage, /pricing tabs, /for-coaches, /for-employers, /universities in preview.
-- Confirm old URLs redirect.
-
-Estimated: ~25–30 file writes. One pass, no follow-up questions.
+<presentation-actions>
+<presentation-open-payments>Open payments dashboard</presentation-open-payments>
+</presentation-actions>
