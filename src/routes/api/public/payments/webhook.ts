@@ -13,6 +13,24 @@ function getSupabase() {
   return _supabase;
 }
 
+async function getUserProfile(userId: string): Promise<{ email?: string; full_name?: string | null } | null> {
+  try {
+    const { data: profile } = await getSupabase()
+      .from("profiles")
+      .select("email, full_name")
+      .eq("id", userId)
+      .maybeSingle();
+    if (!profile) return null;
+    return {
+      email: (profile as any).email ?? undefined,
+      full_name: (profile as any).full_name ?? null,
+    };
+  } catch (e) {
+    console.error("getUserProfile failed", e);
+    return null;
+  }
+}
+
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   const reviewId = session.metadata?.reviewId;
   if (reviewId) {
@@ -23,6 +41,48 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         environment: env,
       })
       .eq("id", reviewId);
+
+    // Fire-and-forget: ping the reviewer, sync HubSpot.
+    const userId = session.metadata?.userId as string | undefined;
+    try {
+      const [{ sendInternalTransactionalEmail }, { syncHubspotContact }] = await Promise.all([
+        import("@/lib/email/send-internal.server"),
+        import("@/lib/crm/hubspot.server"),
+      ]);
+      const { data: review } = await getSupabase()
+        .from("resume_reviews")
+        .select("target_role, notes")
+        .eq("id", reviewId)
+        .maybeSingle();
+      const profile = userId ? await getUserProfile(userId) : null;
+      const email = profile?.email
+        || (session.customer_details?.email as string | undefined)
+        || (session.customer_email as string | undefined);
+
+      await sendInternalTransactionalEmail({
+        templateName: "resume-review-request",
+        recipientEmail: "max@discoverdiplomacy.org",
+        idempotencyKey: `resume-review-${reviewId}`,
+        templateData: {
+          candidateName: profile?.full_name ?? undefined,
+          candidateEmail: email,
+          targetRole: (review as any)?.target_role,
+          notes: (review as any)?.notes,
+          reviewId,
+        },
+      });
+
+      if (email) {
+        await syncHubspotContact({
+          email,
+          fullName: profile?.full_name ?? undefined,
+          product: "resume_review",
+          lifecycleStage: "purchase_completed",
+        });
+      }
+    } catch (e) {
+      console.error("resume-review post-purchase side-effects failed", e);
+    }
   }
 
   // Employer credit purchases (one-time)
@@ -90,6 +150,24 @@ async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
     { onConflict: "stripe_subscription_id" },
   );
   await syncTier(userId, env);
+
+  // CRM sync (best-effort)
+  try {
+    const { syncHubspotContact } = await import("@/lib/crm/hubspot.server");
+    const profile = await getUserProfile(userId);
+    if (profile?.email) {
+      const product =
+        priceId === "envoy_monthly" || priceId === "envoy_annual" ? "envoy" : "compass";
+      await syncHubspotContact({
+        email: profile.email,
+        fullName: profile.full_name ?? undefined,
+        product,
+        lifecycleStage: "subscription_active",
+      });
+    }
+  } catch (e) {
+    console.error("hubspot sync on subscription.created failed", e);
+  }
 }
 
 async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {

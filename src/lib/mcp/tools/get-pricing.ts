@@ -3,7 +3,7 @@ import { defineTool } from "@lovable.dev/mcp-js";
 const PRICING = {
   candidates: {
     free: "Account + profile, limited features.",
-    compass: "$35/mo — self-directed tools: resume help, job board, digest, community, Resume Drop opt-in.",
+    compass: "$20/mo — self-directed tools: resume help, job board, digest, community, Resume Drop opt-in.",
     envoy: "$150/mo — everything in Compass plus unlimited coaching, mock interviews, priority matching.",
     resume_review: "$25 one-time expert-designed resume review.",
   },

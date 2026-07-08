@@ -4,6 +4,7 @@ import { template as compassWelcomeTemplate } from './compass-welcome'
 import { template as envoyUpsellTemplate } from './envoy-upsell'
 import { template as universityMonthlyTemplate } from './university-monthly'
 import { template as employerUnlockTemplate } from './employer-unlock'
+import { template as resumeReviewRequestTemplate } from './resume-review-request'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -23,4 +24,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'envoy-upsell': envoyUpsellTemplate,
   'university-monthly': universityMonthlyTemplate,
   'employer-unlock': employerUnlockTemplate,
+  'resume-review-request': resumeReviewRequestTemplate,
 }
