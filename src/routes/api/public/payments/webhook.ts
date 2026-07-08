@@ -15,14 +15,16 @@ function getSupabase() {
 
 async function getUserProfile(userId: string): Promise<{ email?: string; full_name?: string | null } | null> {
   try {
-    const { data: authUser } = await (getSupabase().auth as any).admin.getUserById(userId);
-    const email = authUser?.user?.email as string | undefined;
     const { data: profile } = await getSupabase()
       .from("profiles")
-      .select("full_name")
+      .select("email, full_name")
       .eq("id", userId)
       .maybeSingle();
-    return { email, full_name: (profile as any)?.full_name ?? null };
+    if (!profile) return null;
+    return {
+      email: (profile as any).email ?? undefined,
+      full_name: (profile as any).full_name ?? null,
+    };
   } catch (e) {
     console.error("getUserProfile failed", e);
     return null;
