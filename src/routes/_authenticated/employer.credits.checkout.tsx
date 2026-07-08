@@ -1,8 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { SiteLayout } from "@/components/site-layout";
-import { useWaitlist } from "@/components/waitlist-dialog";
 
 const search = z.object({
   pack: z.enum(["single", "pack20"]).default("single"),
@@ -10,17 +8,11 @@ const search = z.object({
 
 export const Route = createFileRoute("/_authenticated/employer/credits/checkout")({
   validateSearch: (s) => search.parse(s),
-  head: () => ({ meta: [{ title: "Join the employer waitlist | Discover Diplomacy" }] }),
-  component: EmployerCreditsWaitlistPage,
+  head: () => ({ meta: [{ title: "Employer credits | Discover Diplomacy" }] }),
+  component: EmployerCreditsPage,
 });
 
-function EmployerCreditsWaitlistPage() {
-  const { open } = useWaitlist();
-
-  useEffect(() => {
-    open({ interest: "employer", title: "Join the employer waitlist" });
-  }, [open]);
-
+function EmployerCreditsPage() {
   return (
     <SiteLayout>
       <section className="bg-paper">
@@ -30,18 +22,15 @@ function EmployerCreditsWaitlistPage() {
             Employer credits open in waves.
           </h1>
           <p className="mt-4 text-sm text-muted-foreground">
-            Payments aren't live yet. Join the waitlist and we'll email you the moment credit
-            purchases open.
+            Self-serve credit purchases aren't live yet. Reach out and we'll set up your
+            account directly.
           </p>
-          <button
-            type="button"
-            onClick={() =>
-              open({ interest: "employer", title: "Join the employer waitlist" })
-            }
+          <Link
+            to="/contact"
             className="mt-8 inline-flex items-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper hover:bg-navy"
           >
-            Join the employer waitlist
-          </button>
+            Contact us
+          </Link>
         </div>
       </section>
     </SiteLayout>

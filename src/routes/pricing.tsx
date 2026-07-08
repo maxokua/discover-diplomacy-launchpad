@@ -9,7 +9,7 @@ import {
 
 import { SiteLayout } from "@/components/site-layout";
 import { Reveal } from "@/components/reveal";
-import { WaitlistButton, useWaitlist, type WaitlistInterest } from "@/components/waitlist-dialog";
+
 import {
   Accordion,
   AccordionContent,
@@ -205,15 +205,15 @@ function IndividualsTab() {
                 ))}
               </ul>
               <div className="mt-8 pt-2">
-                <WaitlistButton
-                  interest="compass"
-                  variant="navy"
-                  className="w-full"
+                <Link
+                  to="/membership/checkout"
+                  search={{ tier: "compass", cadence: isAnnual ? "annual" : "monthly" }}
+                  className="inline-flex w-full items-center justify-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
                 >
-                  Join the Compass waitlist
-                </WaitlistButton>
+                  Start Compass
+                </Link>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  We're opening access in waves. No payment collected.
+                  Cancel any time from your dashboard.
                 </p>
               </div>
             </div>
@@ -329,16 +329,13 @@ function UniversitiesTab() {
 // ─── Employers ──────────────────────────────────────────────────────────────
 
 function EmployersTab() {
-  const { open } = useWaitlist();
   type Tier = {
     name: string;
     price: string;
     cadence: string;
     body: string;
     features: string[];
-    cta:
-      | { kind: "link"; label: string; to: string }
-      | { kind: "waitlist"; label: string; interest: WaitlistInterest };
+    cta: { label: string; to: string };
     tone: "default" | "feature";
   };
   const tiers: Tier[] = [
@@ -352,7 +349,7 @@ function EmployersTab() {
         "Verified-employer badge after vetting",
         "Email alerts for new public profiles",
       ],
-      cta: { kind: "link", label: "Apply for access", to: "/employers/apply" },
+      cta: { label: "Apply for access", to: "/employers/apply" },
       tone: "default",
     },
     {
@@ -366,7 +363,7 @@ function EmployersTab() {
         "Member Pool browsing (Resume Drop)",
         "Direct contact through Discover Diplomacy",
       ],
-      cta: { kind: "waitlist", label: "Join the waitlist", interest: "employer" },
+      cta: { label: "Contact us", to: "/contact" },
       tone: "default",
     },
     {
@@ -381,7 +378,7 @@ function EmployersTab() {
         "Saved searches and alerts",
         "Priority support",
       ],
-      cta: { kind: "waitlist", label: "Join the waitlist", interest: "employer" },
+      cta: { label: "Contact us", to: "/contact" },
       tone: "feature",
     },
     {
@@ -395,7 +392,7 @@ function EmployersTab() {
         "Credits never expire",
         "Stackable with Starter or Professional",
       ],
-      cta: { kind: "waitlist", label: "Join the waitlist", interest: "employer" },
+      cta: { label: "Contact us", to: "/contact" },
       tone: "default",
     },
   ];
@@ -411,8 +408,8 @@ function EmployersTab() {
                 Unlock vetted international talent.
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                Free tier lets you browse public candidates. Paid tiers open in waves — join
-                the waitlist to be first in.
+                Free tier lets you browse public candidates. Paid tiers open in waves —
+                contact us to get set up.
               </p>
             </div>
           </Reveal>
@@ -446,19 +443,9 @@ function EmployersTab() {
                         </li>
                       ))}
                     </ul>
-                    {t.cta.kind === "link" ? (
-                      <Link to={t.cta.to} className={ctaClass}>
-                        {t.cta.label}
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => open({ interest: t.cta.kind === "waitlist" ? t.cta.interest : "employer" })}
-                        className={ctaClass}
-                      >
-                        {t.cta.label}
-                      </button>
-                    )}
+                    <Link to={t.cta.to} className={ctaClass}>
+                      {t.cta.label}
+                    </Link>
                   </div>
                 </Reveal>
               );
