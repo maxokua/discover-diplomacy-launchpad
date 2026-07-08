@@ -13,6 +13,22 @@ function getSupabase() {
   return _supabase;
 }
 
+async function getUserProfile(userId: string): Promise<{ email?: string; full_name?: string | null } | null> {
+  try {
+    const { data: authUser } = await (getSupabase().auth as any).admin.getUserById(userId);
+    const email = authUser?.user?.email as string | undefined;
+    const { data: profile } = await getSupabase()
+      .from("profiles")
+      .select("full_name")
+      .eq("id", userId)
+      .maybeSingle();
+    return { email, full_name: (profile as any)?.full_name ?? null };
+  } catch (e) {
+    console.error("getUserProfile failed", e);
+    return null;
+  }
+}
+
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   const reviewId = session.metadata?.reviewId;
   if (reviewId) {
@@ -23,6 +39,48 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         environment: env,
       })
       .eq("id", reviewId);
+
+    // Fire-and-forget: ping the reviewer, sync HubSpot.
+    const userId = session.metadata?.userId as string | undefined;
+    try {
+      const [{ sendInternalTransactionalEmail }, { syncHubspotContact }] = await Promise.all([
+        import("@/lib/email/send-internal.server"),
+        import("@/lib/crm/hubspot.server"),
+      ]);
+      const { data: review } = await getSupabase()
+        .from("resume_reviews")
+        .select("target_role, notes")
+        .eq("id", reviewId)
+        .maybeSingle();
+      const profile = userId ? await getUserProfile(userId) : null;
+      const email = profile?.email
+        || (session.customer_details?.email as string | undefined)
+        || (session.customer_email as string | undefined);
+
+      await sendInternalTransactionalEmail({
+        templateName: "resume-review-request",
+        recipientEmail: "max@discoverdiplomacy.org",
+        idempotencyKey: `resume-review-${reviewId}`,
+        templateData: {
+          candidateName: profile?.full_name ?? undefined,
+          candidateEmail: email,
+          targetRole: (review as any)?.target_role,
+          notes: (review as any)?.notes,
+          reviewId,
+        },
+      });
+
+      if (email) {
+        await syncHubspotContact({
+          email,
+          fullName: profile?.full_name ?? undefined,
+          product: "resume_review",
+          lifecycleStage: "purchase_completed",
+        });
+      }
+    } catch (e) {
+      console.error("resume-review post-purchase side-effects failed", e);
+    }
   }
 
   // Employer credit purchases (one-time)
