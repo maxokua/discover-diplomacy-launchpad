@@ -1,39 +1,22 @@
-# Save payments setup to project memory
+# Add `IHEARTMAX` — 100% off, single-use
 
-You're about to disconnect Stripe and reconnect a different account. When you do that, all products/prices in Stripe are gone and I'll be asked to set them up again. To avoid re-asking every question, I'll persist your decisions to project memory now so I can reapply them verbatim on reconnect.
+## What you'll get
+A one-time-use promo code `IHEARTMAX` redeemable by exactly **one customer** on either Compass or Resume Review checkout. Once someone uses it, no one else can.
 
-## What I'll remember
+## Steps
 
-**Active products (recreate in the new Stripe account):**
-- Compass Membership — $20/mo recurring — `price_id: compass_monthly` — tax_code `txcd_10103001`
-- Expert Resume Review — $25 one-time — `price_id: resume_review_onetime` — tax_code `txcd_10000000`
+1. **Create the coupon + promotion code in Stripe** (one-time setup via a small script through the Lovable Stripe gateway):
+   - Coupon: `percent_off: 100`, `duration: forever` (so if that user redeems Compass, all future monthly renewals are also $0).
+   - Promotion code: `code: "IHEARTMAX"`, `max_redemptions: 1`.
 
-**Hidden / waitlist only (do NOT create in Stripe, keep checkout hidden):**
-- Envoy ($150/mo)
-- Employer credits (Starter $30/mo, Professional $100/mo, à la carte $18/credit)
+2. **Enable promo entry on checkout** in `src/lib/payments.functions.ts`:
+   - Add `allow_promotion_codes: true` to `createSubscriptionCheckout` (Compass) and `createResumeReviewCheckout`.
+   - This adds an "Add promotion code" link inside the embedded Stripe form.
 
-**Post-purchase business logic:**
-- Compass purchase → `subscriptions` row + `sync_user_service_tier` sets `profiles.service_tier='compass'` + HubSpot contact upsert (`dd_product=compass`, `dd_lifecycle=subscription_active`)
-- Resume Review purchase → `resume_reviews.status='paid'` + email ping to `max@discoverdiplomacy.org` (template `resume-review-request`) + HubSpot upsert. Reviews are performed manually by Max — no automated review.
-- Cancellation → keep access until `current_period_end` (already handled in `sync_user_service_tier`)
-- Upgrades/downgrades → not implemented yet
+3. **Verify in preview** with Playwright: open `/membership/checkout?tier=compass`, enter `IHEARTMAX`, confirm total → $0.00.
 
-**CRM:** HubSpot connector (`HUBSPOT_API_KEY`). Helper at `src/lib/crm/hubspot.server.ts` (`syncHubspotContact`). Fire-and-forget from webhook; never blocks checkout.
-
-**Notify email:** `max@discoverdiplomacy.org` for new resume reviews.
-
-## What you'll do
-
-1. Disconnect the current Stripe account from the Payments dashboard (three-dots menu → Disconnect Stripe).
-2. Reconnect the correct Stripe account.
-3. Tell me you're done — I'll recreate the two products above and confirm the webhook + HubSpot wiring still works. No re-asking about prices, hidden tiers, cancellation, or the reviewer email.
-
-## Technical details
-
-- Memory files updated: `mem://index.md` (Core rules) and `mem://features/active-pricing.md` (full decision record).
-- Code already in place and unchanged by the reconnect: checkout server functions, webhook handler, HubSpot sync helper, `resume-review-request` email template.
-- Only Stripe-side objects (products, prices, webhook secret) need to be recreated after reconnect; the `enable_stripe_payments` flow handles the webhook automatically.
-
-<presentation-actions>
-<presentation-open-payments>Open payments dashboard</presentation-open-payments>
-</presentation-actions>
+## Notes
+- `max_redemptions: 1` is per promotion code, not per customer — the first person to redeem it wins.
+- Applies to whichever product that one user checks out first (Compass or Resume Review).
+- `managed_payments: { enabled: true }` is compatible with `allow_promotion_codes` — no conflict.
+- Case-insensitive on redemption by default.
