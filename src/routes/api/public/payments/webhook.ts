@@ -148,6 +148,24 @@ async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
     { onConflict: "stripe_subscription_id" },
   );
   await syncTier(userId, env);
+
+  // CRM sync (best-effort)
+  try {
+    const { syncHubspotContact } = await import("@/lib/crm/hubspot.server");
+    const profile = await getUserProfile(userId);
+    if (profile?.email) {
+      const product =
+        priceId === "envoy_monthly" || priceId === "envoy_annual" ? "envoy" : "compass";
+      await syncHubspotContact({
+        email: profile.email,
+        fullName: profile.full_name ?? undefined,
+        product,
+        lifecycleStage: "subscription_active",
+      });
+    }
+  } catch (e) {
+    console.error("hubspot sync on subscription.created failed", e);
+  }
 }
 
 async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {
