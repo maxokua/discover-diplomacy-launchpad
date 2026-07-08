@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { WaitlistProvider } from "../components/waitlist-dialog";
+
 
 function NotFoundComponent() {
   return (
@@ -159,10 +159,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <WaitlistProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-      </WaitlistProvider>
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <Outlet />
     </QueryClientProvider>
   );
 }
