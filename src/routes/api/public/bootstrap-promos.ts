@@ -51,7 +51,7 @@ async function ensurePromo(stripe: any, opts: (typeof PROMOS)[number]) {
   }
 
   const created = await stripe.promotionCodes.create({
-    coupon: couponId,
+    promotion: { type: "coupon", coupon: couponId },
     code: opts.code,
     max_redemptions: opts.maxRedemptions,
   });
