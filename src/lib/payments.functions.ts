@@ -90,6 +90,7 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
         ui_mode: "embedded_page",
         return_url: data.returnUrl,
         customer: customerId,
+        allow_promotion_codes: true,
         payment_intent_data: { description: "Expert Resume Review" },
         metadata: { userId: context.userId, reviewId: data.reviewId },
         managed_payments: { enabled: true },
