@@ -226,7 +226,7 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
           couponId = coupon.id;
         }
         await stripe.promotionCodes.create({
-          coupon: couponId,
+          promotion: { type: "coupon", coupon: couponId },
           code: opts.code,
           max_redemptions: opts.maxRedemptions,
         } as any);
