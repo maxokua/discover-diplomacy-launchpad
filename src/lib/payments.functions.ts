@@ -68,7 +68,7 @@ export const createResumeReviewCheckout = createServerFn({ method: "POST" })
 
       const stripe = createStripeClient(data.environment);
 
-      const prices = await stripe.prices.list({ lookup_keys: ["resume_review_25"] });
+      const prices = await stripe.prices.list({ lookup_keys: ["resume_review_onetime"] });
       if (!prices.data.length) throw new Error("Price not configured");
       const stripePrice = prices.data[0];
 
