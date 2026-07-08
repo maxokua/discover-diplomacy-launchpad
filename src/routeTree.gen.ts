@@ -55,6 +55,7 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedCoachIndexRouteImport } from './routes/_authenticated/coach.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as ApiPublicBootstrapPromosRouteImport } from './routes/api/public/bootstrap-promos'
 import { Route as AuthenticatedResumeReviewReturnRouteImport } from './routes/_authenticated/resume-review.return'
 import { Route as AuthenticatedResumeReviewCheckoutRouteImport } from './routes/_authenticated/resume-review.checkout'
 import { Route as AuthenticatedResumeAnalysesAnalysisIdRouteImport } from './routes/_authenticated/resume-analyses.$analysisId'
@@ -320,6 +321,12 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBootstrapPromosRoute =
+  ApiPublicBootstrapPromosRouteImport.update({
+    id: '/api/public/bootstrap-promos',
+    path: '/api/public/bootstrap-promos',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedResumeReviewReturnRoute =
   AuthenticatedResumeReviewReturnRouteImport.update({
     id: '/resume-review/return',
@@ -546,6 +553,7 @@ export interface FileRoutesByFullPath {
   '/resume-analyses/$analysisId': typeof AuthenticatedResumeAnalysesAnalysisIdRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
+  '/api/public/bootstrap-promos': typeof ApiPublicBootstrapPromosRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/coach/': typeof AuthenticatedCoachIndexRoute
@@ -616,6 +624,7 @@ export interface FileRoutesByTo {
   '/resume-analyses/$analysisId': typeof AuthenticatedResumeAnalysesAnalysisIdRoute
   '/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
+  '/api/public/bootstrap-promos': typeof ApiPublicBootstrapPromosRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/coach': typeof AuthenticatedCoachIndexRoute
@@ -693,6 +702,7 @@ export interface FileRoutesById {
   '/_authenticated/resume-analyses/$analysisId': typeof AuthenticatedResumeAnalysesAnalysisIdRoute
   '/_authenticated/resume-review/checkout': typeof AuthenticatedResumeReviewCheckoutRoute
   '/_authenticated/resume-review/return': typeof AuthenticatedResumeReviewReturnRoute
+  '/api/public/bootstrap-promos': typeof ApiPublicBootstrapPromosRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/coach/': typeof AuthenticatedCoachIndexRoute
@@ -770,6 +780,7 @@ export interface FileRouteTypes {
     | '/resume-analyses/$analysisId'
     | '/resume-review/checkout'
     | '/resume-review/return'
+    | '/api/public/bootstrap-promos'
     | '/lovable/email/suppression'
     | '/admin/'
     | '/coach/'
@@ -840,6 +851,7 @@ export interface FileRouteTypes {
     | '/resume-analyses/$analysisId'
     | '/resume-review/checkout'
     | '/resume-review/return'
+    | '/api/public/bootstrap-promos'
     | '/lovable/email/suppression'
     | '/admin'
     | '/coach'
@@ -916,6 +928,7 @@ export interface FileRouteTypes {
     | '/_authenticated/resume-analyses/$analysisId'
     | '/_authenticated/resume-review/checkout'
     | '/_authenticated/resume-review/return'
+    | '/api/public/bootstrap-promos'
     | '/lovable/email/suppression'
     | '/_authenticated/admin/'
     | '/_authenticated/coach/'
@@ -962,6 +975,7 @@ export interface RootRouteChildren {
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   GuideInternationalRelationsJobsRequirementsRoute: typeof GuideInternationalRelationsJobsRequirementsRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicBootstrapPromosRoute: typeof ApiPublicBootstrapPromosRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -1291,6 +1305,13 @@ declare module '@tanstack/react-router' {
       path: '/lovable/email/suppression'
       fullPath: '/lovable/email/suppression'
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/bootstrap-promos': {
+      id: '/api/public/bootstrap-promos'
+      path: '/api/public/bootstrap-promos'
+      fullPath: '/api/public/bootstrap-promos'
+      preLoaderRoute: typeof ApiPublicBootstrapPromosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/resume-review/return': {
@@ -1698,6 +1719,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuideInternationalRelationsJobsRequirementsRoute:
     GuideInternationalRelationsJobsRequirementsRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicBootstrapPromosRoute: ApiPublicBootstrapPromosRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
