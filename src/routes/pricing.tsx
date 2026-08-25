@@ -5,6 +5,8 @@ import {
   Compass as CompassIcon,
   GraduationCap,
   Building2,
+  Clock,
+  Calendar,
 } from "lucide-react";
 
 import { SiteLayout } from "@/components/site-layout";
