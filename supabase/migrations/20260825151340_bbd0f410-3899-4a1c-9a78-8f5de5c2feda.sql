@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.link_cohort_member_on_signup() FROM PUBLIC, anon, authenticated;
