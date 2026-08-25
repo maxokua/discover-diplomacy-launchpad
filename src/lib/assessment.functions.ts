@@ -24,6 +24,7 @@ const AnswersSchema = z.object({
 
 const PathSchema = z.object({
   title: z.string().max(80),
+  archetypeKey: z.string().max(80).optional(),
   why: z.string().max(500),
   exampleRoles: z.array(z.string().max(80)).min(2).max(5),
   exampleEmployers: z.array(z.string().max(80)).min(2).max(6),
@@ -32,6 +33,7 @@ const PathSchema = z.object({
 
 const PlanSchema = z.object({
   archetype: z.string().max(80),
+  archetypeKey: z.string().max(80).optional(),
   summary: z.string().max(600),
   primary: PathSchema,
   adjacent: z.array(PathSchema).length(2),

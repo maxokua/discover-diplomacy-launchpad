@@ -128,10 +128,12 @@ function WelcomePage() {
         {screen === "done" && (
           <div className="rounded-xl border border-border bg-paper p-10 text-center">
             <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gilt">
-              You're a
+              Setup complete
             </div>
             <div className="mt-3 font-display text-3xl text-navy-deep">
-              {archetypeShown ?? profile.archetype ?? "Global Careers member"}
+              {archetypeShown ?? profile.archetype
+                ? `You're on the ${archetypeShown ?? profile.archetype} track.`
+                : "You're all set."}
             </div>
             <p className="mt-4 text-sm text-muted-foreground">Taking you to your dashboard…</p>
             <Link
@@ -175,7 +177,7 @@ function ImportConfirm({
 
       {archetype && (
         <div className="mt-4 inline-flex rounded-full border border-gilt/40 bg-gilt/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-gilt">
-          Archetype: {archetype}
+          Your track: {archetype}
         </div>
       )}
 
