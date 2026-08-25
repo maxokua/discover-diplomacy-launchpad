@@ -3,8 +3,8 @@ import { useRouterState } from "@tanstack/react-router";
 
 /**
  * Site-wide scroll reveal. On every route change it:
- *  - Marks reveal targets with [data-reveal] (sections, headings, cards, opt-ins).
- *  - Stagger-delays direct siblings inside each section for a gentle cascade.
+ *  - Marks only below-the-fold targets with [data-reveal].
+ *  - Keeps first-paint and unsupported-browser content visible.
  *  - Observes them with IntersectionObserver and toggles `.is-visible`.
  * Respects prefers-reduced-motion via CSS.
  */
@@ -13,6 +13,9 @@ export function ScrollRevealInit() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const supportsObserver = "IntersectionObserver" in window;
 
     const SELECTOR = [
       "section",
@@ -23,14 +26,7 @@ export function ScrollRevealInit() {
       "article",
     ].join(", ");
 
-    const tag = (el: Element) => {
-      if (!(el instanceof HTMLElement)) return;
-      if (!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal", "");
-    };
-
-    // Tag candidates
     const roots = document.querySelectorAll(SELECTOR);
-    roots.forEach(tag);
 
     // Auto hover-lift: anything that looks like a card (rounded + border, or article)
     document
@@ -52,22 +48,11 @@ export function ScrollRevealInit() {
         if (!img.hasAttribute("data-img-zoom")) img.setAttribute("data-img-zoom", "");
       });
 
-    // Light stagger for direct content children inside sections
-    document.querySelectorAll("section").forEach((sec) => {
-      const container =
-        (sec.querySelector(":scope > div") as HTMLElement | null) ?? sec;
-      const children = Array.from(container.children).filter(
-        (c) => c instanceof HTMLElement,
-      ) as HTMLElement[];
-      children.slice(0, 8).forEach((child, i) => {
-        if (!child.hasAttribute("data-reveal")) child.setAttribute("data-reveal", "");
-        if (!child.style.transitionDelay) {
-          child.style.transitionDelay = `${Math.min(i * 70, 420)}ms`;
-        }
-      });
-    });
+    if (reduceMotion || !supportsObserver) return;
 
-    const targets = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    const targets = Array.from(roots).filter(
+      (el): el is HTMLElement => el instanceof HTMLElement,
+    );
 
     // Anything already in view on mount should show immediately (no flash on top-of-page hero)
     const io = new IntersectionObserver(
@@ -87,6 +72,7 @@ export function ScrollRevealInit() {
       if (rect.top < window.innerHeight * 0.95) {
         el.classList.add("is-visible");
       } else {
+        el.setAttribute("data-reveal", "");
         io.observe(el);
       }
     });

@@ -20,6 +20,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as EmployersRouteImport } from './routes/employers'
 import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -138,6 +139,11 @@ const MembershipRoute = MembershipRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmployersRoute = EmployersRouteImport.update({
@@ -506,6 +512,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
+  '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/membership': typeof MembershipRoute
   '/pricing': typeof PricingRoute
@@ -581,6 +588,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
+  '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/membership': typeof MembershipRoute
   '/pricing': typeof PricingRoute
@@ -655,6 +663,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/employers': typeof EmployersRouteWithChildren
+  '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/membership': typeof MembershipRoute
   '/pricing': typeof PricingRoute
@@ -733,6 +742,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/employers'
+    | '/login'
     | '/mcp'
     | '/membership'
     | '/pricing'
@@ -808,6 +818,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/employers'
+    | '/login'
     | '/mcp'
     | '/membership'
     | '/pricing'
@@ -881,6 +892,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/employers'
+    | '/login'
     | '/mcp'
     | '/membership'
     | '/pricing'
@@ -959,6 +971,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DirectoryRoute: typeof DirectoryRoute
   EmployersRoute: typeof EmployersRouteWithChildren
+  LoginRoute: typeof LoginRoute
   McpRoute: typeof McpRoute
   MembershipRoute: typeof MembershipRoute
   PricingRoute: typeof PricingRoute
@@ -1059,6 +1072,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/employers': {
@@ -1701,6 +1721,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DirectoryRoute: DirectoryRoute,
   EmployersRoute: EmployersRouteWithChildren,
+  LoginRoute: LoginRoute,
   McpRoute: McpRoute,
   MembershipRoute: MembershipRoute,
   PricingRoute: PricingRoute,
