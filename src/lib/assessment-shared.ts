@@ -342,15 +342,70 @@ function directoryHref(a: Archetype): string {
   return `/directory?${params.toString()}`;
 }
 
-function pathFromArchetype(a: Archetype, ans: AssessmentAnswers): PathCard {
+// What would make someone pick each path INSTEAD of the primary — the real trade-off.
+const INSTEAD_HOOKS: Record<string, string> = {
+  foreign_service:
+    "the prestige and structure of representing your country outweigh speed and flexibility",
+  policy_research:
+    "you'd rather shape the ideas than run the programs — writing and analysis over operations",
+  multilateral:
+    "you want the scale of the UN system and its structured early-career programs (JPO, YPP) over a scrappier, faster route",
+  development: "field-level impact matters more to you than policy-level influence",
+  global_business: "compensation and pace win out over mission-first work",
+};
+
+function locationSentence(q5: string, primaryTitle: string): string {
+  const t = primaryTitle.toLowerCase();
+  if (q5.startsWith("Washington"))
+    return `And since you'd move to Washington DC, you're aiming at the one city where most ${t} employers actually hire — your target list and your zip code finally match.`;
+  if (q5.startsWith("New York"))
+    return `Since you'd move to New York, your target list is weighted toward the employers actually headquartered there — the UN corridor, the foundations, and the risk firms.`;
+  if (q5.startsWith("Abroad"))
+    return `Since you'd move abroad, the Geneva and Brussels postings aren't a dream scenario — they're a real application track, and your employer list is weighted toward them.`;
+  if (q5.startsWith("I need remote"))
+    return `One honest note: this field runs on proximity. Remote-flexible narrows the employer list, so I've kept only the ones where remote is realistic — each application has to count.`;
+  return `Since you're open to anywhere in the US, don't default to the coasts — the densest ${t} market is still Washington DC, and being willing to move for it is an edge most candidates won't use.`;
+}
+
+function interviewTask(q5: string, networkHeavy: boolean): string {
+  const base = networkHeavy
+    ? "Book 5 informational interviews — target alumni and 2-years-ahead peers, not senior partners."
+    : "Book 3 informational interviews with people in your primary path.";
+  if (q5.startsWith("Washington"))
+    return base + " In DC, ask for coffee, not a call — in this town, in-person is the whole game.";
+  if (q5.startsWith("New York"))
+    return base + " In New York, ask for coffee near their office — this corridor runs on short notice.";
+  if (q5.startsWith("Abroad"))
+    return base + " Prioritize people already posted abroad — ask how they got the posting, not just the job.";
+  if (q5.startsWith("I need remote"))
+    return base + " Remote-flexible means your network gets built on video calls — follow each one up in writing within 24 hours.";
+  return base;
+}
+
+function pathFromArchetype(
+  a: Archetype,
+  ans: AssessmentAnswers,
+  primaryTitle?: string,
+): PathCard {
   const bucket = locationBucket(ans.q5_location);
   const employers = a.employers[bucket] ?? a.employers.default;
+  const sectorPull = ans.q2_sector.split(" (")[0].toLowerCase();
   const workStyle = ans.q3_function.toLowerCase();
   const tradeoff = ans.q6_tradeoff.toLowerCase();
+  const issue = (ans.q4_issues[0] || "policy").toLowerCase();
+  let why: string;
+  if (!primaryTitle || primaryTitle === a.title) {
+    why =
+      `This ranked first because it answers your pull toward ${sectorPull} directly — and the day-to-day work is ${workStyle}, the thing you said makes you lose track of time. Given your trade-off ("${tradeoff}"), it beats the two paths below. ` +
+      locationSentence(ans.q5_location, a.title);
+  } else {
+    const hook = INSTEAD_HOOKS[a.key] ?? "your priorities shift";
+    why = `Choose this instead if ${hook}. Right now your answers — the trade-off you picked and the work you actually enjoy — keep ${primaryTitle} in front, though your interest in ${issue} fits here too. If that trade-off ever flips, this is the first path to revisit.`;
+  }
   return {
     title: a.title,
     archetypeKey: a.key,
-    why: `This fits your pull toward ${a.title.toLowerCase()} and how you described the work — ${workStyle}. It also matches your trade-off (${tradeoff}) better than the alternatives.`,
+    why,
     exampleRoles: a.roles.slice(0, 3),
     exampleEmployers: employers.slice(0, 4),
     directoryHref: directoryHref(a),
@@ -394,17 +449,19 @@ export function computePlan(ans: AssessmentAnswers): PlanOutput {
       break;
   }
   days0to30.push("Subscribe to the Wednesday digest so deadlines find you, not the other way around.");
-  if (urgent) {
+  if (ans.q10_obstacle === "I don't know what roles exist") {
+    days0to30.push(
+      urgent
+        ? "Even on an urgent timeline, hold applications for two weeks. Open your saved 10 roles and note the qualification that repeats most — applying blind wastes the urgency."
+        : "Go one level deeper before you apply anywhere: open your saved 10 roles and note the qualification that repeats most — that gap is what phases 2 and 3 close.",
+    );
+  } else if (urgent) {
     days0to30.push(`Apply to 3 live ${primary.title} roles from the directory this month.`);
   } else {
     days0to30.push(`Pick 2 ${primary.title.toLowerCase()} employers and read their last 3 published pieces.`);
   }
 
-  if (ans.q10_obstacle === "No network in this field") {
-    days30to60.push("Book 5 informational interviews — target alumni and 2-years-ahead peers, not senior partners.");
-  } else {
-    days30to60.push("Book 3 informational interviews with people in your primary path.");
-  }
+  days30to60.push(interviewTask(ans.q5_location, ans.q10_obstacle === "No network in this field"));
   if (ans.q10_obstacle === "Getting seen by employers") {
     days30to60.push("Complete your Resume Drop profile — vetted candidates get surfaced directly to hiring employers.");
   } else {
@@ -426,8 +483,8 @@ export function computePlan(ans: AssessmentAnswers): PlanOutput {
     summary,
     primary: pathFromArchetype(primary, ans),
     adjacent: [
-      pathFromArchetype(ARCHETYPES[adj[0]], ans),
-      pathFromArchetype(ARCHETYPES[adj[1]], ans),
+      pathFromArchetype(ARCHETYPES[adj[0]], ans, primary.title),
+      pathFromArchetype(ARCHETYPES[adj[1]], ans, primary.title),
     ],
     days0to30,
     days30to60,
