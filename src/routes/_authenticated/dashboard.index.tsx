@@ -83,7 +83,7 @@ function MyMapPage() {
         <h1 className="mt-3 font-display text-4xl text-navy-deep lg:text-5xl">
           {firstName ? `${firstName}, ` : ""}
           {profile.archetype
-            ? <>you're a <em className="not-italic text-gilt">{profile.archetype}</em>.</>
+            ? <>you're on the <em className="not-italic text-gilt">{profile.archetype}</em> track.</>
             : "welcome to your dashboard."}
         </h1>
         {plan && (
