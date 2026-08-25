@@ -210,12 +210,12 @@ function BrowsePage() {
       const isPaid = tier !== null && tier !== "free";
       if (row.pile === "paid" && !isPaid) {
         toast.error("Member Pool candidates require a paid employer plan.");
-        navigate({ to: "/employer/credits/checkout" });
+        navigate({ to: "/employer/credits/checkout", search: { pack: "single" } });
         return;
       }
       if ((balance ?? 0) <= 0) {
         toast.error("You're out of credits.");
-        navigate({ to: "/employer/credits/checkout" });
+        navigate({ to: "/employer/credits/checkout", search: { pack: "single" } });
         return;
       }
       setUnlockTarget(row);
@@ -232,7 +232,7 @@ function BrowsePage() {
         if (r.error === "no_credits" || r.error === "upgrade_required") {
           toast.error(("message" in r ? r.message : null) ?? "Couldn't unlock");
           setUnlockTarget(null);
-          navigate({ to: "/employer/credits/checkout" });
+          navigate({ to: "/employer/credits/checkout", search: { pack: "single" } });
           return;
         }
         toast.error(r.error ?? "Couldn't unlock");
@@ -321,7 +321,7 @@ function BrowsePage() {
               <span>
                 You&apos;re on the free tier. Upgrade to unlock Member Pool candidates and bulk credits.
               </span>
-              <Link to="/employer/credits/checkout" className="font-semibold underline">
+              <Link to="/employer/credits/checkout" search={{ pack: "single" }} className="font-semibold underline">
                 Buy credits / upgrade
               </Link>
             </div>
@@ -592,11 +592,11 @@ function PreviewCard({
             <Lock className="h-3 w-3" /> Unlock — 1 credit
           </button>
         ) : upgradeNeeded ? (
-          <Link to="/employer/credits/checkout" className="font-semibold text-navy-deep underline">
+          <Link to="/employer/credits/checkout" search={{ pack: "single" }} className="font-semibold text-navy-deep underline">
             Upgrade to unlock
           </Link>
         ) : (
-          <Link to="/employer/credits/checkout" className="font-semibold text-navy-deep underline">
+          <Link to="/employer/credits/checkout" search={{ pack: "single" }} className="font-semibold text-navy-deep underline">
             Buy credits
           </Link>
         )}
