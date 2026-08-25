@@ -225,6 +225,70 @@ function IndividualsTab() {
       </section>
 
       <section className="border-b border-border bg-stone">
+        <div className="mx-auto max-w-5xl px-6 py-16 lg:px-10 lg:py-20">
+          <Reveal>
+            <div className="eyebrow">One-off sessions</div>
+            <h2 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">
+              Talk to Max directly
+            </h2>
+            <p className="mt-3 max-w-2xl text-muted-foreground">
+              Book a focused call. No subscription required.
+            </p>
+          </Reveal>
+
+          <div className="mt-10 grid gap-8 sm:grid-cols-2">
+            <Reveal delay={60}>
+              <div className="flex h-full flex-col border border-border bg-paper p-8">
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-navy-deep/15 bg-navy-deep/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
+                  <Clock className="h-3 w-3" /> Advisory call
+                </div>
+                <h3 className="mt-4 font-display text-2xl text-navy-deep">30-minute advisory call</h3>
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="font-display text-4xl text-navy-deep">$25</span>
+                  <span className="text-sm text-muted-foreground">one-time</span>
+                </div>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  One focused question — path, pivot, or next step.
+                </p>
+                <div className="mt-auto pt-6">
+                  <Link
+                    to="/booking"
+                    className="inline-flex w-full items-center justify-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
+                  >
+                    Book 30 minutes
+                  </Link>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={120}>
+              <div className="flex h-full flex-col border border-border bg-paper p-8">
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-navy-deep/15 bg-navy-deep/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-navy-deep">
+                  <Calendar className="h-3 w-3" /> Advisory call
+                </div>
+                <h3 className="mt-4 font-display text-2xl text-navy-deep">60-minute advisory call</h3>
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="font-display text-4xl text-navy-deep">$50</span>
+                  <span className="text-sm text-muted-foreground">one-time</span>
+                </div>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  More time to review your background, map, and specific applications.
+                </p>
+                <div className="mt-auto pt-6">
+                  <Link
+                    to="/booking"
+                    className="inline-flex w-full items-center justify-center bg-navy-deep px-6 py-3 text-xs font-medium uppercase tracking-wider text-paper transition-colors hover:bg-navy"
+                  >
+                    Book 60 minutes
+                  </Link>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-border bg-stone">
         <div className="mx-auto max-w-4xl px-6 py-16 lg:px-10">
           <Reveal>
             <div className="eyebrow">Still choosing?</div>
