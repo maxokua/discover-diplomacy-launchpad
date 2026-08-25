@@ -203,10 +203,9 @@ function AssessmentMock() {
 
 function Stats() {
   const stats = [
-    { v: TRACTION.directoryViews, l: "Directory views" },
-    { v: TRACTION.peopleReached, l: "Professionals reached" },
-    { v: TRACTION.weeklyOpportunities, l: "Opportunities curated weekly" },
-    { v: "75+", l: "Countries reached" },
+    { value: "125,000+", label: "Directory views" },
+    { value: "25,000+", label: "Professionals reached" },
+    { value: "75+", label: "Countries in our community" },
   ];
   return (
     <section className="border-b border-border bg-paper">
@@ -217,22 +216,13 @@ function Stats() {
             Trusted by internationally-minded professionals worldwide.
           </h2>
         </Reveal>
-        <ul className="mt-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((s, i) => {
-            const { to, prefix, suffix } = parseStat(s.v);
-            return (
-              <Reveal key={s.l} delay={i * 60} className="text-center">
-                <div className="font-display text-5xl text-navy-deep lg:text-6xl">
-                  {to > 0 ? (
-                    <CountUp to={to} prefix={prefix} suffix={suffix} duration={900} />
-                  ) : (
-                    s.v
-                  )}
-                </div>
-                <div className="mt-4 text-sm uppercase tracking-[0.14em] text-muted-foreground">{s.l}</div>
-              </Reveal>
-            );
-          })}
+        <ul className="mt-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+          {stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 60} className="text-center">
+              <div className="font-display text-5xl text-navy-deep lg:text-6xl">{s.value}</div>
+              <div className="mt-4 text-sm uppercase tracking-[0.14em] text-muted-foreground">{s.label}</div>
+            </Reveal>
+          ))}
         </ul>
       </div>
     </section>
