@@ -465,6 +465,14 @@ function AssessmentPage() {
   const [submitting, setSubmitting] = useState(false);
   const [plan, setPlan] = useState<AssessmentPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [emailNotice, setEmailNotice] = useState<string | null>(null);
+  const [retryingEmail, setRetryingEmail] = useState(false);
+  const lastPayload = useRef<{
+    email: string;
+    consentNewsletter: boolean;
+    answers: AssessmentAnswers;
+    plan: AssessmentPlan;
+  } | null>(null);
 
   const generate = useServerFn(generateAssessment);
   const step = STEPS[stepIdx];
@@ -505,19 +513,56 @@ function AssessmentPage() {
         q9_authorization: answers.q9 as AssessmentAnswers["q9_authorization"],
         q10_blocker: answers.q10,
       };
-      const { plan: returned } = await generate({
-        data: {
-          email: email.trim(),
-          consentNewsletter: true,
-          answers: payloadAnswers,
-          plan: localPlan,
-        },
-      });
-      setPlan(returned ?? localPlan);
+      const payload = {
+        email: email.trim(),
+        consentNewsletter: true,
+        answers: payloadAnswers,
+        plan: localPlan,
+      };
+      lastPayload.current = payload;
+      const result = await generate({ data: payload });
+      setPlan(result?.plan ?? localPlan);
+      if (result && (!result.persisted || !result.emailed)) {
+        setEmailNotice(
+          result.emailed
+            ? null
+            : "Your map is ready below — we couldn't email a copy just yet. You can retry from the results page.",
+        );
+      } else {
+        setEmailNotice(null);
+      }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+      console.error("[assessment] submit failed", e);
+      const msg = e instanceof Error ? e.message : "";
+      setError(
+        msg.includes("hourly limit")
+          ? msg
+          : "Something glitched on our side — your answers are still here. Please try again.",
+      );
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function retryEmail() {
+    if (!lastPayload.current || retryingEmail) return;
+    setRetryingEmail(true);
+    try {
+      const result = await generate({ data: lastPayload.current });
+      if (result?.emailed) {
+        setEmailNotice(null);
+      } else {
+        setEmailNotice("Still couldn't send the email — please try again in a few minutes.");
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      setEmailNotice(
+        msg.includes("hourly limit")
+          ? "Too many attempts from this network — please try again in an hour."
+          : "Still couldn't send the email — please try again in a few minutes.",
+      );
+    } finally {
+      setRetryingEmail(false);
     }
   }
 
@@ -527,12 +572,22 @@ function AssessmentPage() {
     setAnswers(EMPTY);
     setEmail("");
     setError(null);
+    setEmailNotice(null);
+    lastPayload.current = null;
   }
 
   if (plan) {
     return (
       <SiteLayout>
-        <ResultsView plan={plan} answers={answers} email={email} onRestart={reset} />
+        <ResultsView
+          plan={plan}
+          answers={answers}
+          email={email}
+          onRestart={reset}
+          emailNotice={emailNotice}
+          onRetryEmail={retryEmail}
+          retryingEmail={retryingEmail}
+        />
       </SiteLayout>
     );
   }
@@ -962,11 +1017,17 @@ function ResultsView({
   answers,
   email,
   onRestart,
+  emailNotice,
+  onRetryEmail,
+  retryingEmail,
 }: {
   plan: AssessmentPlan;
   answers: LocalAnswers;
   email: string;
   onRestart: () => void;
+  emailNotice?: string | null;
+  onRetryEmail?: () => void;
+  retryingEmail?: boolean;
 }) {
   const [shared, setShared] = useState(false);
   const name = answers.name || "friend";
@@ -1005,8 +1066,32 @@ function ResultsView({
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-navy-deep/85">{plan.summary}</p>
           <p className="mt-4 text-xs text-muted-foreground">
-            A copy has been sent to {email}. Your archetype: <strong>{plan.archetype}</strong>.
+            {emailNotice ? (
+              <>
+                Your archetype: <strong>{plan.archetype}</strong>.
+              </>
+            ) : (
+              <>
+                A copy has been sent to {email}. Your archetype:{" "}
+                <strong>{plan.archetype}</strong>.
+              </>
+            )}
           </p>
+          {emailNotice && (
+            <div className="mt-4 flex flex-wrap items-center gap-3 border border-gilt/40 bg-gilt/10 px-4 py-3">
+              <p className="text-xs text-navy-deep">{emailNotice}</p>
+              {onRetryEmail && (
+                <button
+                  onClick={onRetryEmail}
+                  disabled={retryingEmail}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-navy-deep underline hover:text-emerald disabled:opacity-50"
+                >
+                  {retryingEmail && <Loader2 className="h-3 w-3 animate-spin" />}
+                  {retryingEmail ? "Sending…" : "Retry email"}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
