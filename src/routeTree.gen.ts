@@ -25,6 +25,7 @@ import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoachesRouteImport } from './routes/coaches'
 import { Route as BrandGuideRouteImport } from './routes/brand-guide'
+import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AccessibilityRouteImport } from './routes/accessibility'
@@ -162,6 +163,11 @@ const CoachesRoute = CoachesRouteImport.update({
 const BrandGuideRoute = BrandGuideRouteImport.update({
   id: '/brand-guide',
   path: '/brand-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingRoute = BookingRouteImport.update({
+  id: '/booking',
+  path: '/booking',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -494,6 +500,7 @@ export interface FileRoutesByFullPath {
   '/accessibility': typeof AccessibilityRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/booking': typeof BookingRoute
   '/brand-guide': typeof BrandGuideRoute
   '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
@@ -569,6 +576,7 @@ export interface FileRoutesByTo {
   '/accessibility': typeof AccessibilityRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/booking': typeof BookingRoute
   '/brand-guide': typeof BrandGuideRoute
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
@@ -641,6 +649,7 @@ export interface FileRoutesById {
   '/accessibility': typeof AccessibilityRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/booking': typeof BookingRoute
   '/brand-guide': typeof BrandGuideRoute
   '/coaches': typeof CoachesRouteWithChildren
   '/contact': typeof ContactRoute
@@ -718,6 +727,7 @@ export interface FileRouteTypes {
     | '/accessibility'
     | '/assessment'
     | '/auth'
+    | '/booking'
     | '/brand-guide'
     | '/coaches'
     | '/contact'
@@ -793,6 +803,7 @@ export interface FileRouteTypes {
     | '/accessibility'
     | '/assessment'
     | '/auth'
+    | '/booking'
     | '/brand-guide'
     | '/contact'
     | '/directory'
@@ -864,6 +875,7 @@ export interface FileRouteTypes {
     | '/accessibility'
     | '/assessment'
     | '/auth'
+    | '/booking'
     | '/brand-guide'
     | '/coaches'
     | '/contact'
@@ -941,6 +953,7 @@ export interface RootRouteChildren {
   AccessibilityRoute: typeof AccessibilityRoute
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
+  BookingRoute: typeof BookingRoute
   BrandGuideRoute: typeof BrandGuideRoute
   CoachesRoute: typeof CoachesRouteWithChildren
   ContactRoute: typeof ContactRoute
@@ -1081,6 +1094,13 @@ declare module '@tanstack/react-router' {
       path: '/brand-guide'
       fullPath: '/brand-guide'
       preLoaderRoute: typeof BrandGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking': {
+      id: '/booking'
+      path: '/booking'
+      fullPath: '/booking'
+      preLoaderRoute: typeof BookingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1675,6 +1695,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccessibilityRoute: AccessibilityRoute,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
+  BookingRoute: BookingRoute,
   BrandGuideRoute: BrandGuideRoute,
   CoachesRoute: CoachesRouteWithChildren,
   ContactRoute: ContactRoute,
