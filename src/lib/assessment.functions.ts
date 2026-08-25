@@ -50,43 +50,56 @@ const InputSchema = z.object({
   plan: PlanSchema,
 });
 
+/**
+ * Persists the assessment lead and emails the plan. This function is
+ * deliberately failure-tolerant: the plan itself is computed client-side,
+ * so the visitor's results must render even if the database, secrets, or
+ * email pipeline are unavailable. Raw infrastructure errors (missing env
+ * vars, connection failures) are logged server-side only — never thrown
+ * back to the visitor.
+ */
 export const generateAssessment = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => InputSchema.parse(d))
   .handler(async ({ data }) => {
-    const normalizedEmail = data.email.toLowerCase().trim();
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    // Per-IP rate limit
-    const req = getRequest();
-    const rawIp =
-      req?.headers.get("cf-connecting-ip") ||
-      req?.headers.get("x-real-ip") ||
-      (req?.headers.get("x-forwarded-for") ?? "").split(",")[0]?.trim() ||
-      "unknown";
-    const ipHash = createHash("sha256")
-      .update(`${rawIp}|${process.env.SUPABASE_URL ?? ""}`)
-      .digest("hex");
-
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-
-    if (rawIp !== "unknown") {
-      const { count: ipCount } = await supabaseAdmin
-        .from("assessment_leads")
-        .select("id", { count: "exact", head: true })
-        .eq("ip_hash", ipHash)
-        .gte("created_at", oneHourAgo);
-      if ((ipCount ?? 0) >= 5) {
-        throw new Error(
-          "You've hit the hourly limit for assessments from this network. Please try again later.",
-        );
-      }
-    }
-
     const plan = data.plan;
+    const normalizedEmail = data.email.toLowerCase().trim();
 
-    // Persist lead
+    let persisted = false;
+    let emailed = false;
+
     try {
-      await supabaseAdmin.from("assessment_leads").insert({
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+      // Per-IP rate limit
+      const req = getRequest();
+      const rawIp =
+        req?.headers.get("cf-connecting-ip") ||
+        req?.headers.get("x-real-ip") ||
+        (req?.headers.get("x-forwarded-for") ?? "").split(",")[0]?.trim() ||
+        "unknown";
+      const ipHash = createHash("sha256")
+        .update(`${rawIp}|${process.env.SUPABASE_URL ?? ""}`)
+        .digest("hex");
+
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+
+      if (rawIp !== "unknown") {
+        const { count: ipCount, error: countError } = await supabaseAdmin
+          .from("assessment_leads")
+          .select("id", { count: "exact", head: true })
+          .eq("ip_hash", ipHash)
+          .gte("created_at", oneHourAgo);
+        if (countError) throw countError;
+        if ((ipCount ?? 0) >= 5) {
+          // Deliberate, visitor-safe message — not an infra detail.
+          throw new Error(
+            "You've hit the hourly limit for assessments from this network. Please try again later.",
+          );
+        }
+      }
+
+      // Persist lead
+      const { error: insertError } = await supabaseAdmin.from("assessment_leads").insert({
         email: normalizedEmail,
         name: data.answers.name || null,
         answers: data.answers,
@@ -95,41 +108,49 @@ export const generateAssessment = createServerFn({ method: "POST" })
         consent_newsletter: data.consentNewsletter,
         ip_hash: ipHash,
       });
+      if (insertError) throw insertError;
+      persisted = true;
     } catch (err) {
-      console.error("Failed to persist assessment lead", err);
+      // Rate-limit errors must reach the visitor; everything else is logged only.
+      if (err instanceof Error && err.message.includes("hourly limit")) throw err;
+      console.error("[assessment] Failed to persist assessment lead", err);
     }
 
-    // Send plan email
-    try {
-      const today = new Date().toISOString().slice(0, 10);
-      const { sendInternalTransactionalEmail } = await import("./email/send-internal.server");
-      await sendInternalTransactionalEmail({
-        templateName: "assessment-plan",
-        recipientEmail: normalizedEmail,
-        idempotencyKey: `assessment-${normalizedEmail}-${today}`,
-        templateData: {
-          name: data.answers.name || undefined,
-          summary: plan.summary,
-          paths: [plan.primary, ...plan.adjacent].map((p) => ({
-            title: p.title,
-            why: p.why,
-            exampleRoles: p.exampleRoles,
-            exampleEmployers: p.exampleEmployers,
-          })),
-          days0to30: plan.days0to30,
-          days30to60: plan.days30to60,
-          days60to90: plan.days60to90,
-          networkingStrategy: [],
-          resumeUpdates: [],
-          recommendedTier: "Career Membership",
-          tierRationale:
-            "Compass is where this plan gets tracked, updated, and paired with the tools you'll actually use.",
-          consultationUrl: "https://discoverdiplomacy.org/pricing",
-        },
-      });
-    } catch (err) {
-      console.error("Failed to send plan email", err);
+    if (persisted) {
+      try {
+        const today = new Date().toISOString().slice(0, 10);
+        const { sendInternalTransactionalEmail } = await import(
+          "./email/send-internal.server"
+        );
+        await sendInternalTransactionalEmail({
+          templateName: "assessment-plan",
+          recipientEmail: normalizedEmail,
+          idempotencyKey: `assessment-${normalizedEmail}-${today}`,
+          templateData: {
+            name: data.answers.name || undefined,
+            summary: plan.summary,
+            paths: [plan.primary, ...plan.adjacent].map((p) => ({
+              title: p.title,
+              why: p.why,
+              exampleRoles: p.exampleRoles,
+              exampleEmployers: p.exampleEmployers,
+            })),
+            days0to30: plan.days0to30,
+            days30to60: plan.days30to60,
+            days60to90: plan.days60to90,
+            networkingStrategy: [],
+            resumeUpdates: [],
+            recommendedTier: "Career Membership",
+            tierRationale:
+              "Compass is where this plan gets tracked, updated, and paired with the tools you'll actually use.",
+            consultationUrl: "https://discoverdiplomacy.org/pricing",
+          },
+        });
+        emailed = true;
+      } catch (err) {
+        console.error("[assessment] Failed to send plan email", err);
+      }
     }
 
-    return { plan, ok: true };
+    return { plan, ok: true, persisted, emailed };
   });
