@@ -60,8 +60,21 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const [signupSent, setSignupSent] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+  const [oauthError, setOauthError] = useState<string | null>(null);
 
   useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const oauthCode = query.get("error") ?? hash.get("error");
+    const oauthDescription = query.get("error_description") ?? hash.get("error_description");
+    if (oauthCode || oauthDescription) {
+      setOauthError(
+        oauthDescription?.replace(/\+/g, " ") ??
+          "Google sign-in could not be completed. Please try again or use email and password.",
+      );
+      setBusy(false);
+    }
+
     supabase.auth.getSession().then(async ({ data }) => {
       if (data.session) {
         const dest = await resolvePostLoginPath(explicitNext);
@@ -79,6 +92,7 @@ function AuthPage() {
     e.preventDefault();
     setBusy(true);
     try {
+      setOauthError(null);
       const parsedEmail = emailSchema.parse(email);
       if (mode === "reset") {
         const { error } = await supabase.auth.resetPasswordForEmail(parsedEmail, {
@@ -164,6 +178,17 @@ function AuthPage() {
             <div className="eyebrow">Client Portal</div>
             <h1 className="mt-4 font-display text-3xl text-navy-deep lg:text-4xl">{heading}</h1>
             <p className="mt-3 text-sm text-muted-foreground">{subhead}</p>
+
+            {oauthError && (
+              <div
+                role="alert"
+                aria-live="assertive"
+                className="mt-6 border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+              >
+                <div className="font-medium">Google sign-in failed</div>
+                <p className="mt-1">{oauthError}</p>
+              </div>
+            )}
 
             {mode === "reset" && resetSent ? (
               <div className="mt-10 border border-border bg-stone p-6 text-sm text-navy-deep">
