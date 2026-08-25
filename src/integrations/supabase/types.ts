@@ -1518,6 +1518,18 @@ export type Database = {
         Args: { _env?: string; _user_id: string }
         Returns: undefined
       }
+      university_cohort_engagement: {
+        Args: { _cohort_id: string }
+        Returns: {
+          active_members: number
+          graduated_members: number
+          resume_analyses: number
+          resume_drop_optins: number
+          resume_reviews: number
+          resumes_uploaded: number
+          total_members: number
+        }[]
+      }
       unlock_candidate: {
         Args: { _candidate_id: string; _env?: string }
         Returns: Json
